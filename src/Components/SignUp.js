@@ -1,17 +1,27 @@
-import React, { useRef } from "react";
-import { useAuth } from "../contexts/AuthContexts";
+import React, { useState } from "react";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../Services/firebase";
 
 export default function SignUp() {
-  const emailRef = useRef();
-  const passwordRef = useRef();
-  const passwordConfirmRef = useRef();
-  const { signup } = useAuth();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const createAccount = async () => {
+    const loginEmail = email;
+    const loginPassword = password;
+
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, loginEmail, loginPassword);
+      console.log(userCredential);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   function handleSubmit(e) {
     e.preventDefault();
-
-    signup(emailRef.current.value, passwordRef.current.value);
-  }
+    createAccount();
+  };
 
   return (
     <div>
@@ -19,15 +29,15 @@ export default function SignUp() {
         <h2>SignUp</h2>
         <form>
           <label>Email: </label>
-          <input type="email" ref={emailRef}></input>
+          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Enter Email"></input>
           <br />
           <label>Password: </label>
-          <input type="password" ref={passwordRef}></input>
+          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Enter Password"></input>
           <br />
-          <label>Password Confirmation: </label>
-          <input type="password" ref={passwordConfirmRef}></input>
+          {/* <label>Password Confirmation: </label>
+          <input type="password" ref={passwordConfirmRef}></input> */}
           <br />
-          <button>Sign Up</button>
+          <button onClick={(e) => handleSubmit(e)}>Sign Up</button>
         </form>
       </div>
       <div>Already have an account? Log In</div>
