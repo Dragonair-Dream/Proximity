@@ -1,9 +1,12 @@
-import React from "react";
+import React from 'react';
+import Map from './Components/Map';
 
 function App() {
 
   return (
-    <>Hello</>
+    <div>
+      <Map />
+    </div>
   );
 
 };
