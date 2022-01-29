@@ -1,9 +1,3 @@
-<<<<<<< HEAD
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-import Map from './Components/Map';
-=======
 import React, {useState, useEffect} from 'react';
 import Map from './Components/Map';
 import { auth } from './Services/firebase';
@@ -35,7 +29,6 @@ const App = () => {
       </div>
     );
   };
->>>>>>> f31be0258cb337b3a1687c3a0394822e1960c60d
 
   return (
     <div>
