@@ -11,6 +11,7 @@ const center = {
   lng: -95.93779
 };
 
+const imageUrl = "https://images.unsplash.com/photo-1606066889831-35faf6fa6ff6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"
 
 function Map() {
   const [selectedFriend, setSelectedFriend] = useState(null);
@@ -31,8 +32,11 @@ function Map() {
          {selectedFriend ? (
           <InfoWindow position={center} onCloseClick={()=>{setSelectedFriend(null);}} > 
           <div>
-            <h3>Users Post</h3>
-            <img src="prox-logo-city.png" alt="" width="75px" height="auto"/>
+            <img src={imageUrl} alt="" width="200px" height="auto"/>
+            <h3>Jacopo is at<a href=''>"joes Pizza"</a> </h3>
+            <p>Having a blast, haha get it? cause it's a laser tag place. <br/> 
+            Come join if your in the area. Be here till 7pm.</p>
+            <button>CHAT</button>
           </div>
           </InfoWindow>) : (<></>)}
 
