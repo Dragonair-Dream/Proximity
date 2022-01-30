@@ -1,10 +1,11 @@
-import React, {useState, useEffect} from 'react';
-import Map from './Components/Map';
-import { auth } from './Services/firebase';
-import { onAuthStateChanged } from 'firebase/auth';
-import SignIn from './Components/SignIn';
-import SignUp from './Components/SignUp';
-import Logout from './Components/Logout';
+import React, { useState, useEffect } from "react";
+import Map from "./Components/Map";
+import { auth } from "./Services/firebase";
+import { onAuthStateChanged } from "firebase/auth";
+import SignIn from "./Components/SignIn";
+import SignUp from "./Components/SignUp";
+import LogoutButton from "./Components/Logout";
+import BottomTab from "./Components/BottomTab";
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -21,22 +22,23 @@ const App = () => {
 
   console.log(user);
 
-  if(user) {
+  if (user) {
     return (
-      <div>
+      <div align="center">
+        <LogoutButton />
         <Map />
-        <Logout />
+        <BottomTab />
       </div>
     );
-  };
+  }
 
   return (
     <div>
       {/* <SignIn /> */}
       <SignUp />
+      <SignIn />
     </div>
   );
-
 };
 
 export default App;
