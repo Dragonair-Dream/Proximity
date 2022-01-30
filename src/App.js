@@ -24,7 +24,7 @@ const App = () => {
 
   if (user) {
     return (
-      <div>
+      <div align="center">
         <Map />
         <Logout />
         <BottomTab />
