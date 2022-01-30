@@ -1,12 +1,11 @@
-import React from 'react';
-import { auth } from '../Services/firebase';
-import { signOut } from 'firebase/auth';
+import React from "react";
+import { auth } from "../Services/firebase";
+import { signOut } from "firebase/auth";
 
-const Logout = () => {
-
+const LogoutButton = () => {
   const logout = async () => {
     await signOut(auth);
-    console.log('LOGGED OUT')
+    console.log("LOGGED OUT");
   };
 
   return (
@@ -16,4 +15,4 @@ const Logout = () => {
   );
 };
 
-export default Logout;
+export default LogoutButton;

@@ -2,18 +2,29 @@ import React from "react";
 import { makeStyles } from "@mui/styles";
 import { BottomNavigation } from "@mui/material";
 import { BottomNavigationAction } from "@mui/material";
-import { Logout, Search, Home } from "@mui/icons-material";
-import Map from "./Map";
+import { LocationOn, Search, Home, Settings } from "@mui/icons-material";
 
 const useStyles = makeStyles({
   root: {
-    width: 500,
-    backgroundColor: "#E0E0E0",
+    width: "100%",
+    backgroundColor: "#1565c0",
+    position: "fixed",
+    bottom: 0,
+  },
+});
+
+const myStyles = makeStyles({
+  root: {
+    color: "white",
+  },
+  selected: {
+    color: "red",
   },
 });
 
 function BottomTab() {
   const classes = useStyles();
+  const styles = myStyles();
 
   const [value, setValue] = React.useState(0);
 
@@ -30,15 +41,24 @@ function BottomTab() {
         onChange={(e, newValue) => handleChange(e, newValue)}
       >
         <BottomNavigationAction
+          className={styles.root}
           label="Home"
-          icon={<Home />}
-          LinkComponent={Map}
+          icon={<Home style={{ fill: "white" }} />}
         />
-        <BottomNavigationAction label="Search" icon={<Search />} />
         <BottomNavigationAction
-          label="Logout"
-          icon={<Logout />}
-          LinkComponent={Logout}
+          className={styles.root}
+          label="Search"
+          icon={<Search style={{ fill: "white" }} />}
+        />
+        <BottomNavigationAction
+          className={styles.root}
+          label="Location"
+          icon={<LocationOn style={{ fill: "white" }} />}
+        />
+        <BottomNavigationAction
+          className={styles.root}
+          label="Settings"
+          icon={<Settings style={{ fill: "white" }} />}
         />
       </BottomNavigation>
     </div>
