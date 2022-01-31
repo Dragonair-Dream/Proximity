@@ -16,8 +16,8 @@ const imageUrl = "https://images.unsplash.com/photo-1606066889831-35faf6fa6ff6?i
 
 function Map() {
   const [selectedFriend, setSelectedFriend] = useState(null);
-  const [latitude, setLatitude] = useState( 41.25861)
-  const [longitude, setLongitude] = useState( -95.93779)
+  const [latitude, setLatitude] = useState(41.25861)
+  const [longitude, setLongitude] = useState(-95.93779)
 
     const getPosition = useCallback(() => {
       if(navigator.geolocation) {
@@ -57,11 +57,11 @@ useEffect(() => {getPosition()}, [getPosition])
         onClick={()=> {setSelectedFriend('jerrrrry')}}
         />
          {selectedFriend ? (
-          <InfoWindow position={{lat: latitude, lng: longitude}} onCloseClick={()=>{setSelectedFriend(null);}} > 
+          <InfoWindow position={{lat: latitude, lng: longitude}} onCloseClick={()=>{setSelectedFriend(null);}} >
           <div>
             <img src={imageUrl} alt="" width="200px" height="auto"/>
             <h3>Jacopo is at<a href=''>"joes Pizza"</a> </h3>
-            <p>Having a blast, haha get it? cause it's a laser tag place. <br/> 
+            <p>Having a blast, haha get it? cause it's a laser tag place. <br/>
             Come join if your in the area. Be here till 7pm.</p>
             <button>CHAT</button>
           </div>

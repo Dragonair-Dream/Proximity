@@ -46,12 +46,12 @@ export default function SignUp() {
           justifyContent='center'
         >
           <div style={{display: 'flex', flexDirection: 'column', maxWidth: '400px', minWidth: '300px'}}>
-            <Grid contrainer justify='center'>
+            <Grid container justify='center'>
               <img src='greenLogo.png' width={300} alt='logo' />
             </Grid>
             <TextField
               required
-              id="standard-basic"
+              id="signup-basic"
               label="Email"
               variant="standard"
               type="email"
@@ -64,7 +64,7 @@ export default function SignUp() {
             <TextField
               required
               style={{marginBottom: '20px'}}
-              id="standard-password-input"
+              id="signup-password-input"
               label="Password"
               variant="standard"
               type="password"
@@ -72,7 +72,7 @@ export default function SignUp() {
               value={password}
               onChange={(e) => {setPassword(e.target.value)}}
               margin='normal'
-              InputProps={{ startAdornment: <InputAdornment><LockRounded /></InputAdornment>}}
+              InputProps={{ startAdornment: <InputAdornment position='start'><LockRounded /></InputAdornment>}}
             />
             <Button style={{padding: '8px'}} variant="contained" onClick={(e) => handleSubmit(e)}>Sign Up</Button>
             <Typography marginTop={2}>Already have an account? <Link style={{textDecoration: 'none'}} href='#'>Sign In</Link></Typography>
