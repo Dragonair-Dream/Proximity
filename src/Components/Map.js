@@ -42,7 +42,7 @@ useEffect(() => {getPosition()}, [getPosition])
 
 
   return (
-    <>
+    <div>
     {/* <button onClick={getPosition}>position</button> */}
     <LoadScript
       googleMapsApiKey= "AIzaSyDjD4lGFnY7plUA4lmRqm7k5GOxRWbPwtY"
@@ -71,8 +71,7 @@ useEffect(() => {getPosition()}, [getPosition])
         { /* Child components, such as markers, info windows, etc. */ }
       </GoogleMap>
     </LoadScript>
-    <footer> </footer>
-    </>
+    </div>
   )
 }
 

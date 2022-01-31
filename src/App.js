@@ -27,7 +27,6 @@ const App = () => {
   if (user) {
     return (
       <div align="center">
-        {/* <LogoutButton /> */}
         <NavBar />
         <Map />
         <BottomTab />
@@ -37,9 +36,8 @@ const App = () => {
 
   return (
     <div>
-      {/* <SignIn /> */}
-      <SignUp />
       <SignIn />
+      <SignUp />
     </div>
   );
 };
