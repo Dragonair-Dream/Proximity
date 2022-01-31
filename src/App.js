@@ -4,8 +4,10 @@ import { auth } from "./Services/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import SignIn from "./Components/SignIn";
 import SignUp from "./Components/SignUp";
-import LogoutButton from "./Components/Logout";
 import BottomTab from "./Components/BottomTab";
+import NavBar from "./Components/NavBar";
+
+import LogoutButton from "./Components/Logout";
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -25,7 +27,8 @@ const App = () => {
   if (user) {
     return (
       <div align="center">
-        <LogoutButton />
+        {/* <LogoutButton /> */}
+        <NavBar />
         <Map />
         <br />
         <br />
