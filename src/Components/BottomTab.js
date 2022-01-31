@@ -8,8 +8,10 @@ const useStyles = makeStyles({
   root: {
     width: "100%",
     backgroundColor: "#1565c0",
-    position: "fixed",
+    position: "sticky",
     bottom: 0,
+    opacity: 10,
+    paddingBottom: 10
   },
 });
 
@@ -33,7 +35,6 @@ function BottomTab() {
   };
 
   return (
-    <div>
       <BottomNavigation
         className={classes.root}
         showLabels
@@ -61,7 +62,6 @@ function BottomTab() {
           icon={<Settings style={{ fill: "white" }} />}
         />
       </BottomNavigation>
-    </div>
   );
 }
 export default BottomTab;

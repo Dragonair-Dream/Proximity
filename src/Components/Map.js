@@ -4,7 +4,7 @@ import { GoogleMap, LoadScript, Marker, InfoWindow } from '@react-google-maps/ap
 
 const containerStyle = {
   width: '100%',
-  height: '900px'
+  height: '100vh',
 };
 
 
@@ -31,9 +31,6 @@ function Map() {
       const {latitude, longitude} = pos.coords;
       setLatitude(latitude);
       setLongitude(longitude);
-      console.log('Your current position is:');
-      console.log(`Latitude : ${latitude}`);
-      console.log(`Longitude: ${longitude}`);
     }
 
 console.log('---latsssss-', latitude)
