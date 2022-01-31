@@ -30,9 +30,6 @@ const App = () => {
         {/* <LogoutButton /> */}
         <NavBar />
         <Map />
-        <br />
-        <br />
-        <br />
         <BottomTab />
       </div>
     );
