@@ -8,10 +8,10 @@ const useStyles = makeStyles({
   root: {
     width: "100%",
     backgroundColor: "#1565c0",
-    position: "sticky",
+    position: "absolute",
     bottom: 0,
     opacity: 10,
-    paddingBottom: 10
+    paddingBottom: 10,
   },
 });
 
@@ -35,33 +35,33 @@ function BottomTab() {
   };
 
   return (
-      <BottomNavigation
-        className={classes.root}
-        showLabels
-        value={value}
-        onChange={(e, newValue) => handleChange(e, newValue)}
-      >
-        <BottomNavigationAction
-          className={styles.root}
-          label="Home"
-          icon={<Home style={{ fill: "white" }} />}
-        />
-        <BottomNavigationAction
-          className={styles.root}
-          label="Search"
-          icon={<Search style={{ fill: "white" }} />}
-        />
-        <BottomNavigationAction
-          className={styles.root}
-          label="Location"
-          icon={<LocationOn style={{ fill: "white" }} />}
-        />
-        <BottomNavigationAction
-          className={styles.root}
-          label="Settings"
-          icon={<Settings style={{ fill: "white" }} />}
-        />
-      </BottomNavigation>
+    <BottomNavigation
+      className={classes.root}
+      showLabels
+      value={value}
+      onChange={(e, newValue) => handleChange(e, newValue)}
+    >
+      <BottomNavigationAction
+        className={styles.root}
+        label="Home"
+        icon={<Home style={{ fill: "white" }} />}
+      />
+      <BottomNavigationAction
+        className={styles.root}
+        label="Search"
+        icon={<Search style={{ fill: "white" }} />}
+      />
+      <BottomNavigationAction
+        className={styles.root}
+        label="Location"
+        icon={<LocationOn style={{ fill: "white" }} />}
+      />
+      <BottomNavigationAction
+        className={styles.root}
+        label="Settings"
+        icon={<Settings style={{ fill: "white" }} />}
+      />
+    </BottomNavigation>
   );
 }
 export default BottomTab;
