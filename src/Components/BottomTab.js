@@ -2,7 +2,7 @@ import React from "react";
 import { makeStyles } from "@mui/styles";
 import { BottomNavigation } from "@mui/material";
 import { BottomNavigationAction } from "@mui/material";
-import { LocationOn, Search, Home, Settings } from "@mui/icons-material";
+import { Notifications, Search, Home, Settings } from "@mui/icons-material";
 
 const useStyles = makeStyles({
   root: {
@@ -53,8 +53,8 @@ function BottomTab() {
       />
       <BottomNavigationAction
         className={styles.root}
-        label="Location"
-        icon={<LocationOn style={{ fill: "white" }} />}
+        label="Notifications"
+        icon={<Notifications style={{ fill: "white" }} />}
       />
       <BottomNavigationAction
         className={styles.root}
