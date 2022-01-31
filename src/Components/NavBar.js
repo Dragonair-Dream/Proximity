@@ -47,8 +47,8 @@ const NavBar = () => {
   }
 
   return (
-    <AppBar>
-      <Container maxWidth='xl'>
+    <AppBar position='sticky'>
+      <Container maxWidth='xl' >
         <Toolbar>
           <FormControl>
             <FormControlLabel

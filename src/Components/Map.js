@@ -4,7 +4,7 @@ import { GoogleMap, LoadScript, Marker, InfoWindow } from '@react-google-maps/ap
 
 const containerStyle = {
   width: '100%',
-  height: '900px'
+  height: '100vh',
 };
 
 
@@ -31,9 +31,6 @@ function Map() {
       const {latitude, longitude} = pos.coords;
       setLatitude(latitude);
       setLongitude(longitude);
-      console.log('Your current position is:');
-      console.log(`Latitude : ${latitude}`);
-      console.log(`Longitude: ${longitude}`);
     }
 
 console.log('---latsssss-', latitude)
@@ -42,7 +39,7 @@ useEffect(() => {getPosition()}, [getPosition])
 
 
   return (
-    <>
+    <div>
     {/* <button onClick={getPosition}>position</button> */}
     <LoadScript
       googleMapsApiKey= "AIzaSyDjD4lGFnY7plUA4lmRqm7k5GOxRWbPwtY"
@@ -71,8 +68,7 @@ useEffect(() => {getPosition()}, [getPosition])
         { /* Child components, such as markers, info windows, etc. */ }
       </GoogleMap>
     </LoadScript>
-    <footer> </footer>
-    </>
+    </div>
   )
 }
 

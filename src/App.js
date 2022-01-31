@@ -7,8 +7,6 @@ import SignUp from "./Components/SignUp";
 import BottomTab from "./Components/BottomTab";
 import NavBar from "./Components/NavBar";
 
-import LogoutButton from "./Components/Logout";
-
 const App = () => {
   const [user, setUser] = useState(null);
 
@@ -22,12 +20,9 @@ const App = () => {
     });
   }, [setUser]);
 
-  console.log(user);
-
   if (user) {
     return (
       <div align="center">
-        {/* <LogoutButton /> */}
         <NavBar />
         <Map />
         <BottomTab />
@@ -37,9 +32,8 @@ const App = () => {
 
   return (
     <div>
-      {/* <SignIn /> */}
-      <SignUp />
       <SignIn />
+      <SignUp />
     </div>
   );
 };
