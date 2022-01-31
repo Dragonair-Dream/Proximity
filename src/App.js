@@ -27,6 +27,9 @@ const App = () => {
       <div align="center">
         <LogoutButton />
         <Map />
+        <br />
+        <br />
+        <br />
         <BottomTab />
       </div>
     );

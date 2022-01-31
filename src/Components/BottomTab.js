@@ -10,6 +10,7 @@ const useStyles = makeStyles({
     backgroundColor: "#1565c0",
     position: "fixed",
     bottom: 0,
+    opacity: 10,
   },
 });
 
