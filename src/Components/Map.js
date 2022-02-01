@@ -33,16 +33,9 @@ const jerry = {
   
 };
 
-
-// const jerry = {
-//   post: null
-// };
-
-
-
-
-
 const imageUrl = "https://images.unsplash.com/photo-1606066889831-35faf6fa6ff6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"
+
+
 
 function Map() {
   const [selectedFriend, setSelectedFriend] = useState(null);
@@ -101,8 +94,8 @@ useEffect(() => {getPosition()}, [getPosition])
           <Card sx={{ maxWidth: 345 }}>
             <CardHeader
               avatar={
-                <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                  R
+                <Avatar sx={{ bgcolor: red[500] }} aria-label="name">
+                  {jerry.post.name.slice(0, 1)}
                 </Avatar>
               }
               action={
