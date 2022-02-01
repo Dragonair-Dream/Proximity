@@ -6,8 +6,7 @@ import SignIn from "./Components/SignIn";
 import SignUp from "./Components/SignUp";
 import BottomTab from "./Components/BottomTab";
 import NavBar from "./Components/NavBar";
-
-import LogoutButton from "./Components/Logout";
+import UserProfile from "./Components/UserProfile";
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -22,14 +21,12 @@ const App = () => {
     });
   }, [setUser]);
 
-  console.log(user);
-
   if (user) {
     return (
       <div align="center">
-        {/* <LogoutButton /> */}
         <NavBar />
-        <Map />
+        {/* <Map /> */}
+        <UserProfile />
         <BottomTab />
       </div>
     );
@@ -37,9 +34,8 @@ const App = () => {
 
   return (
     <div>
-      {/* <SignIn /> */}
-      <SignUp />
       <SignIn />
+      <SignUp />
     </div>
   );
 };

@@ -20,8 +20,8 @@ import PostEdit from './PostEdit';
 
 
 const containerStyle = {
-  width: '100%',
-  height: '900px'
+  width: "100%",
+  height: "90vh",
 };
 
 const jerry = {
@@ -73,11 +73,18 @@ function Map() {
       console.log(`Latitude : ${latitude}`);
       console.log(`Longitude: ${longitude}`);
     }
+  }, []);
 
-console.log('---latsssss-', latitude)
-useEffect(() => {getPosition()}, [getPosition])
+  const successPos = (pos) => {
+    const { latitude, longitude } = pos.coords;
+    setLatitude(latitude);
+    setLongitude(longitude);
+  };
 
-
+  console.log("---latsssss-", latitude);
+  useEffect(() => {
+    getPosition();
+  }, [getPosition]);
 
   return (
     <>
@@ -164,6 +171,4 @@ useEffect(() => {getPosition()}, [getPosition])
   )
 }
 
-export default React.memo(Map) //Using memo will cause React to skip rendering a component if its props have not changed.
-
-
+export default React.memo(Map); //Using memo will cause React to skip rendering a component if its props have not changed.

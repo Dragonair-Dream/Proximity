@@ -1,25 +1,25 @@
-import React, { useState } from 'react';
-import AppBar from '@mui/material/AppBar';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import Tooltip from '@mui/material/Tooltip';
-import MenuItem from '@mui/material/MenuItem';
-import Avatar from '@mui/material/Avatar';
-import Menu from '@mui/material/Menu';
-import IconButton from '@mui/material/IconButton';
-import Container from '@mui/material/Container';
-import Toolbar from '@mui/material/Toolbar';
-import FormControl from '@mui/material/FormControl';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
+import React, { useState } from "react";
+import AppBar from "@mui/material/AppBar";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import Tooltip from "@mui/material/Tooltip";
+import MenuItem from "@mui/material/MenuItem";
+import Avatar from "@mui/material/Avatar";
+import Menu from "@mui/material/Menu";
+import IconButton from "@mui/material/IconButton";
+import Container from "@mui/material/Container";
+import Toolbar from "@mui/material/Toolbar";
+import FormControl from "@mui/material/FormControl";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Switch from "@mui/material/Switch";
 import { auth } from "../Services/firebase";
 import { signOut } from "firebase/auth";
 
-const settings = ['Profile', 'Logout'];
+const settings = ["Profile", "Logout"];
 
 const NavBar = () => {
   const [anchorUser, setAnchorUser] = useState(null);
-  const [locationServices, setLocationServices] = useState('On');
+  const [locationServices, setLocationServices] = useState("On");
   const [switchStatus, setSwitchStatus] = useState(true);
 
   const logout = async () => {
@@ -30,7 +30,7 @@ const NavBar = () => {
     setAnchorUser(e.currentTarget);
   };
   const handleCloseUserMenu = (e) => {
-    if (e.target.innerHTML === 'Logout') {
+    if (e.target.innerHTML === "Logout") {
       logout();
     }
     setAnchorUser(null);
@@ -39,31 +39,37 @@ const NavBar = () => {
   const handleSwitch = (e) => {
     setSwitchStatus(e.target.checked);
 
-    if (e.target.checked){
-      setLocationServices('On');
+    if (e.target.checked) {
+      setLocationServices("On");
     } else {
-      setLocationServices('Off');
+      setLocationServices("Off");
     }
-  }
+  };
 
   return (
-    <AppBar>
-      <Container maxWidth='xl'>
+    <AppBar position="sticky">
+      <Container maxWidth="xl">
         <Toolbar>
           <FormControl>
             <FormControlLabel
               value="bottom"
-              control={<Switch color="secondary" checked={switchStatus} onChange={handleSwitch} />}
+              control={
+                <Switch
+                  color="secondary"
+                  checked={switchStatus}
+                  onChange={handleSwitch}
+                />
+              }
               label={`Location ${locationServices}`}
               labelPlacement="bottom"
             />
           </FormControl>
 
           <Typography
-            variant='h5'
+            variant="h5"
             noWrap
-            component='div'
-            sx={{ flexGrow: 1, display:'flex', justifyContent: 'center' }}
+            component="div"
+            sx={{ flexGrow: 1, display: "flex", justifyContent: "center" }}
           >
             PROXIMITY
           </Typography>
@@ -75,21 +81,32 @@ const NavBar = () => {
               </IconButton>
             </Tooltip>
             <Menu
-              sx={{ mt: '45px' }}
+              sx={{ mt: "45px" }}
               id="menu-appbar"
               anchorEl={anchorUser}
               anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
+                vertical: "top",
+                horizontal: "right",
               }}
               keepMounted
               transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
+                vertical: "top",
+                horizontal: "right",
               }}
               open={Boolean(anchorUser)}
               onClose={handleCloseUserMenu}
             >
+              <Typography
+                sx={{
+                  flexGrow: 1,
+                  display: "flex",
+                  justifyContent: "center",
+                  paddingLeft: "10px",
+                  paddingRight: "10px",
+                }}
+              >
+                {auth.currentUser.email}
+              </Typography>
               {settings.map((setting) => (
                 <MenuItem key={setting} onClick={handleCloseUserMenu}>
                   <Typography textAlign="center">{setting}</Typography>
