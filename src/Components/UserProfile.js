@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { auth, db } from "../Services/firebase";
-import { collection, getDocs } from "firebase/firestore/lite";
+import { collection, addDoc, doc, setDoc, getDoc } from "firebase/firestore";
 
 import {
   TextField,
@@ -31,23 +31,39 @@ export default function UserProfile() {
   const [profilePic, setProfilePic] = useState(
     auth.currentUser.profilePic || ""
   );
+  const newData = {
+    firstName: firstName,
+    lastName: lastName,
+    email: email,
+    userName: userName,
+    DateOfBirth: DateOfBirth,
+    phoneNumber: phoneNumber,
+    profilePic: profilePic,
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const userData = db.collection("users").getDocs(auth.currentUser.uid);
+    const uid = await auth.currentUser.uid;
+    // auto generate Id:
+    // try {
+    //   const data = await addDoc(collection(db, "users"), newData);
+    //   console.log("user id", data.id);
+    // } catch (error) {
+    //   console.log("fuck this shit", error);
+    // }
+    //
+    // custom ID:
+    try {
+      const data = await setDoc(doc(db, "users", uid), newData, {
+        merge: true,
+      });
+      const docRef = doc(db, "users", uid);
+      const docSnap = await getDoc(docRef);
 
-    const setWithMerge = await userData.set(
-      {
-        firstName: firstName,
-        lastName: lastName,
-        email: email,
-        userName: userName,
-        DateOfBirth: DateOfBirth,
-        phoneNumber: phoneNumber,
-        profilePic: profilePic,
-      },
-      { merge: true }
-    );
+      console.log("user id", docSnap);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -178,7 +194,7 @@ export default function UserProfile() {
             id="signup-basic"
             label="Profile Pic"
             variant="standard"
-            type="image"
+            type="string"
             value={profilePic}
             onChange={(e) => setProfilePic(e.target.value)}
             margin="normal"
