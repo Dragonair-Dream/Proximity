@@ -6,6 +6,7 @@ import SignIn from "./Components/SignIn";
 import SignUp from "./Components/SignUp";
 import BottomTab from "./Components/BottomTab";
 import NavBar from "./Components/NavBar";
+import UserProfile from "./Components/UserProfile";
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -25,6 +26,7 @@ const App = () => {
       <div>
         <NavBar />
         <Map />
+        {/* <UserProfile /> */}
         <BottomTab />
       </div>
     );
