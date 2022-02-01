@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { GoogleMap, LoadScript, Marker, InfoWindow } from '@react-google-maps/api';
 import FormDialog from './Post';
-import DeleteIcon from '@mui/icons-material/Delete';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
@@ -12,8 +11,11 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import { red } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import ShareIcon from '@mui/icons-material/Share';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 
 
 const containerStyle = {
@@ -46,7 +48,16 @@ function Map() {
   const [selectedFriend, setSelectedFriend] = useState(null);
   const [latitude, setLatitude] = useState(41.25861)
   const [longitude, setLongitude] = useState(-95.93779)
-  console.log(selectedFriend)
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  console.log('selectedfriend', selectedFriend)
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
     const getPosition = useCallback(() => {
       if(navigator.geolocation) {
@@ -95,9 +106,28 @@ useEffect(() => {getPosition()}, [getPosition])
                 </Avatar>
               }
               action={
-                <IconButton aria-label="settings">
+                <>
+                <IconButton 
+                  aria-label="settings" 
+                  aria-controls={open ? 'basic-menu' : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={open ? 'true' : undefined}
+                  onClick={handleClick}
+                  >
                   <MoreVertIcon />
                 </IconButton>
+                <Menu
+                  id="basic-menu"
+                  anchorEl={anchorEl}
+                  open={open}
+                  onClose={handleClose}
+                  MenuListProps={{
+                    'aria-labelledby': 'basic-button',
+                  }}>
+                  <MenuItem onClick={handleClose}><EditIcon />edit</MenuItem>
+                  <MenuItem onClick={handleClose}><DeleteIcon />delete</MenuItem>
+                </Menu>
+                </>
               }
               title={jerry.post.location}
               subheader="15 minutes ago"
