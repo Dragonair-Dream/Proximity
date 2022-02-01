@@ -16,6 +16,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import PostEdit from './PostEdit';
 
 
 const containerStyle = {
@@ -42,6 +43,7 @@ function Map() {
   const [latitude, setLatitude] = useState(41.25861)
   const [longitude, setLongitude] = useState(-95.93779)
   const [anchorEl, setAnchorEl] = useState(null);
+  const [editClicked, setEditClicked] = useState(false);
 
   console.log('selectedfriend', selectedFriend)
   const open = Boolean(anchorEl);
@@ -50,6 +52,9 @@ function Map() {
   };
   const handleClose = () => {
     setAnchorEl(null);
+    setEditClicked(true)
+    console.log('eeeeedddddiiiiittttt', editClicked)
+
   };
 
     const getPosition = useCallback(() => {
