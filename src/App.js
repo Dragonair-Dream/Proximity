@@ -22,7 +22,7 @@ const App = () => {
 
   if (user) {
     return (
-      <div align="center">
+      <div>
         <NavBar />
         <Map />
         <BottomTab />

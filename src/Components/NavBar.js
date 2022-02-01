@@ -51,12 +51,14 @@ const NavBar = () => {
       <Container maxWidth='xl' >
         <Toolbar>
           <FormControl>
-            <FormControlLabel
-              value="bottom"
-              control={<Switch color="secondary" checked={switchStatus} onChange={handleSwitch} />}
-              label={`Location ${locationServices}`}
-              labelPlacement="bottom"
-            />
+            <Box sx={{flexGrow: 0}}>
+              <FormControlLabel
+                value="start"
+                control={<Switch color="secondary" checked={switchStatus} onChange={handleSwitch} />}
+                label={`Location ${locationServices}`}
+                labelPlacement="start"
+              />
+            </Box>
           </FormControl>
 
           <Typography
