@@ -1,5 +1,19 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { GoogleMap, LoadScript, Marker, InfoWindow } from '@react-google-maps/api';
+import FormDialog from './Post';
+import DeleteIcon from '@mui/icons-material/Delete';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import CardMedia from '@mui/material/CardMedia';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import Avatar from '@mui/material/Avatar';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import { red } from '@mui/material/colors';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import ShareIcon from '@mui/icons-material/Share';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 
 const containerStyle = {
@@ -7,6 +21,20 @@ const containerStyle = {
   height: '900px'
 };
 
+const jerry = {
+  post: {
+    imageUrl: 'https://images.unsplash.com/photo-1606066889831-35faf6fa6ff6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80',
+    name: 'Jacopo',
+    location: 'La Pizzeria di Giovananni',
+    description: "yo i'm here lasering it up! come join, i'll be her until 7pm."
+  }
+  
+};
+
+
+// const jerry = {
+//   post: null
+// };
 
 
 
@@ -18,6 +46,7 @@ function Map() {
   const [selectedFriend, setSelectedFriend] = useState(null);
   const [latitude, setLatitude] = useState(41.25861)
   const [longitude, setLongitude] = useState(-95.93779)
+  console.log(selectedFriend)
 
     const getPosition = useCallback(() => {
       if(navigator.geolocation) {
@@ -54,24 +83,55 @@ useEffect(() => {getPosition()}, [getPosition])
       >
         <Marker //at some point we will use map to go through the locations of friends to create marker for each
         position={{lat: latitude, lng: longitude}}
-        onClick={()=> {setSelectedFriend('jerrrrry')}}
+        onClick={()=> {setSelectedFriend(jerry.post)}}
         />
          {selectedFriend ? (
           <InfoWindow position={{lat: latitude, lng: longitude}} onCloseClick={()=>{setSelectedFriend(null);}} >
-          <div>
-            <img src={imageUrl} alt="" width="200px" height="auto"/>
-            <h3>Jacopo is at<a href=''>"joes Pizza"</a> </h3>
-            <p>Having a blast, haha get it? cause it's a laser tag place. <br/>
-            Come join if your in the area. Be here till 7pm.</p>
-            <button>CHAT</button>
-          </div>
-          </InfoWindow>) : (<></>)}
+          <Card sx={{ maxWidth: 345 }}>
+            <CardHeader
+              avatar={
+                <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+                  R
+                </Avatar>
+              }
+              action={
+                <IconButton aria-label="settings">
+                  <MoreVertIcon />
+                </IconButton>
+              }
+              title={jerry.post.location}
+              subheader="15 minutes ago"
+            />
+            <CardMedia
+              component="img"
+              height="194"
+              image="socialGathering.jpeg"
+              alt=""
+            />
+            <CardContent>
+              <Typography variant="body2" color="text.secondary">
+              you gotta nourish to flourish.  #pizzalife come join! be here 'til 8
+              </Typography>
+            </CardContent>
+            <CardActions disableSpacing>
+              <IconButton aria-label="add to favorites">
+                <FavoriteIcon />
+              </IconButton>
+            </CardActions>
+          </Card>
+          </InfoWindow>) : console.log('nothingggggg')}
 
 
         { /* Child components, such as markers, info windows, etc. */ }
       </GoogleMap>
     </LoadScript>
-    <footer> </footer>
+    <FormDialog />
+
+    <br />
+    <br />
+    <br />
+    <br />
+
     </>
   )
 }
