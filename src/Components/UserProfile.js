@@ -59,8 +59,8 @@ export default function UserProfile() {
       });
       const docRef = doc(db, "users", uid);
       const docSnap = await getDoc(docRef);
-
-      console.log("user id", docSnap);
+      const userData = docSnap._document.data.value.mapValue.fields;
+      console.log("user id", userData);
     } catch (error) {
       console.log(error);
     }
