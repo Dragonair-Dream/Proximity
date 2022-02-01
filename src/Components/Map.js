@@ -73,13 +73,6 @@ function Map() {
       console.log(`Latitude : ${latitude}`);
       console.log(`Longitude: ${longitude}`);
     }
-  }, []);
-
-  const successPos = (pos) => {
-    const { latitude, longitude } = pos.coords;
-    setLatitude(latitude);
-    setLongitude(longitude);
-  };
 
   console.log("---latsssss-", latitude);
   useEffect(() => {
