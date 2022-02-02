@@ -148,18 +148,10 @@ function Map() {
             </CardActions>
           </Card>
           </InfoWindow>) : console.log('nothingggggg')}
-
-
+          <FormDialog />
         { /* Child components, such as markers, info windows, etc. */ }
       </GoogleMap>
     </LoadScript>
-    <FormDialog />
-
-    <br />
-    <br />
-    <br />
-    <br />
-
     </>
   )
 }

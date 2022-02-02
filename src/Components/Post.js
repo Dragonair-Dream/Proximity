@@ -6,6 +6,8 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import Fab from '@mui/material/Fab';
+import AddIcon from '@mui/icons-material/Add';
 import PostEdit from './PostEdit';
 
 
@@ -27,9 +29,12 @@ export default function FormDialog() {
 
   return (
     <div>
-      <Button variant="outlined" onClick={handleClickOpen}>
+      {/* <Button variant="outlined" onClick={handleClickOpen}>
         Create a Post
-      </Button>
+      </Button> */}
+      <Fab size="small" color="secondary" aria-label="add" onClick={handleClickOpen}>
+        <AddIcon />
+      </Fab>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Create a post</DialogTitle>
         <DialogContent>
