@@ -8,6 +8,7 @@ import { Routes, Route } from 'react-router-dom'
 import BottomTab from "./Components/BottomTab";
 import NavBar from "./Components/NavBar";
 import UserProfile from "./Components/UserProfile";
+import OurRoutes from './Components/OurRoutes'
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -26,7 +27,7 @@ const App = () => {
     return (
       <div align="center">
         <NavBar />
-        <Map />
+        <OurRoutes />
         {/* <UserProfile /> */}
         <BottomTab />
       </div>
