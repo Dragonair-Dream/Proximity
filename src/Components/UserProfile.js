@@ -117,6 +117,7 @@ export default function UserProfile() {
             flexDirection: "column",
             maxWidth: "400px",
             minWidth: "300px",
+            flexShrink: 1,
           }}
         >
           <Typography

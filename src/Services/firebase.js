@@ -7,6 +7,7 @@ import {
   where,
   query,
 } from "firebase/firestore";
+import { getStorage } from "@firebase/storage";
 
 const firebaseApp = initializeApp({
   apiKey: "AIzaSyBzejvAurNRqg1RMXFYmAHq3GBjl8c6wUg",
@@ -20,6 +21,7 @@ const firebaseApp = initializeApp({
 
 export const auth = getAuth(firebaseApp);
 export const db = getFirestore();
+export const storage = getStorage(firebaseApp);
 
 // const colRef = collection(db, "users");
 // const q = query(colRef, where("email", "==", auth.currentUser.email));

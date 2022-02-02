@@ -7,6 +7,7 @@ import SignUp from "./Components/SignUp";
 import BottomTab from "./Components/BottomTab";
 import NavBar from "./Components/NavBar";
 import UserProfile from "./Components/UserProfile";
+import Image from "./Components/Image";
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -26,7 +27,8 @@ const App = () => {
       <div align="center">
         <NavBar />
         {/* <Map /> */}
-        <UserProfile />
+        {/* <UserProfile /> */}
+        <Image />
         <BottomTab />
       </div>
     );
