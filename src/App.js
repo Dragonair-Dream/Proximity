@@ -4,6 +4,7 @@ import { auth } from "./Services/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import SignIn from "./Components/SignIn";
 import SignUp from "./Components/SignUp";
+import { Routes, Route } from 'react-router-dom'
 import BottomTab from "./Components/BottomTab";
 import NavBar from "./Components/NavBar";
 import UserProfile from "./Components/UserProfile";
@@ -30,14 +31,16 @@ const App = () => {
         <BottomTab />
       </div>
     );
+  } else {
+    return (
+      <div>
+        <Routes>
+          <Route exact path='/' element={<SignIn />} />
+          <Route path='/SignUp' element={<SignUp />} />
+        </Routes>
+      </div>
+    )
   }
-
-  return (
-    <div>
-      <SignIn />
-      <SignUp />
-    </div>
-  );
-};
+}
 
 export default App;
