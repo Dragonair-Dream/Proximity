@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from "react";
-import Map from "./Components/Map";
 import { auth } from "./Services/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import SignIn from "./Components/SignIn";
 import SignUp from "./Components/SignUp";
+import { Routes, Route } from "react-router-dom";
 import BottomTab from "./Components/BottomTab";
 import NavBar from "./Components/NavBar";
 import UserProfile from "./Components/UserProfile";
-import ProfileImage from "./Components/ProfileImage";
+import Search from "./Components/Search";
+import Notifications from "./Components/Notifications";
+import Settings from "./Components/Settings";
+import Map from "./Components/Map";
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -26,20 +29,26 @@ const App = () => {
     return (
       <div align="center">
         <NavBar />
-        {/* <Map /> */}
-        <UserProfile />
-        {/* <ProfileImage /> */}
+        <Routes>
+          <Route path="/" element={<Map />} />
+          <Route path="/Search" element={<Search />} />
+          <Route path="/Notifications" element={<Notifications />} />
+          <Route path="/Settings" element={<Settings />} />
+          <Route path="/UserProfile" element={<UserProfile />} />
+        </Routes>
         <BottomTab />
       </div>
     );
+  } else {
+    return (
+      <div>
+        <Routes>
+          <Route exact path="/" element={<SignIn />} />
+          <Route path="/SignUp" element={<SignUp />} />
+        </Routes>
+      </div>
+    );
   }
-
-  return (
-    <div>
-      <SignIn />
-      <SignUp />
-    </div>
-  );
 };
 
 export default App;

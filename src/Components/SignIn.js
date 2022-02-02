@@ -5,7 +5,8 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import Link from "@mui/material/Link";
+//import Link from '@mui/material/Link';
+import { Link } from "react-router-dom";
 import InputAdornment from "@mui/material/InputAdornment";
 import { AccountCircle, LockRounded } from "@mui/icons-material";
 
@@ -64,60 +65,69 @@ const SignIn = () => {
             minWidth: "300px",
           }}
         >
-          <Grid container justify="center">
-            <img src="Proximity.png" width={300} alt="logo" />
-          </Grid>
-          <TextField
-            required
-            id="signin-basic"
-            label="Email"
-            variant="standard"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            margin="normal"
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <AccountCircle />
-                </InputAdornment>
-              ),
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              maxWidth: "400px",
+              minWidth: "300px",
             }}
-          />
-          <TextField
-            required
-            style={{ marginBottom: "20px" }}
-            id="signin-password-input"
-            label="Password"
-            variant="standard"
-            type="password"
-            autoComplete="current-password"
-            value={password}
-            onChange={(e) => {
-              setPassword(e.target.value);
-            }}
-            margin="normal"
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <LockRounded />
-                </InputAdornment>
-              ),
-            }}
-          />
-          <Button
-            style={{ padding: "8px" }}
-            variant="contained"
-            onClick={(e) => handleSubmit(e)}
           >
-            Sign In
-          </Button>
-          <Typography marginTop={2}>
-            Don't have an account?{" "}
-            <Link style={{ textDecoration: "none" }} href="#">
-              Sign Up
-            </Link>
-          </Typography>
+            <Grid container justify="center">
+              <img src="greenLogo.png" width={300} alt="logo" />
+            </Grid>
+            <TextField
+              required
+              id="signin-basic"
+              label="Email"
+              variant="standard"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              margin="normal"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <AccountCircle />
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <TextField
+              required
+              style={{ marginBottom: "20px" }}
+              id="signin-password-input"
+              label="Password"
+              variant="standard"
+              type="password"
+              autoComplete="current-password"
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
+              margin="normal"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <LockRounded />
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <Button
+              style={{ padding: "8px" }}
+              variant="contained"
+              onClick={(e) => handleSubmit(e)}
+            >
+              Sign In
+            </Button>
+            <Typography marginTop={2}>
+              Don't have an account?{" "}
+              <Link style={{ textDecoration: "none" }} to="/SignUp">
+                Sign Up
+              </Link>
+            </Typography>
+          </div>
         </div>
       </Grid>
     </Grid>
