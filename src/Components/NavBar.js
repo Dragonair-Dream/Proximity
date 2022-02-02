@@ -14,8 +14,9 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import { auth } from "../Services/firebase";
 import { signOut } from "firebase/auth";
+import { Link } from "react-router-dom";
 
-const settings = ["Profile", "Logout"];
+const settings = ["Logout"];
 
 const NavBar = () => {
   const [anchorUser, setAnchorUser] = useState(null);
@@ -106,6 +107,9 @@ const NavBar = () => {
                 }}
               >
                 {auth.currentUser.email}
+              </Typography>
+              <Typography textAlign="left" paddingLeft={2}>
+                <Link to="/UserProfile">Profile</Link>
               </Typography>
               {settings.map((setting) => (
                 <MenuItem key={setting} onClick={handleCloseUserMenu}>

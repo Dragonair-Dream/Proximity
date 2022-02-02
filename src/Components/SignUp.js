@@ -37,7 +37,10 @@ export default function SignUp() {
   }
 
   return (
-    <Grid container style={{ minHeight: "100vh" }}>
+    <Grid
+      container
+      style={{ minHeight: "100vh", backgroundColor: "WhiteSmoke" }}
+    >
       <Grid item xs={12} sm={6}>
         <img
           src="socialGathering.jpeg"
@@ -64,7 +67,7 @@ export default function SignUp() {
           }}
         >
           <Grid container justify="center">
-            <img src="greenLogo.png" width={300} alt="logo" />
+            <img src="Proximity.png" width={300} alt="logo" />
           </Grid>
           <TextField
             required
