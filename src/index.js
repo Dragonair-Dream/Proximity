@@ -4,11 +4,34 @@ import "./index.css";
 import App from "./App";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import reportWebVitals from "./reportWebVitals";
+import store from './Store';
+import { Provider } from 'react-redux';
+import firebase from 'firebase/app'
+import 'firebase/auth'
+import 'firebase/database'
+import 'firebase/firestore'
+import { ReactReduxFirebaseProvider } from 'react-redux-firebase';
+import { createFirestoreInstance} from 'redux-firestore';
+import firebaseApp from "./Services/firebase";
+
+const rrfConfig = {
+  userProfile: 'user',
+  // useFirestoreForProfile: true // Firestore for Profile instead of Realtime DB
+}
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <Provider store={store}>
+    <ReactReduxFirebaseProvider
+      firebase={firebaseApp}
+      config={rrfConfig}
+      dispatch={store.dispatch}
+      createFirestoreInstance={createFirestoreInstance}
+    >
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>
+    </ReactReduxFirebaseProvider>
+  </Provider>,
   document.getElementById("root")
 );
 

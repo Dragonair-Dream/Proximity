@@ -25,8 +25,8 @@ const App = () => {
     return (
       <div>
         <NavBar />
-        <Map />
-        {/* <UserProfile /> */}
+        {/* <Map /> */}
+        <UserProfile />
         <BottomTab />
       </div>
     );

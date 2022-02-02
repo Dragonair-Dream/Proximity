@@ -1,6 +1,10 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import { auth, db } from "../Services/firebase";
-import { collection, addDoc, doc, setDoc, getDoc } from "firebase/firestore";
+
+import { createUserProfile } from "../Store/userProfileReducer";
+// import { collection, addDoc, doc, setDoc, getDoc } from "firebase/firestore";
+
 
 import {
   TextField,
@@ -31,6 +35,7 @@ export default function UserProfile() {
   const [profilePic, setProfilePic] = useState(
     auth.currentUser.profilePic || ""
   );
+  const dispatch = useDispatch();
   const newData = {
     firstName: firstName,
     lastName: lastName,
@@ -43,27 +48,15 @@ export default function UserProfile() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const uid = await auth.currentUser.uid;
     // auto generate Id:
     // try {
+    //   const uid = await auth.currentUser.uid;
     //   const data = await addDoc(collection(db, "users"), newData);
     //   console.log("user id", data.id);
     // } catch (error) {
     //   console.log("fuck this shit", error);
     // }
-    //
-    // custom ID:
-    try {
-      const data = await setDoc(doc(db, "users", uid), newData, {
-        merge: true,
-      });
-      const docRef = doc(db, "users", uid);
-      const docSnap = await getDoc(docRef);
-
-      console.log("user id", docSnap);
-    } catch (error) {
-      console.log(error);
-    }
+    dispatch(createUserProfile(newData));
   };
 
   return (
