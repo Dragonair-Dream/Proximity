@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Map from "./Components/Map";
 import { auth } from "./Services/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import SignIn from "./Components/SignIn";
@@ -8,7 +7,10 @@ import { Routes, Route } from 'react-router-dom'
 import BottomTab from "./Components/BottomTab";
 import NavBar from "./Components/NavBar";
 import UserProfile from "./Components/UserProfile";
-import OurRoutes from './Components/OurRoutes'
+import Search from './Components/Search'
+import Notifications from './Components/Notifications'
+import Settings from './Components/Settings'
+import Map from "./Components/Map";
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -27,8 +29,12 @@ const App = () => {
     return (
       <div align="center">
         <NavBar />
-        <OurRoutes />
-        {/* <UserProfile /> */}
+        <Routes>
+          <Route path='/' element={<Map />} />
+          <Route path='/Search' element={<Search />} />
+          <Route path='/Notifications' element={<Notifications />} />
+          <Route path='/Settings' element={<Settings />} />
+        </Routes>
         <BottomTab />
       </div>
     );
