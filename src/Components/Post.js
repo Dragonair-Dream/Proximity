@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -8,7 +8,9 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
-import PostEdit from './PostEdit';
+import { doc, setDoc } from '@firebase/firestore';
+import { auth, db } from '../Services/firebase';
+import { FormControl } from '@mui/material';
 
 
 //     const [imageUrl, setImageurl] = useState('');
@@ -16,7 +18,11 @@ import PostEdit from './PostEdit';
 //     const [description, setDescription] = useState('');
 
 export default function FormDialog() {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false)
+  const [imageUrl, setImageUrl] = useState('')
+  const [caption, setCaption] = useState('')
+  const [location, setLocation] = useState('')
+  const [post, setPost] = useState(null)
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -25,6 +31,16 @@ export default function FormDialog() {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const handleSubmit = async(e) => {
+    e.preventDefault()
+    const uid = auth.currentUser.uid
+      try {
+        const post = await setDoc(doc(db,('Posts'), uid), {imageUrl: imageUrl , location: location, caption: caption}, {merge:true})
+      } catch (error) {
+        console.log(error)
+      }
+    };
   
 
   return (
@@ -49,6 +65,8 @@ export default function FormDialog() {
             type="email"
             fullWidth
             variant="standard"
+            onChange={(e) => console.log('image', e.target.value)}
+
           />
           <TextField
             autoFocus
@@ -58,6 +76,8 @@ export default function FormDialog() {
             type="email"
             fullWidth
             variant="standard"
+            onChange={(e) => console.log('location', e.target.value)}
+
           />
           <TextField
             autoFocus
@@ -67,11 +87,13 @@ export default function FormDialog() {
             type="email"
             fullWidth
             variant="standard"
+            onChange={(e) => console.log(e.target.value)}
+
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button variant="contained" onClick={handleClose}>Create Post</Button>
+          <Button variant="contained" onClick={handleClose} onSubmit={(e) => {handleSubmit(e)}}>Create Post</Button>
         </DialogActions>
       </Dialog>
     </div>
