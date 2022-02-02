@@ -6,7 +6,7 @@ import SignIn from "./Components/SignIn";
 import SignUp from "./Components/SignUp";
 import BottomTab from "./Components/BottomTab";
 import NavBar from "./Components/NavBar";
-import UserProfile from "./Components/UserProfile";
+import Chats from "./Components/Chats";
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -26,7 +26,8 @@ const App = () => {
       <div>
         <NavBar />
         {/* <Map /> */}
-        <UserProfile />
+        {/* <UserProfile /> */}
+        <Chats />
         <BottomTab />
       </div>
     );
