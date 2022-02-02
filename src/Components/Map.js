@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { GoogleMap, LoadScript, Marker, InfoWindow } from '@react-google-maps/api';
+import { googleMapsKey } from '../secrets';
 import FormDialog from './Post';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
@@ -17,7 +18,6 @@ import MenuItem from '@mui/material/MenuItem';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 
-
 const containerStyle = {
   width: "100%",
   height: "90vh",
@@ -30,12 +30,10 @@ const jerry = {
     location: 'La Pizzeria di Giovananni',
     description: "yo i'm here lasering it up! come join, i'll be her until 7pm."
   }
-  
+
 };
 
 const imageUrl = "https://images.unsplash.com/photo-1606066889831-35faf6fa6ff6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"
-
-
 
 function Map() {
   const [selectedFriend, setSelectedFriend] = useState(null);
@@ -56,14 +54,6 @@ function Map() {
 
   };
 
-    const getPosition = useCallback(() => {
-      if(navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(successPos)
-      } else {
-        alert("sorry, Geolocation is not supported by this browser.")
-      }
-    }, [])
-
     const successPos = (pos) => {
       const {latitude, longitude} = pos.coords;
       setLatitude(latitude);
@@ -73,17 +63,24 @@ function Map() {
       console.log(`Longitude: ${longitude}`);
     }
 
-  console.log("---latsssss-", latitude);
   useEffect(() => {
-    getPosition();
-  }, [getPosition]);
+    let watchId;
+    if(navigator.geolocation) {
+      watchId = navigator.geolocation.getCurrentPosition(successPos)
+    } else {
+      alert("sorry, Geolocation is not supported by this browser.")
+    }
+    return () => {
+      navigator.geolocation.clearWatch(watchId);
+    }
+  }, []);
 
   return (
     <>
     {/* <button onClick={getPosition}>position</button> */}
-    <LoadScript
-      googleMapsApiKey= "AIzaSyDjD4lGFnY7plUA4lmRqm7k5GOxRWbPwtY"
-    >
+      <LoadScript
+        googleMapsApiKey= {googleMapsKey}
+      >
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={{lat: latitude, lng: longitude}}
@@ -104,8 +101,8 @@ function Map() {
               }
               action={
                 <>
-                <IconButton 
-                  aria-label="settings" 
+                <IconButton
+                  aria-label="settings"
                   aria-controls={open ? 'basic-menu' : undefined}
                   aria-haspopup="true"
                   aria-expanded={open ? 'true' : undefined}

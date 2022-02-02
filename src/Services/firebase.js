@@ -10,17 +10,9 @@ import {
 import { getStorage, uploadBytes, ref } from "@firebase/storage";
 import { useEffect, useState } from "react";
 import { getDownloadURL } from "firebase/storage";
+import { firebaseConfig } from "../secrets";
 
-const firebaseApp = initializeApp({
-  apiKey: "AIzaSyBzejvAurNRqg1RMXFYmAHq3GBjl8c6wUg",
-  authDomain: "proximity-3c563.firebaseapp.com",
-  projectId: "proximity-3c563",
-  storageBucket: "proximity-3c563.appspot.com",
-  messagingSenderId: "752995737957",
-  appId: "1:752995737957:web:f37ae84626dbb44ee4c18c",
-  measurementId: "G-RPCL9C7TQT",
-});
-
+const firebaseApp = initializeApp(firebaseConfig);
 export const auth = getAuth(firebaseApp);
 export const db = getFirestore();
 export const storage = getStorage(firebaseApp);
@@ -74,3 +66,5 @@ export async function upload(file, currentUser, setLoading) {
 //     users.push({ ...doc.data() });
 //   });
 // });
+
+export default firebaseApp;

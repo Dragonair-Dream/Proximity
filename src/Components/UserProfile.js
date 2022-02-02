@@ -1,7 +1,9 @@
 import React, { useState } from "react";
-import { auth, db } from "../Services/firebase";
+import { useDispatch } from "react-redux";
+import { auth } from "../Services/firebase";
+import { createUserProfile } from "../Store/userProfileReducer";
 import ProfileImage from "./ProfileImage";
-import { doc, setDoc } from "firebase/firestore";
+
 import {
   TextField,
   Button,
@@ -23,6 +25,8 @@ export default function UserProfile() {
   const [firstName, setFirstName] = useState(auth.currentUser.firstName || "");
   const [lastName, setLastName] = useState(auth.currentUser.lastName || "");
 
+  const dispatch = useDispatch();
+
   const newData = {
     firstName: firstName,
     lastName: lastName,
@@ -34,27 +38,7 @@ export default function UserProfile() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const uid = await auth.currentUser.uid;
-    // auto generate Id:
-    // try {
-    //   const data = await addDoc(collection(db, "users"), newData);
-    //   console.log("user id", data.id);
-    // } catch (error) {
-    //   console.log("fuck this shit", error);
-    // }
-    //
-    // custom ID:
-    try {
-      const data = await setDoc(doc(db, "users", uid), newData, {
-        merge: true,
-      });
-      // const docRef = doc(db, "users", uid);
-      // const docSnap = await getDoc(docRef);
-      // const userData = docSnap._document.data.value.mapValue.fields;
-      // console.log("user id", userData);
-    } catch (error) {
-      console.log(error);
-    }
+    dispatch(createUserProfile(newData));
   };
 
   // const colRef = collection(db, "users");

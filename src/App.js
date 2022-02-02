@@ -6,6 +6,7 @@ import SignUp from "./Components/SignUp";
 import { Routes, Route } from "react-router-dom";
 import BottomTab from "./Components/BottomTab";
 import NavBar from "./Components/NavBar";
+import Chats from "./Components/Chats";
 import UserProfile from "./Components/UserProfile";
 import Search from "./Components/Search";
 import Notifications from "./Components/Notifications";
@@ -27,13 +28,14 @@ const App = () => {
 
   if (user) {
     return (
-      <div align="center">
+      <div>
         <NavBar />
         <Routes>
           <Route path="/" element={<Map />} />
           <Route path="/Search" element={<Search />} />
           <Route path="/Notifications" element={<Notifications />} />
           <Route path="/Settings" element={<Settings />} />
+          <Route path='/chats' element={<Chats />} />
           <Route path="/UserProfile" element={<UserProfile />} />
         </Routes>
         <BottomTab />
