@@ -5,7 +5,8 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import Link from '@mui/material/Link';
+//import Link from '@mui/material/Link';
+import { Link } from 'react-router-dom'
 import InputAdornment from '@mui/material/InputAdornment';
 import { AccountCircle, LockRounded } from '@mui/icons-material';
 
@@ -75,7 +76,7 @@ const SignIn = () => {
               InputProps={{ startAdornment: <InputAdornment position='start'><LockRounded /></InputAdornment>}}
             />
             <Button style={{padding: '8px'}} variant="contained" onClick={(e) => handleSubmit(e)}>Sign In</Button>
-            <Typography marginTop={2}>Don't have an account? <Link style={{textDecoration: 'none'}} href='#'>Sign Up</Link></Typography>
+            <Typography marginTop={2}>Don't have an account? <Link style={{textDecoration: 'none'}} to='/SignUp'>Sign Up</Link></Typography>
           </div>
         </Grid>
     </Grid>
