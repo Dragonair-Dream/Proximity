@@ -48,14 +48,6 @@ export default function UserProfile() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // auto generate Id:
-    // try {
-    //   const uid = await auth.currentUser.uid;
-    //   const data = await addDoc(collection(db, "users"), newData);
-    //   console.log("user id", data.id);
-    // } catch (error) {
-    //   console.log("fuck this shit", error);
-    // }
     dispatch(createUserProfile(newData));
   };
 

@@ -6,7 +6,6 @@ const CREATE_USER_PROFILE = 'CREATE_USER_PROFILE';
 const CREATE_USER_PROFILE_ERROR = 'CREATE_USER_PROFILE_ERROR';
 
 export const createdUserProfile = (userInfo) => {
-  console.log('INSIDE ACTION CREATOR', userInfo)
   return {
     type: CREATE_USER_PROFILE,
     userInfo
