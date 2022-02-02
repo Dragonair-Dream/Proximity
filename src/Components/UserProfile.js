@@ -1,15 +1,7 @@
 import React, { useState } from "react";
 import { auth, db } from "../Services/firebase";
-import {
-  collection,
-  addDoc,
-  doc,
-  setDoc,
-  getDoc,
-  getDocs,
-  where,
-  query,
-} from "firebase/firestore";
+import ProfileImage from "./ProfileImage";
+import { doc, setDoc } from "firebase/firestore";
 import {
   TextField,
   Button,
@@ -17,24 +9,9 @@ import {
   InputAdornment,
   Typography,
 } from "@mui/material";
-import {
-  AccountCircle,
-  ContactPhone,
-  Cake,
-  Badge,
-  Link,
-} from "@mui/icons-material";
+import { AccountCircle, ContactPhone, Cake, Badge } from "@mui/icons-material";
 
 export default function UserProfile() {
-  const colRef = collection(db, "users");
-  const q = query(colRef, where("email", "==", auth.currentUser.email));
-  let users = [];
-  const querySnapshot = getDocs(q).then((snapshot) => {
-    snapshot.docs.forEach((doc) => {
-      users.push({ ...doc.data() });
-    });
-  });
-  console.log(users);
   const [email, setEmail] = useState(auth.currentUser.email || "");
   const [userName, setUserName] = useState(auth.currentUser.userName || "");
   const [DateOfBirth, setDateOfBirth] = useState(
@@ -45,9 +22,6 @@ export default function UserProfile() {
   );
   const [firstName, setFirstName] = useState(auth.currentUser.firstName || "");
   const [lastName, setLastName] = useState(auth.currentUser.lastName || "");
-  const [profilePic, setProfilePic] = useState(
-    auth.currentUser.profilePic || ""
-  );
 
   const newData = {
     firstName: firstName,
@@ -56,7 +30,6 @@ export default function UserProfile() {
     userName: userName,
     DateOfBirth: DateOfBirth,
     phoneNumber: phoneNumber,
-    profilePic: profilePic,
   };
 
   const handleSubmit = async (e) => {
@@ -224,22 +197,6 @@ export default function UserProfile() {
               ),
             }}
           />
-          <TextField
-            id="signup-basic"
-            label="Profile Pic"
-            variant="standard"
-            type="string"
-            value={profilePic}
-            onChange={(e) => setProfilePic(e.target.value)}
-            margin="normal"
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <Link />
-                </InputAdornment>
-              ),
-            }}
-          />
 
           <Button
             style={{ padding: "8px" }}
@@ -248,6 +205,8 @@ export default function UserProfile() {
           >
             Submit Profile
           </Button>
+          <br />
+          <ProfileImage />
         </div>
       </Grid>
     </Grid>
