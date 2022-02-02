@@ -18,6 +18,7 @@ import MenuItem from '@mui/material/MenuItem';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import PostEdit from './PostEdit';
+import { letterSpacing } from '@mui/system';
 
 
 const containerStyle = {
@@ -36,8 +37,6 @@ const jerry = {
 };
 
 const imageUrl = "https://images.unsplash.com/photo-1606066889831-35faf6fa6ff6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"
-
-
 
 function Map() {
   const [selectedFriend, setSelectedFriend] = useState(null);
@@ -58,14 +57,6 @@ function Map() {
 
   };
 
-    const getPosition = useCallback(() => {
-      if(navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(successPos)
-      } else {
-        alert("sorry, Geolocation is not supported by this browser.")
-      }
-    }, [])
-
     const successPos = (pos) => {
       const {latitude, longitude} = pos.coords;
       setLatitude(latitude);
@@ -75,10 +66,17 @@ function Map() {
       console.log(`Longitude: ${longitude}`);
     }
 
-  console.log("---latsssss-", latitude);
   useEffect(() => {
-    getPosition();
-  }, [getPosition]);
+    let watchId;
+    if(navigator.geolocation) {
+      watchId = navigator.geolocation.getCurrentPosition(successPos)
+    } else {
+      alert("sorry, Geolocation is not supported by this browser.")
+    }
+    return () => {
+      navigator.geolocation.clearWatch(watchId);
+    }
+  }, []);
 
   return (
     <>
