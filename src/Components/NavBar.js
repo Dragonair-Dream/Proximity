@@ -16,7 +16,7 @@ import { auth } from "../Services/firebase";
 import { signOut } from "firebase/auth";
 import { Link } from "react-router-dom";
 
-const settings = ["Profile", "Logout"];
+const settings = ["Logout"];
 
 const NavBar = () => {
   const [anchorUser, setAnchorUser] = useState(null);

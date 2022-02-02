@@ -74,7 +74,7 @@ const SignIn = () => {
             }}
           >
             <Grid container justify="center">
-              <img src="greenLogo.png" width={300} alt="logo" />
+              <img src="Proximity.png" width={300} alt="logo" />
             </Grid>
             <TextField
               required

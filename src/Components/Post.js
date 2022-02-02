@@ -27,9 +27,7 @@ export default function FormDialog() {
   useEffect(() => {
     var hours = new Date().getHours(); //Current Hours
     var min = new Date().getMinutes(); //Current Minutes
-    setPostTime(
-      hours + ":" + min + ":" + sec
-    );
+    setPostTime(hours + ":" + min + ":");
   }, []);
 
   const handleClickOpen = () => {
