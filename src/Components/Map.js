@@ -17,9 +17,6 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import PostEdit from './PostEdit';
-import { letterSpacing } from '@mui/system';
-
 
 const containerStyle = {
   width: "100%",
@@ -147,18 +144,10 @@ function Map() {
             </CardActions>
           </Card>
           </InfoWindow>) : console.log('nothingggggg')}
-
-
+          <FormDialog />
         { /* Child components, such as markers, info windows, etc. */ }
       </GoogleMap>
     </LoadScript>
-    <FormDialog />
-
-    <br />
-    <br />
-    <br />
-    <br />
-
     </>
   )
 }

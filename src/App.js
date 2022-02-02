@@ -3,14 +3,14 @@ import { auth } from "./Services/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import SignIn from "./Components/SignIn";
 import SignUp from "./Components/SignUp";
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route } from "react-router-dom";
 import BottomTab from "./Components/BottomTab";
 import NavBar from "./Components/NavBar";
 import Chats from "./Components/Chats";
 import UserProfile from "./Components/UserProfile";
-import Search from './Components/Search'
-import Notifications from './Components/Notifications'
-import Settings from './Components/Settings'
+import Search from "./Components/Search";
+import Notifications from "./Components/Notifications";
+import Settings from "./Components/Settings";
 import Map from "./Components/Map";
 
 const App = () => {
@@ -31,11 +31,12 @@ const App = () => {
       <div>
         <NavBar />
         <Routes>
-          <Route path='/' element={<Map />} />
-          <Route path='/Search' element={<Search />} />
-          <Route path='/Notifications' element={<Notifications />} />
-          <Route path='/Settings' element={<Settings />} />
+          <Route path="/" element={<Map />} />
+          <Route path="/Search" element={<Search />} />
+          <Route path="/Notifications" element={<Notifications />} />
+          <Route path="/Settings" element={<Settings />} />
           <Route path='/chats' element={<Chats />} />
+          <Route path="/UserProfile" element={<UserProfile />} />
         </Routes>
         <BottomTab />
       </div>
@@ -44,12 +45,12 @@ const App = () => {
     return (
       <div>
         <Routes>
-          <Route exact path='/' element={<SignIn />} />
-          <Route path='/SignUp' element={<SignUp />} />
+          <Route exact path="/" element={<SignIn />} />
+          <Route path="/SignUp" element={<SignUp />} />
         </Routes>
       </div>
-    )
+    );
   }
-}
+};
 
 export default App;
