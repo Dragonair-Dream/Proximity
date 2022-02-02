@@ -1,7 +1,15 @@
 import React, { useState } from "react";
 import { auth, db } from "../Services/firebase";
-import { collection, addDoc, doc, setDoc, getDoc } from "firebase/firestore";
-
+import {
+  collection,
+  addDoc,
+  doc,
+  setDoc,
+  getDoc,
+  getDocs,
+  where,
+  query,
+} from "firebase/firestore";
 import {
   TextField,
   Button,
@@ -18,6 +26,15 @@ import {
 } from "@mui/icons-material";
 
 export default function UserProfile() {
+  const colRef = collection(db, "users");
+  const q = query(colRef, where("email", "==", auth.currentUser.email));
+  let users = [];
+  const querySnapshot = getDocs(q).then((snapshot) => {
+    snapshot.docs.forEach((doc) => {
+      users.push({ ...doc.data() });
+    });
+  });
+  console.log(users);
   const [email, setEmail] = useState(auth.currentUser.email || "");
   const [userName, setUserName] = useState(auth.currentUser.userName || "");
   const [DateOfBirth, setDateOfBirth] = useState(
@@ -31,6 +48,7 @@ export default function UserProfile() {
   const [profilePic, setProfilePic] = useState(
     auth.currentUser.profilePic || ""
   );
+
   const newData = {
     firstName: firstName,
     lastName: lastName,
@@ -57,14 +75,29 @@ export default function UserProfile() {
       const data = await setDoc(doc(db, "users", uid), newData, {
         merge: true,
       });
-      const docRef = doc(db, "users", uid);
-      const docSnap = await getDoc(docRef);
-      const userData = docSnap._document.data.value.mapValue.fields;
-      console.log("user id", userData);
+      // const docRef = doc(db, "users", uid);
+      // const docSnap = await getDoc(docRef);
+      // const userData = docSnap._document.data.value.mapValue.fields;
+      // console.log("user id", userData);
     } catch (error) {
       console.log(error);
     }
   };
+
+  // const colRef = collection(db, "users");
+  // const q = query(colRef, where("email", "==", auth.currentUser.email));
+  // let users = [];
+  // const querySnapshot = getDocs(q).then((snapshot) => {
+  //   snapshot.docs.forEach((doc) => {
+  //     users.push({ ...doc.data() });
+  //   });
+  // });
+  // console.log(users);
+
+  // querySnapshot.forEach((doc) => {
+  //   users.push(doc.data());
+  //   console.log("inside userProfile", users);
+  // });
 
   return (
     <Grid container style={{ maxHeight: "100vh" }}>

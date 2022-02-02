@@ -1,6 +1,12 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  where,
+  query,
+} from "firebase/firestore";
 
 const firebaseApp = initializeApp({
   apiKey: "AIzaSyBzejvAurNRqg1RMXFYmAHq3GBjl8c6wUg",
@@ -14,3 +20,12 @@ const firebaseApp = initializeApp({
 
 export const auth = getAuth(firebaseApp);
 export const db = getFirestore();
+
+// const colRef = collection(db, "users");
+// const q = query(colRef, where("email", "==", auth.currentUser.email));
+// export const querySnapshot = getDocs(q).then((snapshot) => {
+//   let users = [];
+//   snapshot.docs.forEach((doc) => {
+//     users.push({ ...doc.data() });
+//   });
+// });
