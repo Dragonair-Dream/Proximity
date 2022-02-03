@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AppBar from "@mui/material/AppBar";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
@@ -15,6 +15,7 @@ import Switch from "@mui/material/Switch";
 import { auth } from "../Services/firebase";
 import { signOut } from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../Services/firebase";
 
 const settings = ["Logout"];
 
@@ -22,6 +23,15 @@ const NavBar = (props) => {
   const [anchorUser, setAnchorUser] = useState(null);
   const [locationServices, setLocationServices] = useState("On");
   const [switchStatus, setSwitchStatus] = useState(true);
+  const [photoURL, setphotoURL] = useState(null);
+
+  const currentUser = useAuth();
+
+  useEffect(() => {
+    if (currentUser) {
+      setphotoURL(currentUser.photoURL);
+    }
+  }, [currentUser]);
 
   const navigate = useNavigate();
   const logout = async () => {
@@ -80,7 +90,7 @@ const NavBar = (props) => {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar />
+                <Avatar src={photoURL} />
               </IconButton>
             </Tooltip>
             <Menu

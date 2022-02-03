@@ -1,12 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged, updateProfile } from "firebase/auth";
-import {
-  getFirestore,
-  collection,
-  getDocs,
-  where,
-  query,
-} from "firebase/firestore";
+import { getFirestore } from "firebase/firestore";
 import { getStorage, uploadBytes, ref } from "@firebase/storage";
 import { useEffect, useState } from "react";
 import { getDownloadURL } from "firebase/storage";
