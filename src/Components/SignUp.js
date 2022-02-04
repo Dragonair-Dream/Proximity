@@ -12,6 +12,9 @@ import InputAdornment from "@mui/material/InputAdornment";
 import { AccountCircle, LockRounded } from "@mui/icons-material";
 
 export default function SignUp() {
+  //creates regex for valid emails
+  const regex = new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}');
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -25,16 +28,23 @@ export default function SignUp() {
         loginEmail,
         loginPassword
       );
-      console.log(user);
+      return true
     } catch (error) {
-      console.log(error);
+      return false
     }
   };
   const navigate = useNavigate();
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    createAccount();
-    navigate("/");
+    if (!regex.test(email)) {
+      window.alert('Email is not valid')
+    } else if (password.length < 6) {
+      window.alert('Password should contain at least 6 characters')
+    } else if (!(await createAccount())) {
+      window.alert('Email is already in use')
+    } else {
+      navigate('/UserProfile')
+    }
   }
 
   return (
