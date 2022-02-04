@@ -2,7 +2,12 @@ import React from "react";
 import { makeStyles } from "@mui/styles";
 import { BottomNavigation } from "@mui/material";
 import { BottomNavigationAction } from "@mui/material";
-import { Notifications, Search, Home, Settings } from "@mui/icons-material";
+import {
+  Notifications,
+  Search,
+  Home,
+  ChatBubbleTwoTone,
+} from "@mui/icons-material";
 import { Link } from "react-router-dom";
 
 const useStyles = makeStyles({
@@ -11,13 +16,15 @@ const useStyles = makeStyles({
     backgroundColor: "#1565c0",
     position: "fixed",
     bottom: 0,
-    // opacity: 10,
-    // paddingBottom: 10,
+    opacity: 10,
+    paddingTop: 5,
+    paddingBottom: 10,
   },
 });
 
 const myStyles = makeStyles({
   root: {
+    width: "100%",
     color: "white",
   },
   selected: {
@@ -65,10 +72,10 @@ function BottomTab() {
       />
       <BottomNavigationAction
         component={Link}
-        to="/Settings"
+        to="/Chats"
         className={styles.root}
-        label="Settings"
-        icon={<Settings style={{ fill: "white" }} />}
+        label="Chat"
+        icon={<ChatBubbleTwoTone style={{ fill: "white" }} />}
       />
     </BottomNavigation>
   );
