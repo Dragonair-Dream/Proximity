@@ -8,13 +8,10 @@ import userProfileReducer from "./userProfileReducer";
 const reducer = combineReducers({
   //Enter reducers from store here
   userProfile: userProfileReducer,
-
 });
-const middleware = applyMiddleware(thunkMiddleware.withExtraArgument(getFirebase))
-const store = createStore(reducer,
-  compose(
-    middleware,
-  )
+const middleware = applyMiddleware(
+  thunkMiddleware.withExtraArgument(getFirebase)
 );
+const store = createStore(reducer, compose(middleware));
 
 export default store;

@@ -13,10 +13,10 @@ export const createdUserProfile = (userInfo) => {
   };
 };
 
-export const gotUserData = (userid) => {
+export const gotUserData = (userData) => {
   return {
     type: GET_USER_DATA,
-    userid,
+    userData,
   };
 };
 
@@ -43,14 +43,17 @@ export const createUserProfile = (userInfo) => {
   };
 };
 
-export const getUserData = async (userid) => {
-  const docRef = doc(db, "users", userid);
-  const docSnap = await getDoc(docRef);
-  if (docSnap.exists()) {
-    return docSnap.data();
-  } else {
-    console("something went wrong");
-  }
+export const getUserData = () => {
+  return async (dispatch) => {
+    try {
+      const docRef = doc(db, "users", auth.currentUser.uid);
+      const docSnap = await getDoc(docRef);
+      // console.log(docSnap.data());
+      dispatch(gotUserData(docSnap.data()));
+    } catch (error) {
+      console.log(error);
+    }
+  };
 };
 
 export default (state = {}, action) => {
@@ -62,7 +65,8 @@ export default (state = {}, action) => {
       console.log("create user error", action.error);
       return state;
     case GET_USER_DATA:
-      console.log("got user data", action.userid);
+      console.log("got user data", action.userData);
+      return action.userData;
     default:
       return state;
   }

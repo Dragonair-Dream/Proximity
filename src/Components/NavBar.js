@@ -16,6 +16,8 @@ import { auth } from "../Services/firebase";
 import { signOut } from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../Services/firebase";
+import { useDispatch, useSelector } from "react-redux";
+import { getUserData } from "../Store/userProfileReducer";
 
 const settings = ["Logout"];
 
@@ -23,15 +25,13 @@ const NavBar = (props) => {
   const [anchorUser, setAnchorUser] = useState(null);
   const [locationServices, setLocationServices] = useState("On");
   const [switchStatus, setSwitchStatus] = useState(true);
-  const [photoURL, setphotoURL] = useState(null);
+  const dispatch = useDispatch();
 
-  const currentUser = useAuth();
-
+  const userData = useSelector((state) => state.userProfile);
   useEffect(() => {
-    if (currentUser) {
-      setphotoURL(currentUser.photoURL);
-    }
-  }, [currentUser]);
+    dispatch(getUserData());
+  }, []);
+  console.log("user data", userData.profilePic);
 
   const navigate = useNavigate();
   const logout = async () => {
@@ -90,7 +90,7 @@ const NavBar = (props) => {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar src={photoURL} />
+                <Avatar src={userData.profilePic} />
               </IconButton>
             </Tooltip>
             <Menu
@@ -118,7 +118,9 @@ const NavBar = (props) => {
                   paddingRight: "10px",
                 }}
               >
-                {auth.currentUser.email}
+                {userData?.firstName
+                  ? userData.firstName
+                  : auth.currentUser.email}
               </Typography>
               <Typography textAlign="left" paddingLeft={2}>
                 <Link to="/UserProfile">Profile</Link>

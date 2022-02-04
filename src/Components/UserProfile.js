@@ -34,6 +34,8 @@ export default function UserProfile() {
     userName: userName,
     DateOfBirth: DateOfBirth,
     phoneNumber: phoneNumber,
+    profilePic: auth.currentUser.photoURL,
+    posterId: auth.currentUser.uid,
   };
 
   const handleSubmit = async (e) => {
