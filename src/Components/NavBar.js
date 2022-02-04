@@ -27,12 +27,6 @@ const NavBar = (props) => {
   const [switchStatus, setSwitchStatus] = useState(true);
   const dispatch = useDispatch();
 
-  const userData = useSelector((state) => state.userProfile);
-  useEffect(() => {
-    dispatch(getUserData());
-  }, []);
-  console.log("user data", userData.profilePic);
-
   const navigate = useNavigate();
   const logout = async () => {
     await signOut(auth);
@@ -58,6 +52,12 @@ const NavBar = (props) => {
       setLocationServices("Off");
     }
   };
+
+  const userData = useSelector((state) => state.userProfile);
+  useEffect(() => {
+    dispatch(getUserData());
+  }, []);
+  console.log("user data", userData.profilePic);
 
   return (
     <AppBar position="sticky">

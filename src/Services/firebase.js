@@ -38,7 +38,7 @@ export async function upload(file, currentUser, setLoading) {
   });
 
   setLoading(false);
-  alert("Uploaded File!");
+  alert("Profile Picture Updated!");
 }
 
 //GET CURRENT USER DATA

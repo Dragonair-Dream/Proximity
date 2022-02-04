@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { auth } from "../Services/firebase";
 import { createUserProfile } from "../Store/userProfileReducer";
 import ProfileImage from "./ProfileImage";
-
+import { useNavigate } from "react-router";
 import {
   TextField,
   Button,
@@ -37,10 +37,11 @@ export default function UserProfile() {
     profilePic: auth.currentUser.photoURL,
     posterId: auth.currentUser.uid,
   };
-
+  const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
     dispatch(createUserProfile(newData));
+    navigate("/");
   };
 
   // const colRef = collection(db, "users");
