@@ -12,11 +12,9 @@ const reducer = combineReducers({
   relations: relationsReducer
 
 });
-const middleware = applyMiddleware(thunkMiddleware.withExtraArgument(getFirebase))
-const store = createStore(reducer,
-  compose(
-    middleware,
-  )
+const middleware = applyMiddleware(
+  thunkMiddleware.withExtraArgument(getFirebase)
 );
+const store = createStore(reducer, compose(middleware));
 
 export default store;

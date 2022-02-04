@@ -18,7 +18,7 @@ const Search = () => {
   useEffect(() => {
     console.log('Ran the useEffect')
     dispatch(getRelations())
-  }, [dispatch])
+  }, [])
 
   return (
     <div>
