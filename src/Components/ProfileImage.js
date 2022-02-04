@@ -54,6 +54,10 @@ export default function ProfileImage() {
       >
         Upload
       </Button>
+      <br />
+      <br />
+      <br />
+      <br />
     </div>
   );
 }
