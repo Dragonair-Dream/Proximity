@@ -7,7 +7,7 @@ import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 //import Link from "@mui/material/Link";
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from "react-router-dom";
 import InputAdornment from "@mui/material/InputAdornment";
 import { AccountCircle, LockRounded } from "@mui/icons-material";
 
@@ -30,10 +30,11 @@ export default function SignUp() {
       console.log(error);
     }
   };
-
+  const navigate = useNavigate();
   function handleSubmit(e) {
     e.preventDefault();
     createAccount();
+    navigate("/");
   }
 
   return (
