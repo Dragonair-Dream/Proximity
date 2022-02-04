@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Box, TextField } from '@mui/material'
 import { AccountCircle } from '@mui/icons-material'
 import { List, ListItem, ListItemText, ListSubheader } from '@mui/material/'
@@ -7,10 +7,19 @@ import { doc, getDoc } from 'firebase/firestore'
 
 import { auth } from "../Services/firebase";
 import { db } from "../Services/firebase";
-import { getFriends } from "../Store/friendsReducer";
+import { getRelations } from "../Store/relationsReducer";
 
 const Search = () => {
-  
+  const dispatch = useDispatch()
+  const initialRelations = useSelector(state => state.relations)
+  const relations = Object.keys(initialRelations).length === 0 ? {pending: [], accepted: [], requested: []} : initialRelations
+  console.log('All Relations: ', relations)
+
+  useEffect(() => {
+    console.log('Ran the useEffect')
+    dispatch(getRelations())
+  }, [dispatch])
+
   return (
     <div>
       <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
@@ -30,18 +39,38 @@ const Search = () => {
         }}
         subheader={<li />}
       >
-        {['Requested', 'Pending', 'Friends'].map((sectionId) => (
-          <li key={`section-${sectionId}`}>
+
+        
+        {relations.pending.length ? (
+          <li key='pending'>
             <ul>
-              <ListSubheader>{`I'm sticky ${sectionId}`}</ListSubheader>
-              {[0, 1, 2].map((item) => (
-                <ListItem key={`item-${sectionId}-${item}`}>
-                  <ListItemText primary={`Item ${item}`} />
+              <ListSubheader>
+                {`${relations.pending.length} Pending Request(s)`}
+              </ListSubheader>
+              {relations.pending.map((pending) => (
+                <ListItem key={`pending-${pending.uid}`}>
+                  <ListItemText primary={`Name: ${pending.firstName}`} />
                 </ListItem>
               ))}
             </ul>
           </li>
-        ))}
+        ) : ''}
+
+        {relations.accepted.length ? (
+          <li key='accepted'>
+            <ul>
+              <ListSubheader>
+                {`Friends`}
+              </ListSubheader>
+              {relations.accepted.map((accepted) => (
+                <ListItem key={`accepted-${accepted.uid}`}>
+                  <ListItemText primary={`Name: ${accepted.firstName}`} />
+                </ListItem>
+              ))}
+            </ul>
+          </li>
+        ) : ''}
+        
       </List>
     </div>
   )
