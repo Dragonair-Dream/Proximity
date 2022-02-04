@@ -15,6 +15,7 @@ export const createdUserProfile = (userInfo) => {
 export const createUserProfile = (userInfo) => {
   return async (dispatch) => {
     try {
+      console.log('auth.currentUser: ', auth.currentUser)
       const uid = auth.currentUser.uid;
       if (!uid) throw new Error('UID is undefined or possibly null');
       await setDoc(doc(db, 'users', uid),
