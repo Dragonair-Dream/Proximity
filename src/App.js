@@ -12,6 +12,7 @@ import Search from "./Components/Search";
 import Notifications from "./Components/Notifications";
 import Settings from "./Components/Settings";
 import Map from "./Components/Map";
+import ChatRoom from "./Components/ChatRoom";
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -36,6 +37,7 @@ const App = () => {
           <Route path="/Notifications" element={<Notifications />} />
           <Route path="/Settings" element={<Settings />} />
           <Route path='/chats' element={<Chats />} />
+          <Route path='/chats/:chatId' element={<ChatRoom />} />
           <Route path="/UserProfile" element={<UserProfile />} />
         </Routes>
         <BottomTab />
