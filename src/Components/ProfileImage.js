@@ -25,7 +25,7 @@ export default function ProfileImage() {
   }, [currentUser]);
 
   return (
-    <div>
+    <div style={{ marginBottom: "17%" }}>
       <Typography
         style={{
           fontSize: "30px",
@@ -54,10 +54,6 @@ export default function ProfileImage() {
       >
         Upload
       </Button>
-      <br />
-      <br />
-      <br />
-      <br />
     </div>
   );
 }
