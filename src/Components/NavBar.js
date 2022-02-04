@@ -52,11 +52,11 @@ const NavBar = (props) => {
       setLocationServices("Off");
     }
   };
-
+  const thisUser = useAuth();
   const userData = useSelector((state) => state.userProfile);
   useEffect(() => {
     dispatch(getUserData());
-  }, []);
+  }, [thisUser]);
   console.log("user data", userData.profilePic);
 
   return (
