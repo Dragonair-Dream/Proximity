@@ -28,6 +28,7 @@ export default function SignUp() {
         loginEmail,
         loginPassword
       );
+      console.log('User', user)
       return true
     } catch (error) {
       return false

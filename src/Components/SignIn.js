@@ -26,7 +26,7 @@ const SignIn = () => {
       );
       console.log(userCredential);
     } catch (error) {
-      console.log(error);
+      window.alert('Invalid credentials, please try again')
     }
   };
 
