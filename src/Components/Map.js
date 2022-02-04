@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { GoogleMap, LoadScript, Marker, InfoWindow } from '@react-google-maps/api';
 import { googleMapsKey } from '../secrets';
-import FormDialog from './Post';
+import PostCreate from './PostCreate';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
@@ -17,11 +17,15 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import { auth, db} from '../Services/firebase';
+import { doc, getDoc } from '@firebase/firestore';
 
 const containerStyle = {
   width: "100%",
   height: "90vh",
 };
+
+
 
 const jerry = {
   post: {
@@ -32,8 +36,6 @@ const jerry = {
   }
 
 };
-
-const imageUrl = "https://images.unsplash.com/photo-1606066889831-35faf6fa6ff6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"
 
 function Map() {
   const [selectedFriend, setSelectedFriend] = useState(null);
@@ -66,7 +68,8 @@ function Map() {
   useEffect(() => {
     let watchId;
     if(navigator.geolocation) {
-      watchId = navigator.geolocation.getCurrentPosition(successPos)
+      watchId = navigator.geolocation.getCurrentPosition(successPos);
+      console.log('use Effect map called')
     } else {
       alert("sorry, Geolocation is not supported by this browser.")
     }
@@ -74,6 +77,23 @@ function Map() {
       navigator.geolocation.clearWatch(watchId);
     }
   }, []);
+
+  // const fetchMyPosts = useCallback(async() => { // async must go inside anonymous function?
+  //   const uid = auth.currentUser.uid;
+  //   const docRef = doc(db, "posts", uid );
+  //   const docSnap = await getDoc(docRef);
+
+  //   if (docSnap.exists()) {
+  //     console.log("Document data:", docSnap.data());
+  //   } else {
+  //     // doc.data() will be undefined in this case
+  //     console.log("No such document!");
+  //   }
+  // }, [/*some sort of state */]);
+
+  // useEffect(()=> {
+  //   fetchMyPosts()
+  // }, [fetchMyPosts])
 
   return (
     <>
@@ -85,6 +105,7 @@ function Map() {
         mapContainerStyle={containerStyle}
         center={{lat: latitude, lng: longitude}}
         zoom={10}
+        options={{ gestureHandling: "cooperative"}}
       >
         <Marker //at some point we will use map to go through the locations of friends to create marker for each
         position={{lat: latitude, lng: longitude}}
@@ -144,7 +165,7 @@ function Map() {
             </CardActions>
           </Card>
           </InfoWindow>) : console.log('nothingggggg')}
-          <FormDialog />
+          <PostCreate lat={latitude} lng={longitude} />
         { /* Child components, such as markers, info windows, etc. */ }
       </GoogleMap>
     </LoadScript>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
@@ -8,29 +8,24 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
-import { doc, setDoc } from "@firebase/firestore";
+import { doc, getDoc, addDoc, collection, where, query, getDocs } from "@firebase/firestore";
 import { auth, db } from "../Services/firebase";
-import { FormControl } from "@mui/material";
+import getUserData from "../Store/userProfileReducer"
 
-//     const [imageUrl, setImageurl] = useState('');
-//     const [location, setLocation] = useState('');
-//     const [description, setDescription] = useState('');
-
-export default function FormDialog() {
+export default function PostCreate(props) {
   const [open, setOpen] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
   const [caption, setCaption] = useState("");
-  const [location, setLocation] = useState("");
-  const [post, setPost] = useState(null);
-  const [postTime, setPostTime] = useState("");
-
-  useEffect(() => {
-    var hours = new Date().getHours(); //Current Hours
-    var min = new Date().getMinutes(); //Current Minutes
-    setPostTime(hours + ":" + min + ":");
-  }, []);
-
-  const handleClickOpen = () => {
+  const [locationName, setLocationName] = useState("");
+  // console.log(formatRelative(postTime.getTime(), postTime))
+  // console.log(props.lng)
+  // useEffect(() => {
+  //   var hours = new Date().getHours(); //Current Hours
+  //   var min = new Date().getMinutes(); //Current Minutes
+  //   setPostTime(hours + ":" + min + ":");
+  // }, []);
+  
+  const handleClickOpen = () => { // have a state to set clicked 'createpost' to false when open and true when we click the 'create' button, handled in handle submit
     setOpen(true);
   };
 
@@ -42,30 +37,70 @@ export default function FormDialog() {
     e.preventDefault();
     const uid = auth.currentUser.uid;
     try {
-      const post = await setDoc(
-        doc(db, "Posts", uid),
+      const post = await addDoc(
+        collection(db, "posts"),
         {
+          postersId: uid,
           imageUrl: imageUrl,
-          location: location,
+          locationName: locationName,
+          latitude: props.lat,
+          longitude: props.lng,
           caption: caption,
-          postTime: postTime,
+          postTime: new Date(),
         },
         { merge: true }
       );
+      await fetchMyPosts();
       setOpen(false);
     } catch (error) {
       console.log(error);
     }
   };
+  const docData = []
+  let userName = ''
+
+  const fetchMyPosts = useCallback(async() => { // async must go inside anonymous function?
+    const uid = auth.currentUser.uid;
+    
+    const q =  query(collection(db, "posts"), where("postersId", "==", uid));
+
+    const docSnap = await getDocs(q);
+
+    if (docSnap) {
+      docSnap.forEach((doc) => {
+      docData.push((doc.id, " => ", doc.data()));
+      });
+      const docRef = doc(db, "users", uid);
+      const userSnap = await getDoc(docRef);
+      userName = userSnap.data().userName
+      console.log("Document data:", docData[0]);
+      console.log('user data', userName)
+
+    } else {
+      // doc.data() will be undefined in this case
+      console.log("No such document!");
+    }
+    console.log("Document data:", docData[0]);
+    console.log('user data', userName)
+
+
+  }, [/*some sort of state */]);
+
+  useEffect(()=> {
+    fetchMyPosts()
+  }, [fetchMyPosts])
 
   return (
     <div>
-      {/* <Button variant="outlined" onClick={handleClickOpen}>
-        Create a Post
-      </Button> */}
+      
       <Fab
+        sx={{
+          position: "fixed",
+          top: (theme) => theme.spacing('auto'),
+          right: (theme) => theme.spacing(1)
+        }}
         size="small"
-        color="secondary"
+        color="primary"
         aria-label="add"
         onClick={handleClickOpen}
       >
@@ -76,13 +111,13 @@ export default function FormDialog() {
         <DialogContent>
           <DialogContentText>
             To create a post at your current location fill out the following
-            fields.
+            fields:
           </DialogContentText>
           <TextField
             autoFocus
             margin="dense"
             id="name"
-            label="Add an image Url..."
+            label="image..."
             type="imageUrl"
             value={imageUrl}
             fullWidth
@@ -93,18 +128,18 @@ export default function FormDialog() {
             autoFocus
             margin="dense"
             id="name"
-            label="Where Are You?"
+            label="Location name..."
             type="string"
-            value={location}
+            value={locationName}
             fullWidth
             variant="standard"
-            onChange={(e) => setLocation(e.target.value)}
+            onChange={(e) => setLocationName(e.target.value)}
           />
           <TextField
             autoFocus
             margin="dense"
             id="name"
-            label="Add a Caption..."
+            label="Caption..."
             type="email"
             value={caption}
             fullWidth
