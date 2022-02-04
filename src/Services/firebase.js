@@ -1,12 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged, updateProfile } from "firebase/auth";
-import {
-  getFirestore,
-  collection,
-  getDocs,
-  where,
-  query,
-} from "firebase/firestore";
+import { getFirestore } from "firebase/firestore";
 import { getStorage, uploadBytes, ref } from "@firebase/storage";
 import { useEffect, useState } from "react";
 import { getDownloadURL } from "firebase/storage";
@@ -25,7 +19,7 @@ export function useAuth() {
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => setCurrentUser(user));
   }, []);
-  console.log("current user", currentUser);
+  // console.log("current user", currentUser);
   return currentUser;
 }
 
@@ -44,7 +38,7 @@ export async function upload(file, currentUser, setLoading) {
   });
 
   setLoading(false);
-  alert("Uploaded File!");
+  alert("Profile Picture Updated!");
 }
 
 //GET CURRENT USER DATA
