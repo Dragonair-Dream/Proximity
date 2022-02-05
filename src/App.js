@@ -12,6 +12,7 @@ import Search from "./Components/Search";
 import Notifications from "./Components/Notifications";
 import Settings from "./Components/Settings";
 import Map from "./Components/Map";
+import Profile from "./Components/Profile";
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -35,8 +36,9 @@ const App = () => {
           <Route path="/Search" element={<Search />} />
           <Route path="/Notifications" element={<Notifications />} />
           <Route path="/Settings" element={<Settings />} />
-          <Route path='/chats' element={<Chats />} />
-          <Route path="/UserProfile" element={<UserProfile />} />
+          <Route path="/chats" element={<Chats />} />
+          <Route path="/UserProfile" element={<Profile />} />
+          <Route path="/editProfile" element={<UserProfile />} />
         </Routes>
         <BottomTab />
       </div>
