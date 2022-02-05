@@ -23,8 +23,7 @@ export default function Profile() {
   const userData = useSelector((state) => state.userProfile);
   useEffect(() => {
     dispatch(getUserData());
-  }, [thisUser]);
-  console.log("inside Profile", userData);
+  }, []);
 
   const handleSubmit = () => {
     navigate("/editProfile");
@@ -51,7 +50,7 @@ export default function Profile() {
         textAlign="center"
         style={{ padding: "1px", fontWeight: "lighter" }}
       >
-        something about the user
+        {userData?.about ? userData.about : <div></div>}
       </Typography>
       <Box textAlign="center" style={{ padding: "10px" }}>
         <Button
@@ -69,13 +68,13 @@ export default function Profile() {
         alignItems="center"
         spacing={2}
       >
-        <Stack direction="column" spacing={-1}>
+        <Stack align="center" direction="column" spacing={-1}>
           <ListItem sx={{ fontWeight: "bolder" }}>1010</ListItem>
-          <ListItem>Friends</ListItem>
+          <ListItem sx={{ fontWeight: "lighter" }}>Friends</ListItem>
         </Stack>
         <Stack direction="column" spacing={-1}>
           <ListItem sx={{ fontWeight: "bolder" }}>136</ListItem>
-          <ListItem>Posts</ListItem>
+          <ListItem sx={{ fontWeight: "lighter" }}>Posts</ListItem>
         </Stack>
       </Stack>
       <Divider component="p" />
@@ -87,6 +86,27 @@ export default function Profile() {
           variant="caption"
         ></Typography>
       </p>
+      <Grid align="center" sx={{ mb: 2 }}>
+        <Typography>
+          Name : {`${userData.firstName} ${userData.lastName}`}
+        </Typography>
+        <Typography>User Name : {userData.userName}</Typography>
+        <Typography>Email : {userData.email}</Typography>
+        <Typography>Phone Number : {userData.phoneNumber}</Typography>
+        <Typography>Birthday : {userData.DateOfBirth}</Typography>
+      </Grid>
+      <Divider component="p" />
+      <p>
+        <Typography
+          sx={{ mt: 0.5, ml: 2 }}
+          color="text.secondary"
+          display="block"
+          variant="caption"
+        ></Typography>
+      </p>
+      <Grid align="center">
+        <Typography sx={{ fontWeight: "bolder" }}>Friends</Typography>
+      </Grid>
     </Grid>
   );
 }

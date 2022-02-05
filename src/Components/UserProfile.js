@@ -24,6 +24,7 @@ export default function UserProfile() {
   );
   const [firstName, setFirstName] = useState(auth.currentUser.firstName || "");
   const [lastName, setLastName] = useState(auth.currentUser.lastName || "");
+  const [about, setAbout] = useState("");
 
   const dispatch = useDispatch();
 
@@ -36,6 +37,7 @@ export default function UserProfile() {
     phoneNumber: phoneNumber,
     profilePic: auth.currentUser.photoURL,
     posterId: auth.currentUser.uid,
+    about: about,
   };
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
@@ -94,7 +96,7 @@ export default function UserProfile() {
             id="signup-basic"
             label="First name"
             variant="standard"
-            type="name"
+            type="text"
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
             margin="normal"
@@ -111,7 +113,7 @@ export default function UserProfile() {
             id="signup-basic"
             label="Last name"
             variant="standard"
-            type="name"
+            type="text"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
             margin="normal"
@@ -144,7 +146,7 @@ export default function UserProfile() {
             id="signup-basic"
             label="User name"
             variant="standard"
-            type="displayName"
+            type="text"
             value={userName}
             onChange={(e) => setUserName(e.target.value)}
             margin="normal"
@@ -160,7 +162,7 @@ export default function UserProfile() {
             id="signup-basic"
             label="Phone Number"
             variant="standard"
-            type="number"
+            type="tel"
             value={phoneNumber}
             onChange={(e) => setPhoneNumber(e.target.value)}
             margin="normal"
@@ -184,6 +186,22 @@ export default function UserProfile() {
               startAdornment: (
                 <InputAdornment position="start">
                   <Cake />
+                </InputAdornment>
+              ),
+            }}
+          />
+          <TextField
+            id="signup-basic"
+            label="About Me"
+            variant="standard"
+            type="text"
+            value={about}
+            onChange={(e) => setAbout(e.target.value)}
+            margin="normal"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <AccountCircle />
                 </InputAdornment>
               ),
             }}
