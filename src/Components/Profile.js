@@ -5,15 +5,14 @@ import { createUserProfile } from "../Store/userProfileReducer";
 import ProfileImage from "./ProfileImage";
 import { useNavigate } from "react-router";
 import {
-  TextField,
   Button,
   Grid,
-  InputAdornment,
   Typography,
   Avatar,
   Box,
   Stack,
   ListItem,
+  Divider,
 } from "@mui/material";
 import {
   AccountCircle,
@@ -42,7 +41,7 @@ export default function Profile() {
         }}
       />
       <Typography textAlign="center" style={{ padding: "8px" }}>
-        Name
+        Users Name
       </Typography>
       <Box textAlign="center" style={{ padding: "10px" }}>
         <Button
@@ -69,6 +68,15 @@ export default function Profile() {
           <ListItem>Posts</ListItem>
         </Stack>
       </Stack>
+      <Divider component="p" />
+      <p>
+        <Typography
+          sx={{ mt: 0.5, ml: 2 }}
+          color="text.secondary"
+          display="block"
+          variant="caption"
+        ></Typography>
+      </p>
     </Grid>
   );
 }
