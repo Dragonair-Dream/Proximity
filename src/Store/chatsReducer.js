@@ -18,10 +18,10 @@ export const getChats = () => {
       const snapshot = await getDocs(q);
 
 
-      const friendId =[];
+      // const friendId =[];
       const data = [];
       snapshot.forEach(item => {
-        friendId.push(item.data().users.filter(user => user !== auth.currentUser.uid));
+        // friendId.push(item.data().users.filter(user => user !== auth.currentUser.uid));
         data.push(item.data());
       });
       // console.log(friendId)

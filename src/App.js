@@ -33,12 +33,12 @@ const App = () => {
         <NavBar />
         <Routes>
           <Route path="/" element={<Map />} />
-          <Route path="/Search" element={<Search />} />
-          <Route path="/Notifications" element={<Notifications />} />
-          <Route path="/Settings" element={<Settings />} />
+          <Route path="/search" element={<Search />} />
+          <Route path="/notifications" element={<Notifications />} />
+          <Route path="/settings" element={<Settings />} />
           <Route path='/chats' element={<Chats />} />
           <Route path='/chats/:chatId' element={<ChatRoom />} />
-          <Route path="/UserProfile" element={<UserProfile />} />
+          <Route path="/userProfile" element={<UserProfile />} />
         </Routes>
         <BottomTab />
       </div>
