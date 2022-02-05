@@ -13,6 +13,7 @@ import Notifications from "./Components/Notifications";
 import Settings from "./Components/Settings";
 import Map from "./Components/Map";
 import Profile from "./Components/Profile";
+import { PostEdit } from "./Components/PostEdit";
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -33,6 +34,7 @@ const App = () => {
         <NavBar />
         <Routes>
           <Route path="/" element={<Map />} />
+          <Route path="/post-edit" element={<PostEdit />} />
           <Route path="/Search" element={<Search />} />
           <Route path="/Notifications" element={<Notifications />} />
           <Route path="/Settings" element={<Settings />} />

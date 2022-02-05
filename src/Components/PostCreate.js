@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback,  } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
@@ -8,29 +8,23 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
-import { doc, setDoc } from "@firebase/firestore";
+import { doc, getDoc, addDoc, collection, where, query, getDocs } from "@firebase/firestore";
 import { auth, db } from "../Services/firebase";
-import { FormControl } from "@mui/material";
+import {useDispatch, useSelector} from "react-redux";
+import { _addUsersPost } from "../Store/userPostReducer";
 
-//     const [imageUrl, setImageurl] = useState('');
-//     const [location, setLocation] = useState('');
-//     const [description, setDescription] = useState('');
 
-export default function FormDialog() {
+export default function PostCreate(props) {
+  const user = useSelector(state => state.user)
   const [open, setOpen] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
   const [caption, setCaption] = useState("");
-  const [location, setLocation] = useState("");
-  const [post, setPost] = useState(null);
-  const [postTime, setPostTime] = useState("");
-
-  useEffect(() => {
-    var hours = new Date().getHours(); //Current Hours
-    var min = new Date().getMinutes(); //Current Minutes
-    setPostTime(hours + ":" + min + ":");
-  }, []);
-
-  const handleClickOpen = () => {
+  const [locationName, setLocationName] = useState("");
+  const dispatch = useDispatch();
+  // use this for post console.log(formatRelative(postTime.getTime(), postTime))
+  
+  
+  const handleClickOpen = () => { // have a state to set clicked 'createpost' to false when open and true when we click the 'create' button, handled in handle submit
     setOpen(true);
   };
 
@@ -41,31 +35,28 @@ export default function FormDialog() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const uid = auth.currentUser.uid;
+    const latitude = props.lat
+    const longitude = props.lng
     try {
-      const post = await setDoc(
-        doc(db, "Posts", uid),
-        {
-          imageUrl: imageUrl,
-          location: location,
-          caption: caption,
-          postTime: postTime,
-        },
-        { merge: true }
-      );
+      dispatch(_addUsersPost(imageUrl, locationName, caption, latitude, longitude, uid ))
       setOpen(false);
     } catch (error) {
       console.log(error);
     }
   };
 
+  
   return (
     <div>
-      {/* <Button variant="outlined" onClick={handleClickOpen}>
-        Create a Post
-      </Button> */}
+      
       <Fab
+        sx={{
+          position: "fixed",
+          top: (theme) => theme.spacing('auto'),
+          right: (theme) => theme.spacing(1)
+        }}
         size="small"
-        color="secondary"
+        color="primary"
         aria-label="add"
         onClick={handleClickOpen}
       >
@@ -76,13 +67,13 @@ export default function FormDialog() {
         <DialogContent>
           <DialogContentText>
             To create a post at your current location fill out the following
-            fields.
+            fields:
           </DialogContentText>
           <TextField
             autoFocus
             margin="dense"
             id="name"
-            label="Add an image Url..."
+            label="image..."
             type="imageUrl"
             value={imageUrl}
             fullWidth
@@ -93,18 +84,18 @@ export default function FormDialog() {
             autoFocus
             margin="dense"
             id="name"
-            label="Where Are You?"
+            label="Location name..."
             type="string"
-            value={location}
+            value={locationName}
             fullWidth
             variant="standard"
-            onChange={(e) => setLocation(e.target.value)}
+            onChange={(e) => setLocationName(e.target.value)}
           />
           <TextField
             autoFocus
             margin="dense"
             id="name"
-            label="Add a Caption..."
+            label="Caption..."
             type="email"
             value={caption}
             fullWidth
