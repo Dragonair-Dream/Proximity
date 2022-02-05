@@ -40,8 +40,12 @@ export default function UserProfile() {
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(createUserProfile(newData));
-    navigate("/");
+    if (!userName) {
+      window.alert("Please enter a User Name");
+    } else {
+      dispatch(createUserProfile(newData));
+      navigate("/");
+    }
   };
 
   // const colRef = collection(db, "users");

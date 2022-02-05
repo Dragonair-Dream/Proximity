@@ -1,8 +1,7 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { auth } from "../Services/firebase";
-import { createUserProfile } from "../Store/userProfileReducer";
-import ProfileImage from "./ProfileImage";
+import { getUserData } from "../Store/userProfileReducer";
 import { useNavigate } from "react-router";
 import {
   Button,
@@ -14,16 +13,19 @@ import {
   ListItem,
   Divider,
 } from "@mui/material";
-import {
-  AccountCircle,
-  ContactPhone,
-  Cake,
-  Badge,
-  AddBoxOutlined,
-} from "@mui/icons-material";
+import { useAuth } from "../Services/firebase";
 
 export default function Profile() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const thisUser = useAuth();
+
+  const userData = useSelector((state) => state.userProfile);
+  useEffect(() => {
+    dispatch(getUserData());
+  }, [thisUser]);
+  console.log("inside Profile", userData);
+
   const handleSubmit = () => {
     navigate("/editProfile");
   };
@@ -41,7 +43,15 @@ export default function Profile() {
         }}
       />
       <Typography textAlign="center" style={{ padding: "8px" }}>
-        Users Name
+        {userData?.firstName
+          ? `${userData.firstName} ${userData.lastName}`
+          : auth.currentUser.email}
+      </Typography>
+      <Typography
+        textAlign="center"
+        style={{ padding: "1px", fontWeight: "lighter" }}
+      >
+        something about the user
       </Typography>
       <Box textAlign="center" style={{ padding: "10px" }}>
         <Button
@@ -49,7 +59,7 @@ export default function Profile() {
           variant="contained"
           onClick={(e) => handleSubmit(e)}
         >
-          Edit User
+          Edit Profile
         </Button>
       </Box>
 
