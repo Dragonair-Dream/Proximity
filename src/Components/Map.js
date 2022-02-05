@@ -66,14 +66,14 @@ function Map() {
     navigate('/post-edit')
   };
 
-    const successPos = (pos) => {
-      const {latitude, longitude} = pos.coords;
-      setLatitude(latitude);
-      setLongitude(longitude);
-      console.log('Your current position is:');
-      console.log(`Latitude : ${latitude}`);
-      console.log(`Longitude: ${longitude}`);
-    }
+  const successPos = (pos) => {
+    const { latitude, longitude } = pos.coords;
+    setLatitude(latitude);
+    setLongitude(longitude);
+    console.log("Your current position is:");
+    console.log(`Latitude : ${latitude}`);
+    console.log(`Longitude: ${longitude}`);
+  };
 
   useEffect(() => {
     let watchId;
@@ -83,11 +83,11 @@ function Map() {
       console.log('use Effect map called')
 
     } else {
-      alert("sorry, Geolocation is not supported by this browser.")
+      alert("sorry, Geolocation is not supported by this browser.");
     }
     return () => {
       navigator.geolocation.clearWatch(watchId);
-    }
+    };
   }, []);
 
   
@@ -191,7 +191,7 @@ function Map() {
       </GoogleMap>
     </LoadScript>
     </>
-  )
+  );
 }
 
 export default React.memo(Map); //Using memo will cause React to skip rendering a component if its props have not changed.
