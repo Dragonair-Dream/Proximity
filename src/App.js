@@ -13,6 +13,7 @@ import Notifications from "./Components/Notifications";
 import Settings from "./Components/Settings";
 import Map from "./Components/Map";
 import ChatRoom from "./Components/ChatRoom";
+import PostEdit from "./Components/PostEdit";
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -33,6 +34,7 @@ const App = () => {
         <NavBar />
         <Routes>
           <Route path="/" element={<Map />} />
+          <Route path="/post-edit" element={<PostEdit />} />
           <Route path="/search" element={<Search />} />
           <Route path="/notifications" element={<Notifications />} />
           <Route path="/settings" element={<Settings />} />

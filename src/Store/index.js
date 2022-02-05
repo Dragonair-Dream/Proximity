@@ -5,8 +5,11 @@ import userProfileReducer from "./userProfileReducer";
 import chatsReducer from "./chatsReducer";
 import getSingleUserDoc from "./getSingleUserDoc";
 import messagesReducer from "./messagesReducer";
+import userPostReducer from "./userPostReducer";
 
 const reducer = combineReducers({
+  //Enter reducers from store here
+  usersPosts: userPostReducer,
   userProfile: userProfileReducer,
   chats: chatsReducer,
   user: getSingleUserDoc,
