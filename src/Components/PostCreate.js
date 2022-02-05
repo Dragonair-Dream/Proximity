@@ -21,13 +21,8 @@ export default function PostCreate(props) {
   const [caption, setCaption] = useState("");
   const [locationName, setLocationName] = useState("");
   const dispatch = useDispatch();
-  // console.log(formatRelative(postTime.getTime(), postTime))
-  // console.log(props.lng)
-  // useEffect(() => {
-  //   var hours = new Date().getHours(); //Current Hours
-  //   var min = new Date().getMinutes(); //Current Minutes
-  //   setPostTime(hours + ":" + min + ":");
-  // }, []);
+  // use this for post console.log(formatRelative(postTime.getTime(), postTime))
+  
   
   const handleClickOpen = () => { // have a state to set clicked 'createpost' to false when open and true when we click the 'create' button, handled in handle submit
     setOpen(true);
@@ -44,19 +39,6 @@ export default function PostCreate(props) {
     const longitude = props.lng
     try {
       dispatch(_addUsersPost(imageUrl, locationName, caption, latitude, longitude, uid ))
-      // const post = await addDoc(
-      //   collection(db, "posts"),
-      //   {
-      //     postersId: uid,
-      //     imageUrl: imageUrl,
-      //     locationName: locationName,
-      //     latitude: props.lat,
-      //     longitude: props.lng,
-      //     caption: caption,
-      //     postTime: new Date(),
-      //   },
-      //   { merge: true }
-      // );
       setOpen(false);
     } catch (error) {
       console.log(error);

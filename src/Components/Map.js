@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
+import {useNavigate} from 'react-router-dom'
 import { GoogleMap, LoadScript, Marker, InfoWindow } from '@react-google-maps/api';
 import { googleMapsKey } from '../secrets';
 import PostCreate from './PostCreate';
@@ -45,19 +46,24 @@ function Map() {
   const [latitude, setLatitude] = useState(41.25861)
   const [longitude, setLongitude] = useState(-95.93779)
   const [anchorEl, setAnchorEl] = useState(null);
-  const [editClicked, setEditClicked] = useState(false);
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   console.log('selectedMarker', selectedMarker)
+
   const open = Boolean(anchorEl);
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
-    setEditClicked(true)
-    console.log('eeeeedddddiiiiittttt', editClicked)
+  };
 
+  const handleCloseEdit = () => {
+    setAnchorEl(null);
+    navigate('/post-edit')
   };
 
     const successPos = (pos) => {
@@ -71,7 +77,7 @@ function Map() {
 
   useEffect(() => {
     let watchId;
-    dispatch(_getUsersPosts())
+    dispatch(_getUsersPosts()) // is this the leak???
     if(navigator.geolocation) {
       watchId = navigator.geolocation.getCurrentPosition(successPos);
       console.log('use Effect map called')
@@ -116,12 +122,13 @@ function Map() {
           ) 
         }
         
-        <Marker //at some point we will use map to go through the locations of friends to create marker for each
+        <Marker 
         position={{lat: latitude, lng: longitude}}
         // icon= {{
         //   url: "https://www.clipartmax.com/png/full/5-51090_this-free-clip-arts-design-of-google-maps-pin-green-google-map.png",
         //   scale: .5
         // }}
+        label='me'
         onClick={()=> {setSelectedMarker(jerry.post.id)}}
         />
          {selectedMarker === jerry.post.id ? (
@@ -152,7 +159,7 @@ function Map() {
                   MenuListProps={{
                     'aria-labelledby': 'basic-button',
                   }}>
-                  <MenuItem onClick={handleClose}><EditIcon />edit</MenuItem>
+                  <MenuItem onClick={handleCloseEdit}><EditIcon />edit</MenuItem>
                   <MenuItem onClick={handleClose}><DeleteIcon />delete</MenuItem>
                 </Menu>
                 </>

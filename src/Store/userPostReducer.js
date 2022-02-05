@@ -58,12 +58,7 @@ export const _getUsersPosts = () => {
               });
               dispatch(getUsersPosts(postData))
               console.log("_getuserspostr", postData)
-            //   const docRef = doc(db, "users", uid);
-            //   const userSnap = await getDoc(docRef);
-            //   userName = userSnap.data().userName
-            //   postData.push(userName)
-            //   console.log("Document data:", docData[0]);
-            //   console.log('user data', userName)
+
             } else {
               // doc.data() will be undefined in this case
               console.log("No such document!");
