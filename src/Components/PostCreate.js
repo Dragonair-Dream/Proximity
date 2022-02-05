@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback,  } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
@@ -10,13 +10,17 @@ import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import { doc, getDoc, addDoc, collection, where, query, getDocs } from "@firebase/firestore";
 import { auth, db } from "../Services/firebase";
-import getUserData from "../Store/userProfileReducer"
+import {useDispatch, useSelector} from "react-redux";
+import { _addUsersPost } from "../Store/userPostReducer";
+
 
 export default function PostCreate(props) {
+  const user = useSelector(state => state.user)
   const [open, setOpen] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
   const [caption, setCaption] = useState("");
   const [locationName, setLocationName] = useState("");
+  const dispatch = useDispatch();
   // console.log(formatRelative(postTime.getTime(), postTime))
   // console.log(props.lng)
   // useEffect(() => {
@@ -36,60 +40,30 @@ export default function PostCreate(props) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const uid = auth.currentUser.uid;
+    const latitude = props.lat
+    const longitude = props.lng
     try {
-      const post = await addDoc(
-        collection(db, "posts"),
-        {
-          postersId: uid,
-          imageUrl: imageUrl,
-          locationName: locationName,
-          latitude: props.lat,
-          longitude: props.lng,
-          caption: caption,
-          postTime: new Date(),
-        },
-        { merge: true }
-      );
-      await fetchMyPosts();
+      dispatch(_addUsersPost(imageUrl, locationName, caption, latitude, longitude, uid ))
+      // const post = await addDoc(
+      //   collection(db, "posts"),
+      //   {
+      //     postersId: uid,
+      //     imageUrl: imageUrl,
+      //     locationName: locationName,
+      //     latitude: props.lat,
+      //     longitude: props.lng,
+      //     caption: caption,
+      //     postTime: new Date(),
+      //   },
+      //   { merge: true }
+      // );
       setOpen(false);
     } catch (error) {
       console.log(error);
     }
   };
-  const docData = []
-  let userName = ''
 
-  const fetchMyPosts = useCallback(async() => { // async must go inside anonymous function?
-    const uid = auth.currentUser.uid;
-    
-    const q =  query(collection(db, "posts"), where("postersId", "==", uid));
-
-    const docSnap = await getDocs(q);
-
-    if (docSnap) {
-      docSnap.forEach((doc) => {
-      docData.push((doc.id, " => ", doc.data()));
-      });
-      const docRef = doc(db, "users", uid);
-      const userSnap = await getDoc(docRef);
-      userName = userSnap.data().userName
-      console.log("Document data:", docData[0]);
-      console.log('user data', userName)
-
-    } else {
-      // doc.data() will be undefined in this case
-      console.log("No such document!");
-    }
-    console.log("Document data:", docData[0]);
-    console.log('user data', userName)
-
-
-  }, [/*some sort of state */]);
-
-  useEffect(()=> {
-    fetchMyPosts()
-  }, [fetchMyPosts])
-
+  
   return (
     <div>
       

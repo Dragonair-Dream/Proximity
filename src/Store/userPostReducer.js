@@ -1,4 +1,8 @@
+import { doc, getDoc, addDoc, collection, where, query, getDocs } from "@firebase/firestore";
+import { db, auth } from "../Services/firebase";
+
 const GET_USERS_POSTS = "GET_USERS_POSTS";
+const ADD_USERS_POST = "ADD_USERS_POST"
 
 
 const getUsersPosts = (postData) => {
@@ -8,8 +12,39 @@ const getUsersPosts = (postData) => {
     })
 };
 
+const addUsersPost = (post) =>{
+    return({
+        type: ADD_USERS_POST,
+        post
+    })
+}
 
-const _getUsersPosts = () => {
+export const _addUsersPost = (imageUrl, locationName, caption, latitude, longitude, uid) => {
+    return (async (dispatch) => {
+        try {
+            const post = await addDoc(
+                collection(db, "posts"),
+                {
+                  postersId: uid,
+                  imageUrl: imageUrl,
+                  locationName: locationName,
+                  latitude: latitude,
+                  longitude: longitude,
+                  caption: caption,
+                  postTime: new Date(),
+                },
+                { merge: true }
+              );
+              console.log("post data", post.data())
+              dispatch(addUsersPost(post.data()))
+        } catch (error) {
+            console.log('thunk add post' , error)
+        }
+    })
+}
+
+
+export const _getUsersPosts = () => {
     return(async(dispatch) => {
         try {
             const postData = []
@@ -22,6 +57,7 @@ const _getUsersPosts = () => {
               postData.push((doc.id, " => ", doc.data()));
               });
               dispatch(getUsersPosts(postData))
+              console.log("_getuserspostr", postData)
             //   const docRef = doc(db, "users", uid);
             //   const userSnap = await getDoc(docRef);
             //   userName = userSnap.data().userName
@@ -38,10 +74,13 @@ const _getUsersPosts = () => {
     })
 }
 
-const userPostReducer = (state = [], action) => {
+export default function userPostReducer(state = [], action) {
     switch(action.type){
         case GET_USERS_POSTS:
-            return [...state, actio.postData]
+            console.log("reducer check length of posts",action.postData)
+            return action.postData;
+        case ADD_USERS_POST:
+            return [...state, action.postData]
         default:
             return state
     }

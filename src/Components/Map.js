@@ -19,6 +19,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { auth, db} from '../Services/firebase';
 import { doc, getDoc } from '@firebase/firestore';
+import { useDispatch, useSelector } from 'react-redux';
+import { _getUsersPosts } from '../Store/userPostReducer';
 
 const containerStyle = {
   width: "100%",
@@ -29,6 +31,7 @@ const containerStyle = {
 
 const jerry = {
   post: {
+    id: 'klmd8an',
     imageUrl: 'https://images.unsplash.com/photo-1606066889831-35faf6fa6ff6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80',
     name: 'Jacopo',
     location: 'La Pizzeria di Giovananni',
@@ -38,13 +41,14 @@ const jerry = {
 };
 
 function Map() {
-  const [selectedFriend, setSelectedFriend] = useState(null);
+  const [selectedMarker, setSelectedMarker] = useState(null);
   const [latitude, setLatitude] = useState(41.25861)
   const [longitude, setLongitude] = useState(-95.93779)
   const [anchorEl, setAnchorEl] = useState(null);
   const [editClicked, setEditClicked] = useState(false);
+  const dispatch = useDispatch()
 
-  console.log('selectedfriend', selectedFriend)
+  console.log('selectedMarker', selectedMarker)
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -67,9 +71,11 @@ function Map() {
 
   useEffect(() => {
     let watchId;
+    dispatch(_getUsersPosts())
     if(navigator.geolocation) {
       watchId = navigator.geolocation.getCurrentPosition(successPos);
       console.log('use Effect map called')
+
     } else {
       alert("sorry, Geolocation is not supported by this browser.")
     }
@@ -78,22 +84,13 @@ function Map() {
     }
   }, []);
 
-  // const fetchMyPosts = useCallback(async() => { // async must go inside anonymous function?
-  //   const uid = auth.currentUser.uid;
-  //   const docRef = doc(db, "posts", uid );
-  //   const docSnap = await getDoc(docRef);
+  
 
-  //   if (docSnap.exists()) {
-  //     console.log("Document data:", docSnap.data());
-  //   } else {
-  //     // doc.data() will be undefined in this case
-  //     console.log("No such document!");
-  //   }
-  // }, [/*some sort of state */]);
+  const usersPosts = useSelector(state => state.usersPosts)
+  console.log("-------", usersPosts)
 
-  // useEffect(()=> {
-  //   fetchMyPosts()
-  // }, [fetchMyPosts])
+  
+
 
   return (
     <>
@@ -107,12 +104,28 @@ function Map() {
         zoom={10}
         options={{ gestureHandling: "cooperative"}}
       >
+        {
+         usersPosts.map((post, idx) => (
+              <Marker key={idx} position={{lat: post.latitude, lng: post.longitude}} onClick={()=> {setSelectedMarker(idx)}} >
+                {selectedMarker === idx ? 
+                <InfoWindow position={{lat: post.latitude, lng: post.longitude}} onCloseClick={()=>{setSelectedMarker(null);}} >
+                  <div>{post.caption}</div>
+                </InfoWindow> : null }
+              </Marker>
+           )
+          ) 
+        }
+        
         <Marker //at some point we will use map to go through the locations of friends to create marker for each
         position={{lat: latitude, lng: longitude}}
-        onClick={()=> {setSelectedFriend(jerry.post)}}
+        // icon= {{
+        //   url: "https://www.clipartmax.com/png/full/5-51090_this-free-clip-arts-design-of-google-maps-pin-green-google-map.png",
+        //   scale: .5
+        // }}
+        onClick={()=> {setSelectedMarker(jerry.post.id)}}
         />
-         {selectedFriend ? (
-          <InfoWindow position={{lat: latitude, lng: longitude}} onCloseClick={()=>{setSelectedFriend(null);}} >
+         {selectedMarker === jerry.post.id ? (
+          <InfoWindow position={{lat: latitude, lng: longitude}} onCloseClick={()=>{setSelectedMarker(null);}} >
           <Card sx={{ maxWidth: 345 }}>
             <CardHeader
               avatar={
@@ -166,6 +179,7 @@ function Map() {
           </Card>
           </InfoWindow>) : console.log('nothingggggg')}
           <PostCreate lat={latitude} lng={longitude} />
+
         { /* Child components, such as markers, info windows, etc. */ }
       </GoogleMap>
     </LoadScript>
