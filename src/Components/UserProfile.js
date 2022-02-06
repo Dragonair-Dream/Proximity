@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { auth } from "../Services/firebase";
 import { createUserProfile } from "../Store/userProfileReducer";
 import ProfileImage from "./ProfileImage";
@@ -14,16 +14,14 @@ import {
 import { AccountCircle, ContactPhone, Cake, Badge } from "@mui/icons-material";
 
 export default function UserProfile() {
-  const [email, setEmail] = useState(auth.currentUser.email || "");
-  const [userName, setUserName] = useState(auth.currentUser.userName || "");
-  const [DateOfBirth, setDateOfBirth] = useState(
-    auth.currentUser.DateOfBirth || ""
-  );
-  const [phoneNumber, setPhoneNumber] = useState(
-    auth.currentUser.phoneNumber || ""
-  );
-  const [firstName, setFirstName] = useState(auth.currentUser.firstName || "");
-  const [lastName, setLastName] = useState(auth.currentUser.lastName || "");
+  const userData = useSelector((state) => state.userProfile);
+
+  const [email, setEmail] = useState(userData.email || "");
+  const [userName, setUserName] = useState(userData.userName || "");
+  const [DateOfBirth, setDateOfBirth] = useState(userData.DateOfBirth || "");
+  const [phoneNumber, setPhoneNumber] = useState(userData.phoneNumber || "");
+  const [firstName, setFirstName] = useState(userData.firstName || "");
+  const [lastName, setLastName] = useState(userData.lastName || "");
   const [about, setAbout] = useState("");
 
   const dispatch = useDispatch();

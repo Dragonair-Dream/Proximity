@@ -26,21 +26,13 @@ export const createUserProfile = (userInfo) => {
     try {
       const uid = auth.currentUser.uid;
       if (!uid) throw new Error("UID is undefined or possibly null");
-      await setDoc(
-        doc(db, "users", uid),
-        {
-          ...userInfo,
-          createdAt: new Date(),
-        },
-        {
-          merge: true,
-        }
-      );
+      await setDoc(doc(db, "users", uid), {
+        ...userInfo,
+        createdAt: new Date(),
+      });
       dispatch(createdUserProfile(userInfo));
-      UserProfile.querySelector(".error").innerHTML = "";
     } catch (error) {
       dispatch({ type: CREATE_USER_PROFILE_ERROR, error });
-      UserProfile.querySelector(".error").innerHTML = error.message;
       console.error("Error in create user profile thunk", error);
     }
   };
