@@ -90,7 +90,13 @@ const NavBar = (props) => {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar src={userData.profilePic} />
+                <Avatar
+                  src={
+                    userData.email == auth.currentUser.email
+                      ? userData.profilePic
+                      : ""
+                  }
+                />
               </IconButton>
             </Tooltip>
             <Menu

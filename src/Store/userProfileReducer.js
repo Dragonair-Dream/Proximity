@@ -1,6 +1,7 @@
 import { auth } from "../Services/firebase";
 import { db } from "../Services/firebase";
 import { collection, addDoc, getDoc, doc, setDoc } from "firebase/firestore";
+import UserProfile from "../Components/UserProfile";
 
 const CREATE_USER_PROFILE = "CREATE_USER_PROFILE";
 const CREATE_USER_PROFILE_ERROR = "CREATE_USER_PROFILE_ERROR";
@@ -36,8 +37,10 @@ export const createUserProfile = (userInfo) => {
         }
       );
       dispatch(createdUserProfile(userInfo));
+      UserProfile.querySelector(".error").innerHTML = "";
     } catch (error) {
       dispatch({ type: CREATE_USER_PROFILE_ERROR, error });
+      UserProfile.querySelector(".error").innerHTML = error.message;
       console.error("Error in create user profile thunk", error);
     }
   };

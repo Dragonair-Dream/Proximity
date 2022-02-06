@@ -26,7 +26,8 @@ const SignIn = () => {
       );
       console.log(userCredential);
     } catch (error) {
-      console.log(error);
+      alert(error.message);
+      console.log(error.message);
     }
   };
 

@@ -14,6 +14,7 @@ import {
   Divider,
 } from "@mui/material";
 import { useAuth } from "../Services/firebase";
+import { blue } from "@mui/material/colors";
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -29,29 +30,36 @@ export default function Profile() {
     navigate("/editProfile");
   };
   return (
-    <Grid>
-      <Avatar
-        alt="Remy Sharp"
-        src={auth.currentUser.photoURL}
-        sx={{
-          width: 175,
-          height: 175,
-          border: 1,
-          margin: "auto",
-          marginTop: 1,
-        }}
-      />
-      <Typography textAlign="center" style={{ padding: "8px" }}>
-        {userData?.firstName
-          ? `${userData.firstName} ${userData.lastName}`
-          : auth.currentUser.email}
-      </Typography>
-      <Typography
-        textAlign="center"
-        style={{ padding: "1px", fontWeight: "lighter" }}
-      >
-        {userData?.about ? userData.about : <div></div>}
-      </Typography>
+    <Grid
+      sx={{ backgroundColor: "Azure", height: "100vh", marginBottom: "17%" }}
+    >
+      <Box sx={{ paddingTop: 1 }}>
+        <Avatar
+          alt="Remy Sharp"
+          src={
+            userData.email == auth.currentUser.email
+              ? auth.currentUser.photoURL
+              : ""
+          }
+          sx={{
+            width: 175,
+            height: 175,
+            border: 0.5,
+            margin: "auto",
+          }}
+        />
+        <Typography textAlign="center" style={{ padding: "8px" }}>
+          {userData.email == auth.currentUser.email
+            ? `${userData.firstName} ${userData.lastName}`
+            : ""}
+        </Typography>
+        <Typography
+          textAlign="center"
+          style={{ padding: "1px", fontWeight: "lighter" }}
+        >
+          {userData.email == auth.currentUser.email ? userData.about : ""}
+        </Typography>
+      </Box>
       <Box textAlign="center" style={{ padding: "10px" }}>
         <Button
           style={{ padding: "8px" }}
@@ -88,12 +96,27 @@ export default function Profile() {
       </p>
       <Grid align="center" sx={{ mb: 2 }}>
         <Typography>
-          Name : {`${userData.firstName} ${userData.lastName}`}
+          Name :{" "}
+          {userData.email == auth.currentUser.email
+            ? `${userData.firstName} ${userData.lastName}`
+            : ""}
         </Typography>
-        <Typography>User Name : {userData.userName}</Typography>
-        <Typography>Email : {userData.email}</Typography>
-        <Typography>Phone Number : {userData.phoneNumber}</Typography>
-        <Typography>Birthday : {userData.DateOfBirth}</Typography>
+        <Typography>
+          User Name :{" "}
+          {userData.email == auth.currentUser.email ? userData.userName : ""}
+        </Typography>
+        <Typography>
+          Email :{" "}
+          {userData.email == auth.currentUser.email ? userData.email : ""}
+        </Typography>
+        <Typography>
+          Phone Number :{" "}
+          {userData.email == auth.currentUser.email ? userData.phoneNumber : ""}
+        </Typography>
+        <Typography>
+          Birthday :{" "}
+          {userData.email == auth.currentUser.email ? userData.DateOfBirth : ""}
+        </Typography>
       </Grid>
       <Divider component="p" />
       <p>
