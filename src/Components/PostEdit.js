@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { auth } from "../Services/firebase";
+import React from "react";
+// import { useDispatch } from "react-redux";
+// import { auth } from "../Services/firebase";
 import ProfileImage from "./ProfileImage";
 import { useNavigate } from "react-router-dom";
 

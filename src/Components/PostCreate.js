@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback,  } from "react";
+import React, { useState } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
@@ -8,8 +8,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
-import { doc, getDoc, addDoc, collection, where, query, getDocs } from "@firebase/firestore";
-import { auth, db } from "../Services/firebase";
+import { auth } from "../Services/firebase";
 import {useDispatch, useSelector} from "react-redux";
 import { _addUsersPost } from "../Store/userPostReducer";
 
@@ -52,7 +51,7 @@ export default function PostCreate(props) {
       <Fab
         sx={{
           position: "fixed",
-          top: (theme) => theme.spacing('auto'),
+          top: (theme) => theme.spacing("auto"),
           right: (theme) => theme.spacing(1)
         }}
         size="small"

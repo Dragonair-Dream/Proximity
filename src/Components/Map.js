@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {useNavigate} from 'react-router-dom'
 import { GoogleMap, LoadScript, Marker, InfoWindow } from '@react-google-maps/api';
 import { googleMapsKey } from '../secrets';
@@ -12,16 +12,16 @@ import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import { red } from '@mui/material/colors';
-import FavoriteIcon from '@mui/icons-material/Favorite';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { auth, db} from '../Services/firebase';
-import { doc, getDoc } from '@firebase/firestore';
 import { useDispatch, useSelector } from 'react-redux';
 import { _getUsersPosts } from '../Store/userPostReducer';
+import { _getUsersFriends } from '../Store/userFriendReducer';
+import ChatBubble from '@mui/icons-material/ChatBubble';
+import { useGoogleMap } from '@react-google-maps/api';
 
 const containerStyle = {
   width: "100%",
@@ -78,6 +78,7 @@ function Map() {
   useEffect(() => {
     let watchId;
     dispatch(_getUsersPosts()) // is this the leak???
+    dispatch(_getUsersFriends())
     if(navigator.geolocation) {
       watchId = navigator.geolocation.getCurrentPosition(successPos);
       console.log('use Effect map called')
@@ -90,10 +91,18 @@ function Map() {
     };
   }, []);
 
-  
+  const iconPin = {
+    path: 'M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z',
+    fillColor: 'blue',
+    fillOpacity: 0.5,
+    scale: 0.05, //to reduce the size of icons
+   };
 
   const usersPosts = useSelector(state => state.usersPosts)
   console.log("-------", usersPosts)
+
+  const usersFriends = useSelector(state => state.usersFriends.accepted)
+  console.log("-------Fr", usersFriends)
 
   
 
@@ -108,7 +117,7 @@ function Map() {
         mapContainerStyle={containerStyle}
         center={{lat: latitude, lng: longitude}}
         zoom={10}
-        options={{ gestureHandling: "cooperative"}}
+        options={{ gestureHandling: "cooperative", fullscreenControl: false}}
       >
         {
          usersPosts.map((post, idx) => (
@@ -124,10 +133,7 @@ function Map() {
         
         <Marker 
         position={{lat: latitude, lng: longitude}}
-        // icon= {{
-        //   url: "https://www.clipartmax.com/png/full/5-51090_this-free-clip-arts-design-of-google-maps-pin-green-google-map.png",
-        //   scale: .5
-        // }}
+        icon={iconPin}
         label='me'
         onClick={()=> {setSelectedMarker(jerry.post.id)}}
         />
@@ -179,8 +185,8 @@ function Map() {
               </Typography>
             </CardContent>
             <CardActions disableSpacing>
-              <IconButton aria-label="add to favorites">
-                <FavoriteIcon />
+              <IconButton aria-label="chat with poster" >
+                <ChatBubble />
               </IconButton>
             </CardActions>
           </Card>

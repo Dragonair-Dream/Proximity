@@ -4,10 +4,12 @@ import thunkMiddleware from "redux-thunk";
 import { reactReduxFirebase, getFirebase } from "react-redux-firebase";
 import userProfileReducer from "./userProfileReducer";
 import userPostReducer from "./userPostReducer";
+import userFriendReducer from "./userFriendReducer"
 //import reducers from store here
 
 const reducer = combineReducers({
   //Enter reducers from store here
+  usersFriends: userFriendReducer,
   usersPosts: userPostReducer,
   userProfile: userProfileReducer,
 });

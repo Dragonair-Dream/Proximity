@@ -1,4 +1,4 @@
-import { addDoc, collection, where, query, getDocs, doc, getDoc } from "@firebase/firestore";
+import { addDoc, collection, doc, getDoc } from "@firebase/firestore";
 import { db, auth } from "../Services/firebase";
 
 const GET_USERS_FRIENDS = "GET_USERS_FRIENDS";
@@ -62,7 +62,7 @@ export const _getUsersFriends = () => {
     })
 }
 
-export default function userFriendReducer(state = [], action) {
+export default function userFriendReducer(state = {}, action) {
     switch(action.type){
         case GET_USERS_FRIENDS:
             console.log("reducer check length of posts",action.friends)
