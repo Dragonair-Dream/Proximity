@@ -57,7 +57,6 @@ const NavBar = (props) => {
   useEffect(() => {
     dispatch(getUserData());
   }, [thisUser]);
-  console.log("user data", userData.profilePic);
 
   return (
     <AppBar position="sticky">

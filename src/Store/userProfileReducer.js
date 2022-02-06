@@ -43,7 +43,6 @@ export const getUserData = () => {
     try {
       const docRef = doc(db, "users", auth.currentUser.uid);
       const docSnap = await getDoc(docRef);
-      // console.log(docSnap.data());
       dispatch(gotUserData(docSnap.data()));
     } catch (error) {
       console.log(error);

@@ -22,7 +22,7 @@ export default function UserProfile() {
   const [phoneNumber, setPhoneNumber] = useState(userData.phoneNumber || "");
   const [firstName, setFirstName] = useState(userData.firstName || "");
   const [lastName, setLastName] = useState(userData.lastName || "");
-  const [about, setAbout] = useState("");
+  const [about, setAbout] = useState(userData.about || "");
 
   const dispatch = useDispatch();
 
@@ -44,24 +44,9 @@ export default function UserProfile() {
       window.alert("Please enter a User Name");
     } else {
       dispatch(createUserProfile(newData));
-      navigate("/");
+      navigate("/UserProfile");
     }
   };
-
-  // const colRef = collection(db, "users");
-  // const q = query(colRef, where("email", "==", auth.currentUser.email));
-  // let users = [];
-  // const querySnapshot = getDocs(q).then((snapshot) => {
-  //   snapshot.docs.forEach((doc) => {
-  //     users.push({ ...doc.data() });
-  //   });
-  // });
-  // console.log(users);
-
-  // querySnapshot.forEach((doc) => {
-  //   users.push(doc.data());
-  //   console.log("inside userProfile", users);
-  // });
 
   return (
     <Grid container style={{ maxHeight: "100vh" }}>

@@ -24,7 +24,6 @@ const SignIn = () => {
         loginEmail,
         loginPassword
       );
-      console.log(userCredential);
     } catch (error) {
       alert(error.message);
       console.log(error.message);

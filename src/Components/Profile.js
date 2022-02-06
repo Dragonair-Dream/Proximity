@@ -13,13 +13,10 @@ import {
   ListItem,
   Divider,
 } from "@mui/material";
-import { useAuth } from "../Services/firebase";
-import { blue } from "@mui/material/colors";
 
 export default function Profile() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const thisUser = useAuth();
 
   const userData = useSelector((state) => state.userProfile);
   useEffect(() => {
@@ -37,7 +34,7 @@ export default function Profile() {
         <Avatar
           alt="Remy Sharp"
           src={
-            userData.email == auth.currentUser.email
+            userData.email === auth.currentUser.email
               ? auth.currentUser.photoURL
               : ""
           }
@@ -49,7 +46,7 @@ export default function Profile() {
           }}
         />
         <Typography textAlign="center" style={{ padding: "8px" }}>
-          {userData.email == auth.currentUser.email
+          {userData.email === auth.currentUser.email
             ? `${userData.firstName} ${userData.lastName}`
             : ""}
         </Typography>
@@ -57,7 +54,7 @@ export default function Profile() {
           textAlign="center"
           style={{ padding: "1px", fontWeight: "lighter" }}
         >
-          {userData.email == auth.currentUser.email ? userData.about : ""}
+          {userData.email === auth.currentUser.email ? userData.about : ""}
         </Typography>
       </Box>
       <Box textAlign="center" style={{ padding: "10px" }}>
@@ -97,25 +94,29 @@ export default function Profile() {
       <Grid align="center" sx={{ mb: 2 }}>
         <Typography>
           Name :{" "}
-          {userData.email == auth.currentUser.email
+          {userData.email === auth.currentUser.email
             ? `${userData.firstName} ${userData.lastName}`
             : ""}
         </Typography>
         <Typography>
           User Name :{" "}
-          {userData.email == auth.currentUser.email ? userData.userName : ""}
+          {userData.email === auth.currentUser.email ? userData.userName : ""}
         </Typography>
         <Typography>
           Email :{" "}
-          {userData.email == auth.currentUser.email ? userData.email : ""}
+          {userData.email === auth.currentUser.email ? userData.email : ""}
         </Typography>
         <Typography>
           Phone Number :{" "}
-          {userData.email == auth.currentUser.email ? userData.phoneNumber : ""}
+          {userData.email === auth.currentUser.email
+            ? userData.phoneNumber
+            : ""}
         </Typography>
         <Typography>
           Birthday :{" "}
-          {userData.email == auth.currentUser.email ? userData.DateOfBirth : ""}
+          {userData.email === auth.currentUser.email
+            ? userData.DateOfBirth
+            : ""}
         </Typography>
       </Grid>
       <Divider component="p" />
