@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { auth } from "../Services/firebase";
 import { createUserProfile } from "../Store/userProfileReducer";
 import ProfileImage from "./ProfileImage";
@@ -14,16 +14,15 @@ import {
 import { AccountCircle, ContactPhone, Cake, Badge } from "@mui/icons-material";
 
 export default function UserProfile() {
-  const [email, setEmail] = useState(auth.currentUser.email || "");
-  const [userName, setUserName] = useState(auth.currentUser.userName || "");
-  const [DateOfBirth, setDateOfBirth] = useState(
-    auth.currentUser.DateOfBirth || ""
-  );
-  const [phoneNumber, setPhoneNumber] = useState(
-    auth.currentUser.phoneNumber || ""
-  );
-  const [firstName, setFirstName] = useState(auth.currentUser.firstName || "");
-  const [lastName, setLastName] = useState(auth.currentUser.lastName || "");
+  const userData = useSelector((state) => state.userProfile);
+
+  const [email, setEmail] = useState(userData.email || "");
+  const [userName, setUserName] = useState(userData.userName || "");
+  const [DateOfBirth, setDateOfBirth] = useState(userData.DateOfBirth || "");
+  const [phoneNumber, setPhoneNumber] = useState(userData.phoneNumber || "");
+  const [firstName, setFirstName] = useState(userData.firstName || "");
+  const [lastName, setLastName] = useState(userData.lastName || "");
+  const [about, setAbout] = useState(userData.about || "");
 
   const dispatch = useDispatch();
 
@@ -36,28 +35,18 @@ export default function UserProfile() {
     phoneNumber: phoneNumber,
     profilePic: auth.currentUser.photoURL,
     posterId: auth.currentUser.uid,
+    about: about,
   };
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(createUserProfile(newData));
-    navigate("/");
+    if (!userName) {
+      window.alert("Please enter a User Name");
+    } else {
+      dispatch(createUserProfile(newData));
+      navigate("/UserProfile");
+    }
   };
-
-  // const colRef = collection(db, "users");
-  // const q = query(colRef, where("email", "==", auth.currentUser.email));
-  // let users = [];
-  // const querySnapshot = getDocs(q).then((snapshot) => {
-  //   snapshot.docs.forEach((doc) => {
-  //     users.push({ ...doc.data() });
-  //   });
-  // });
-  // console.log(users);
-
-  // querySnapshot.forEach((doc) => {
-  //   users.push(doc.data());
-  //   console.log("inside userProfile", users);
-  // });
 
   return (
     <Grid container style={{ maxHeight: "100vh" }}>
@@ -90,7 +79,7 @@ export default function UserProfile() {
             id="signup-basic"
             label="First name"
             variant="standard"
-            type="name"
+            type="text"
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
             margin="normal"
@@ -107,7 +96,7 @@ export default function UserProfile() {
             id="signup-basic"
             label="Last name"
             variant="standard"
-            type="name"
+            type="text"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
             margin="normal"
@@ -140,7 +129,7 @@ export default function UserProfile() {
             id="signup-basic"
             label="User name"
             variant="standard"
-            type="displayName"
+            type="text"
             value={userName}
             onChange={(e) => setUserName(e.target.value)}
             margin="normal"
@@ -156,7 +145,7 @@ export default function UserProfile() {
             id="signup-basic"
             label="Phone Number"
             variant="standard"
-            type="number"
+            type="tel"
             value={phoneNumber}
             onChange={(e) => setPhoneNumber(e.target.value)}
             margin="normal"
@@ -180,6 +169,22 @@ export default function UserProfile() {
               startAdornment: (
                 <InputAdornment position="start">
                   <Cake />
+                </InputAdornment>
+              ),
+            }}
+          />
+          <TextField
+            id="signup-basic"
+            label="About Me"
+            variant="standard"
+            type="text"
+            value={about}
+            onChange={(e) => setAbout(e.target.value)}
+            margin="normal"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <AccountCircle />
                 </InputAdornment>
               ),
             }}

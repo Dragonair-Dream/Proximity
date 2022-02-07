@@ -90,7 +90,13 @@ const NavBar = (props) => {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar src={auth.currentUser.photoURL} />
+                <Avatar
+                  src={
+                    userData.email == auth.currentUser.email
+                      ? userData.profilePic
+                      : ""
+                  }
+                />
               </IconButton>
             </Tooltip>
             <Menu
@@ -111,7 +117,7 @@ const NavBar = (props) => {
             >
               <Typography
                 sx={{
-                  backgroundColor: 'primary',
+                  backgroundColor: "primary",
                   display: "flex",
                   justifyContent: "center",
                 }}
@@ -122,7 +128,12 @@ const NavBar = (props) => {
               </Typography>
               <Divider />
               <MenuItem>
-                <Link style={{textDecoration: 'none', color: 'black'}} to="/userProfile">Profile</Link>
+                <Link
+                  style={{ textDecoration: "none", color: "black" }}
+                  to="/userProfile"
+                >
+                  Profile
+                </Link>
               </MenuItem>
               {settings.map((setting) => (
                 <MenuItem key={setting} onClick={handleCloseUserMenu}>
