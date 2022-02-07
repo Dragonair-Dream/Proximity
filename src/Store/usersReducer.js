@@ -1,5 +1,6 @@
 import { getDocs, query, collection } from 'firebase/firestore'
 import { auth, db } from '../Services/firebase'
+
 const GET_USERS = 'GET_USERS'
 
 const getUsersAction = (users) => {
@@ -13,7 +14,6 @@ const getUsersAction = (users) => {
 export const getAllUsers = () => {
   return async (dispatch) => {
     try {
-      console.log('getAllUsers thunk called')
       const users = []
       const uid = auth.currentUser.uid
       const allUsers = query(collection(db, 'users'))
