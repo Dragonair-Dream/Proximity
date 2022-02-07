@@ -7,16 +7,19 @@ import getSingleUserDoc from "./getSingleUserDoc";
 import messagesReducer from "./messagesReducer";
 import userPostReducer from "./userPostReducer";
 import userFriendReducer from "./userFriendReducer"
+import friendsPostsReducer from "./friendsPostsReducer";
 //import reducers from store here
 
 const reducer = combineReducers({
   //Enter reducers from store here
   usersFriends: userFriendReducer,
   usersPosts: userPostReducer,
+  friendsPosts: friendsPostsReducer,
   userProfile: userProfileReducer,
   chats: chatsReducer,
   user: getSingleUserDoc,
   messages: messagesReducer,
+
 
 });
 const middleware = applyMiddleware(thunkMiddleware, createLogger({ collapsed: true }))

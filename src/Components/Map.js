@@ -4,9 +4,11 @@ import { googleMapsKey } from '../secrets';
 import PostCreate from './PostCreate';
 import { useDispatch, useSelector } from 'react-redux';
 import { _getUsersPosts } from '../Store/userPostReducer';
-import { _getUsersFriends, _getUsersFriendsPosts } from '../Store/userFriendReducer';
+import { _getUsersFriends } from '../Store/userFriendReducer';
+
 
 import PostContent from './PostContent';
+import { _getUsersFriendsPosts } from '../Store/friendsPostsReducer';
 
 const containerStyle = {
   width: "100%",
@@ -57,6 +59,9 @@ function Map() {
   const usersFriends = useSelector(state => state.usersFriends.accepted)
   console.log("-------Fr", usersFriends)
 
+  const usersFriendsPosts = useSelector(state => state.friendsPosts)
+  console.log("-------friends posts stuff", usersFriendsPosts)
+
   
 
 
@@ -80,6 +85,12 @@ function Map() {
         />
         {
          usersPosts.map((post, idx) => (
+          <PostContent post={post} idx={idx} />
+           )
+          )
+        }
+        {
+         usersFriendsPosts.map((post, idx) => (
           <PostContent post={post} idx={idx} />
            )
           )

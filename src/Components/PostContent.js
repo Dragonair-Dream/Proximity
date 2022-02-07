@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Marker, InfoWindow } from '@react-google-maps/api';
+import { auth } from "../Services/firebase";
 import {useNavigate} from 'react-router-dom'
-import PostCreate from './PostCreate';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
@@ -16,9 +16,6 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { useDispatch, useSelector } from 'react-redux';
-import { _getUsersPosts } from '../Store/userPostReducer';
-import { _getUsersFriends } from '../Store/userFriendReducer';
 import ChatBubble from '@mui/icons-material/ChatBubble';
 import formatRelative from "date-fns/formatRelative";
 
@@ -59,26 +56,30 @@ export default function PostContent(props) {
                         }
                         action={
                             <>
-                            <IconButton
-                            aria-label="settings"
-                            aria-controls={open ? 'basic-menu' : undefined}
-                            aria-haspopup="true"
-                            aria-expanded={open ? 'true' : undefined}
-                            onClick={handleClick}
-                            >
-                            <MoreVertIcon />
-                            </IconButton>
-                            <Menu
-                            id="basic-menu"
-                            anchorEl={anchorEl}
-                            open={open}
-                            onClose={handleClose}
-                            MenuListProps={{
-                                'aria-labelledby': 'basic-button',
-                            }}>
-                            <MenuItem onClick={handleCloseEdit}><EditIcon />edit</MenuItem>
-                            <MenuItem onClick={handleClose}><DeleteIcon />delete</MenuItem>
-                            </Menu>
+                            { auth.currentUser.uid === post.postersId ?
+                                <>
+                                <IconButton
+                                aria-label="settings"
+                                aria-controls={open ? 'basic-menu' : undefined}
+                                aria-haspopup="true"
+                                aria-expanded={open ? 'true' : undefined}
+                                onClick={handleClick}
+                                >
+                                <MoreVertIcon />
+                                </IconButton>
+                                <Menu
+                                    id="basic-menu"
+                                    anchorEl={anchorEl}
+                                    open={open}
+                                    onClose={handleClose}
+                                    MenuListProps={{
+                                        'aria-labelledby': 'basic-button',
+                                    }}>
+                                    <MenuItem onClick={handleCloseEdit}><EditIcon />edit</MenuItem>
+                                    <MenuItem onClick={handleClose}><DeleteIcon />delete</MenuItem>
+                                </Menu>
+                                </> : null
+                            }
                             </>
                         }
                         title={post.locationName}
@@ -95,11 +96,13 @@ export default function PostContent(props) {
                             {post.caption}
                         </Typography>
                     </CardContent>
-                    <CardActions disableSpacing>
-                        <IconButton aria-label="chat with poster" >
-                            <ChatBubble />
-                        </IconButton>
-                    </CardActions>
+                    { auth.currentUser.uid !== post.postersId ?
+                        <CardActions disableSpacing>
+                            <IconButton aria-label="chat with poster" >
+                                <ChatBubble />
+                            </IconButton>
+                        </CardActions> : null
+                    }
                   </Card>
                 </InfoWindow> : null }
         </ Marker>
