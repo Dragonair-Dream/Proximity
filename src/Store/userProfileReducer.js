@@ -1,6 +1,7 @@
 import { auth } from "../Services/firebase";
 import { db } from "../Services/firebase";
 import { collection, addDoc, getDoc, doc, setDoc } from "firebase/firestore";
+import UserProfile from "../Components/UserProfile";
 
 const CREATE_USER_PROFILE = "CREATE_USER_PROFILE";
 const CREATE_USER_PROFILE_ERROR = "CREATE_USER_PROFILE_ERROR";
@@ -25,16 +26,10 @@ export const createUserProfile = (userInfo) => {
     try {
       const uid = auth.currentUser.uid;
       if (!uid) throw new Error("UID is undefined or possibly null");
-      await setDoc(
-        doc(db, "users", uid),
-        {
-          ...userInfo,
-          createdAt: new Date(),
-        },
-        {
-          merge: true,
-        }
-      );
+      await setDoc(doc(db, "users", uid), {
+        ...userInfo,
+        createdAt: new Date(),
+      });
       dispatch(createdUserProfile(userInfo));
     } catch (error) {
       dispatch({ type: CREATE_USER_PROFILE_ERROR, error });
@@ -48,7 +43,6 @@ export const getUserData = () => {
     try {
       const docRef = doc(db, "users", auth.currentUser.uid);
       const docSnap = await getDoc(docRef);
-      // console.log(docSnap.data());
       dispatch(gotUserData(docSnap.data()));
     } catch (error) {
       console.log(error);
