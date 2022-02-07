@@ -72,17 +72,5 @@ export default function userFriendReducer(state = {}, action) {
         default:
             return state
     }
-  };
 };
 
-export default function userFriendReducer(state = [], action) {
-  switch (action.type) {
-    case GET_USERS_FRIENDS:
-      console.log("reducer check length of posts", action.friends);
-      return action.friends;
-    case ADD_USERS_FRIENDS:
-      return [...state, action.friends];
-    default:
-      return state;
-  }
-}

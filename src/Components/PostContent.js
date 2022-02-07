@@ -51,7 +51,7 @@ export default function PostContent(props) {
                         avatar={
                             <Avatar sx={{ bgcolor: red[500] }} aria-label="name">
                                 J
-                            {/* {jerry.post.name.slice(0, 1)} */} 
+                            {/* {post.name.slice(0, 1)} */} 
                             </Avatar>
                         }
                         action={
