@@ -1,19 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { auth, db } from '../Services/firebase';
 import { collection, doc, updateDoc, limitToLast, orderBy, query, onSnapshot, addDoc } from 'firebase/firestore';
 import { useParams } from 'react-router-dom';
 import ChatMessages from './ChatMessages';
-import { getMessages } from '../Store/messagesReducer';
 import Grid from '@mui/material/Grid';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
 import TextField from '@mui/material/TextField';
 import Divider from '@mui/material/Divider';
 import Fab from '@mui/material/Fab';
 import Send from '@mui/icons-material/Send';
 import makeStyles from '@mui/styles/makeStyles';
-import { FormControl } from '@mui/material';
 
 const useStyles = makeStyles({
   messageArea: {
@@ -26,14 +23,14 @@ const useStyles = makeStyles({
 const ChatRoom = () => {
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState('');
+  const snapInPlace = useRef(null);
+
   let  { chatId } = useParams();
   chatId = chatId.replace(/\s/g, '')
-  // const messages = useSelector((state) => state.messages);
-  // const dispatch = useDispatch();
-  // useEffect(() => {
-  //     dispatch(getMessages(chatId));
-  //   }, [chatId]);
 
+  useEffect(() => {
+    snapInPlace.current.scrollIntoView({ behavior: 'smooth' });
+  });
 
   useEffect(() => {
     const chatRef = doc(db, 'chats', chatId)
@@ -46,8 +43,10 @@ const ChatRoom = () => {
       ));
       setMessages(data);
     });
+
     return unsubscribe;
   }, []);
+
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
@@ -66,6 +65,7 @@ const ChatRoom = () => {
       });
     }
     setText('');
+    snapInPlace.current.scrollIntoView({ behavior: 'smooth' });
   };
 
   const classes = useStyles();
@@ -81,6 +81,7 @@ const ChatRoom = () => {
             </Grid>
           </ListItem>
         ))}
+        <div ref={snapInPlace} />
       </List>
       <Divider />
       <Grid container style={{padding: '20px'}}>

@@ -32,7 +32,7 @@ export const getChats = () => {
       // userSnap.forEach(id => console.log('DFSADSFADSF', id.data()))
       // data.map(item => item.users = item.users.filter(user => user !== auth.currentUser.uid));
 
-      console.log(data)
+      // console.log(data)
       dispatch(setChats(data));
     } catch (error) {
       console.error('Something went wrong with Chat Collection Get request', error);
