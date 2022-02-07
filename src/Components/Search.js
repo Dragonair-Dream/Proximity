@@ -3,27 +3,31 @@ import { useDispatch, useSelector } from "react-redux";
 import { Box, TextField } from '@mui/material'
 import { AccountCircle } from '@mui/icons-material'
 import { List, ListItem, ListItemText, ListSubheader } from '@mui/material/'
-import { doc, getDoc } from 'firebase/firestore'
-
-import { auth } from "../Services/firebase";
-import { db } from "../Services/firebase";
-import { getRelations } from "../Store/relationsReducer";
+import { decideRequest } from "../Store/relationsReducer";
 
 const Search = () => {
   const dispatch = useDispatch()
-  const initialRelations = useSelector(state => state.relations)
-  const relations = Object.keys(initialRelations).length === 0 ? {pending: [], accepted: [], requested: []} : initialRelations
-  console.log('All Relations: ', relations)
+  const [search, setSearch] = useState('')
+  const relations = useSelector(state => state.relations)
+  const users = useSelector(state => state.users)
+  const [filtered, setFiltered] = useState([[],[...relations.pending],[...relations.accepted], [...relations.requested]])
 
   useEffect(() => {
-    console.log('Ran the useEffect')
-    dispatch(getRelations())
-  }, [])
+    if (search === '' || search === null || search === undefined) {
+      setFiltered([[], [...relations.pending], [...relations.accepted], [...relations.requested]])
+    } else {
+      const all = users.filter(user => user.userName.includes(search) || user.firstName.includes(search) || user.lastName.includes(search))
+      const p = relations.pending.filter(user => user.userName.includes(search) || user.firstName.includes(search) || user.lastName.includes(search))
+      const a = relations.accepted.filter(user => user.userName.includes(search) || user.firstName.includes(search) || user.lastName.includes(search))
+      const r = relations.requested.filter(user => user.userName.includes(search) || user.firstName.includes(search) || user.lastName.includes(search))
+      setFiltered([all, p, a, r])
+    }
+  }, [search, relations])
 
   return (
     <div>
       <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
-        <TextField id="input-with-sx" label="Search for Friends..." variant="standard" />
+        <TextField id="input-with-sx" label="Search for Friends..." variant="standard" value={search} onChange={e => setSearch(e.target.value)}/>
         <AccountCircle sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
       </Box>
       
@@ -39,32 +43,65 @@ const Search = () => {
         }}
         subheader={<li />}
       >
-
-        
-        {relations.pending.length ? (
-          <li key='pending'>
+        {filtered[0].length ? (
+          <li key='notFriends'>
             <ul>
               <ListSubheader>
-                {`${relations.pending.length} Pending Request(s)`}
+                {`Add a Friend`}
               </ListSubheader>
-              {relations.pending.map((pending) => (
-                <ListItem key={`pending-${pending.uid}`}>
-                  <ListItemText primary={`Name: ${pending.firstName}`} />
+              {filtered[0].map((add) => (
+                <ListItem key={`add-${add.uid}`}>
+                  <ListItemText primary={`Name: ${add.firstName} ${add.lastName} Username: ${add.userName}`} />
+                  <button onClick={() => dispatch(decideRequest(add.uid, 'add'))}>Add Friend</button>
                 </ListItem>
               ))}
             </ul>
           </li>
         ) : ''}
 
-        {relations.accepted.length ? (
+        {filtered[1].length ? (
+          <li key='pending'>
+            <ul>
+              <ListSubheader>
+                {`${filtered[1].length} Pending Request(s)`}
+              </ListSubheader>
+              {filtered[1].map((pending) => (
+                <ListItem key={`pending-${pending.uid}`}>
+                  <ListItemText primary={`Name: ${pending.firstName}`} />
+                  <button onClick={() => dispatch(decideRequest(pending.uid, 'accept'))}>Accept</button>
+                  <button onClick={() => dispatch(decideRequest(pending.uid, 'decline'))}>Decline</button>
+                </ListItem>
+              ))}
+            </ul>
+          </li>
+        ) : ''}
+
+        {filtered[2].length ? (
           <li key='accepted'>
             <ul>
               <ListSubheader>
-                {`Friends`}
+                {`${filtered[2].length} Friend(s)`}
               </ListSubheader>
-              {relations.accepted.map((accepted) => (
+              {filtered[2].map((accepted) => (
                 <ListItem key={`accepted-${accepted.uid}`}>
                   <ListItemText primary={`Name: ${accepted.firstName}`} />
+                  <button>Message</button>
+                </ListItem>
+              ))}
+            </ul>
+          </li>
+        ) : ''}
+
+        {filtered[3].length ? (
+          <li key='requested'>
+            <ul>
+              <ListSubheader>
+                {`${filtered[3].length} Sent Request(s)`}
+              </ListSubheader>
+              {filtered[3].map((request) => (
+                <ListItem key={`request-${request.uid}`}>
+                  <ListItemText primary={`Name: ${request.firstName}`} />
+                  <button>Send a Reminder</button>
                 </ListItem>
               ))}
             </ul>

@@ -1,4 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { useDispatch } from 'react-redux'
+import { getRelations } from "../Store/relationsReducer";
+import { getAllUsers } from '../Store/usersReducer'
 import {
   GoogleMap,
   LoadScript,
@@ -49,6 +52,7 @@ function Map() {
   const [longitude, setLongitude] = useState(-95.93779);
   const [anchorEl, setAnchorEl] = useState(null);
   const [editClicked, setEditClicked] = useState(false);
+  const dispatch = useDispatch()
 
   console.log("selectedfriend", selectedFriend);
   const open = Boolean(anchorEl);
@@ -71,6 +75,9 @@ function Map() {
   };
 
   useEffect(() => {
+    dispatch(getRelations())
+    dispatch(getAllUsers())
+
     let watchId;
     if (navigator.geolocation) {
       watchId = navigator.geolocation.getCurrentPosition(successPos);

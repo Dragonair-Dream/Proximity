@@ -4,12 +4,14 @@ import thunkMiddleware from "redux-thunk";
 import { reactReduxFirebase, getFirebase } from "react-redux-firebase";
 import userProfileReducer from "./userProfileReducer";
 import relationsReducer from './relationsReducer'
+import usersReducer from "./usersReducer";
 //import reducers from store here
 
 const reducer = combineReducers({
   //Enter reducers from store here
   userProfile: userProfileReducer,
-  relations: relationsReducer
+  relations: relationsReducer,
+  users: usersReducer
 
 });
 const middleware = applyMiddleware(
