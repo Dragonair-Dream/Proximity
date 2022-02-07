@@ -6,11 +6,8 @@ import chatsReducer from "./chatsReducer";
 import getSingleUserDoc from "./getSingleUserDoc";
 import messagesReducer from "./messagesReducer";
 import userPostReducer from "./userPostReducer";
-<<<<<<< HEAD
 import userFriendReducer from "./userFriendReducer"
 //import reducers from store here
-=======
->>>>>>> 11aeedd535feff4f278c8a96bf3aad805a22391f
 
 const reducer = combineReducers({
   //Enter reducers from store here
