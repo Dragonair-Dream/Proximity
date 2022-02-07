@@ -1,16 +1,9 @@
-import {
-  addDoc,
-  collection,
-  where,
-  query,
-  getDocs,
-  doc,
-  getDoc,
-} from "@firebase/firestore";
+import { addDoc, collection, doc, getDoc, getDocs, query, where } from "@firebase/firestore";
 import { db, auth } from "../Services/firebase";
 
 const GET_USERS_FRIENDS = "GET_USERS_FRIENDS";
-const ADD_USERS_FRIENDS = "ADD_USERS_FRIENDS";
+const ADD_USERS_FRIENDS= "ADD_USERS_FRIENDS";
+
 
 const getUsersFriends = (friends) => {
   return {
@@ -25,6 +18,7 @@ const addUsersFriends = (friends) => {
     friends,
   };
 };
+
 
 export const _addUsersFriends = (accepted, pending, requested) => {
   return async (dispatch) => {
@@ -46,34 +40,37 @@ export const _addUsersFriends = (accepted, pending, requested) => {
 };
 
 export const _getUsersFriends = () => {
-  return async (dispatch) => {
-    try {
-      const friendData = [];
-      const uid = auth.currentUser.uid;
-      const docRef = doc(db, "friends", uid);
-      const docSnap = await getDoc(docRef);
+    return(async(dispatch) => {
+        try {
+            const friendData = []
+            const uid = auth.currentUser.uid;
+            const docRef =  doc(db, "friends", uid);
+            const docSnap = await getDoc(docRef);
+        
+            if (docSnap) {
+                const friendsData = docSnap.data()
+              dispatch(getUsersFriends(friendsData))
+              console.log("_getusers friends data", docSnap.data().accepted)
+            } else {
+              // doc.data() will be undefined in this case
+              console.log("No such friends  document!");
+            }
+        } catch (error) {
+            console.log('thunk user freinds' , error)
+        }
+    })
+}
 
-      if (docSnap) {
-        const friendsData = docSnap.data();
-        dispatch(getUsersFriends(friendsData));
-      } else {
-        // doc.data() will be undefined in this case
-        console.log("No such friends  document!");
-      }
-    } catch (error) {
-      console.log("thunk user freinds", error);
+
+export default function userFriendReducer(state = {}, action) {
+    switch(action.type){
+        case GET_USERS_FRIENDS:
+            console.log("reducer check length of posts",action.friends)
+            return action.friends;
+        case ADD_USERS_FRIENDS:
+            return [...state, action.friends]
+        default:
+            return state
     }
-  };
 };
 
-export default function userFriendReducer(state = [], action) {
-  switch (action.type) {
-    case GET_USERS_FRIENDS:
-      console.log("reducer check length of posts", action.friends);
-      return action.friends;
-    case ADD_USERS_FRIENDS:
-      return [...state, action.friends];
-    default:
-      return state;
-  }
-}

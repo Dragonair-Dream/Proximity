@@ -9,7 +9,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import { auth } from "../Services/firebase";
-import { useDispatch, useSelector } from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import { _addUsersPost } from "../Store/userPostReducer";
 
 export default function PostCreate(props) {
@@ -50,7 +50,7 @@ export default function PostCreate(props) {
         sx={{
           position: "fixed",
           top: (theme) => theme.spacing("auto"),
-          right: (theme) => theme.spacing(1),
+          right: (theme) => theme.spacing(1)
         }}
         size="small"
         color="primary"

@@ -1,12 +1,4 @@
-import {
-  doc,
-  getDoc,
-  addDoc,
-  collection,
-  where,
-  query,
-  getDocs,
-} from "@firebase/firestore";
+import { addDoc, collection, where, query, getDocs } from "@firebase/firestore";
 import { db, auth } from "../Services/firebase";
 
 const GET_USERS_POSTS = "GET_USERS_POSTS";
