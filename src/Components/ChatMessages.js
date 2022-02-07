@@ -10,8 +10,8 @@ import Typography from '@mui/material/Typography';
 const ChatMessages = (props) => {
   const { text, userId, photoURL, createdAt } = props.message;
   const messagePosition = userId === auth.currentUser.uid ? 'right' : 'left';
-  // const avatarPosition = userId === auth.currentUser.uid && {flexDirection: 'row-reverse'};
-  const profilePic = userId === auth.currentUser.uid ? photoURL : '';
+  const textAlignment = userId === auth.currentUser.uid ? 'row-reverse' : 'row';
+  const profilePic = userId === auth.currentUser.uid ? photoURL : ''; //This is where i will put other person's photoURL
 
   return (
       <Grid container align={messagePosition} display='flex'>
@@ -36,7 +36,8 @@ const ChatMessages = (props) => {
               secondary={
                 <React.Fragment>
                   <Typography
-                    sx={{ display: 'inline' }}
+                    style={{width: '300px'}}
+                    sx={{ display: 'flex', flexWrap: 'wrap', flexDirection: `${textAlignment}` }}
                     component="span"
                     variant="body2"
                     color="text.primary"

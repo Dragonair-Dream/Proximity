@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { auth, db } from '../Services/firebase';
 import { collection, doc, updateDoc, limitToLast, orderBy, query, onSnapshot, addDoc } from 'firebase/firestore';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import ChatMessages from './ChatMessages';
 import Grid from '@mui/material/Grid';
 import List from '@mui/material/List';
@@ -24,6 +24,8 @@ const ChatRoom = () => {
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState('');
   const snapInPlace = useRef(null);
+  const something = useLocation();
+  console.log(something)
 
   let  { chatId } = useParams();
   chatId = chatId.replace(/\s/g, '')
