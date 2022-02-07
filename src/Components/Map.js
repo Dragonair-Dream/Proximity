@@ -12,7 +12,8 @@ import { _getUsersFriendsPosts } from '../Store/friendsPostsReducer';
 
 const containerStyle = {
   width: "100%",
-  height: "90vh"
+  height: "90vh",
+  marginBottom: "17%",
 };
 
 function Map() {

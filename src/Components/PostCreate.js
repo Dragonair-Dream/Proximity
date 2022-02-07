@@ -12,18 +12,16 @@ import { auth } from "../Services/firebase";
 import {useDispatch, useSelector} from "react-redux";
 import { _addUsersPost } from "../Store/userPostReducer";
 
-
 export default function PostCreate(props) {
-  const user = useSelector(state => state.user)
+  const user = useSelector((state) => state.user);
   const [open, setOpen] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
   const [caption, setCaption] = useState("");
   const [locationName, setLocationName] = useState("");
   const dispatch = useDispatch();
-  // use this for post console.log(formatRelative(postTime.getTime(), postTime))
-  
-  
-  const handleClickOpen = () => { // have a state to set clicked 'createpost' to false when open and true when we click the 'create' button, handled in handle submit
+
+  const handleClickOpen = () => {
+    // have a state to set clicked 'createpost' to false when open and true when we click the 'create' button, handled in handle submit
     setOpen(true);
   };
 
@@ -34,20 +32,20 @@ export default function PostCreate(props) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const uid = auth.currentUser.uid;
-    const latitude = props.lat
-    const longitude = props.lng
+    const latitude = props.lat;
+    const longitude = props.lng;
     try {
-      dispatch(_addUsersPost(imageUrl, locationName, caption, latitude, longitude, uid ))
+      dispatch(
+        _addUsersPost(imageUrl, locationName, caption, latitude, longitude, uid)
+      );
       setOpen(false);
     } catch (error) {
       console.log(error);
     }
   };
 
-  
   return (
     <div>
-      
       <Fab
         sx={{
           position: "fixed",

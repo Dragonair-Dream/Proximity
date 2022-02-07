@@ -8,6 +8,7 @@ import BottomTab from "./Components/BottomTab";
 import NavBar from "./Components/NavBar";
 import Chats from "./Components/Chats";
 import UserProfile from "./Components/UserProfile";
+import Profile from "./Components/Profile";
 import Search from "./Components/Search";
 import Notifications from "./Components/Notifications";
 import Settings from "./Components/Settings";
@@ -38,9 +39,10 @@ const App = () => {
           <Route path="/search" element={<Search />} />
           <Route path="/notifications" element={<Notifications />} />
           <Route path="/settings" element={<Settings />} />
-          <Route path='/chats' element={<Chats />} />
-          <Route path='/chats/:chatId' element={<ChatRoom />} />
-          <Route path="/userProfile" element={<UserProfile />} />
+          <Route path="/chats" element={<Chats />} />
+          <Route path="/chats/:chatId" element={<ChatRoom />} />
+          <Route path="/userProfile" element={<Profile />} />
+          <Route path="/editProfile" element={<UserProfile />} />
         </Routes>
         <BottomTab />
       </div>

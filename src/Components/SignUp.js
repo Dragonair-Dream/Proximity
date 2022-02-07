@@ -25,16 +25,18 @@ export default function SignUp() {
         loginEmail,
         loginPassword
       );
-      console.log(user);
     } catch (error) {
-      console.log(error);
+      alert(error.message);
+      console.log(error.message);
     }
   };
   const navigate = useNavigate();
   function handleSubmit(e) {
     e.preventDefault();
     createAccount();
-    navigate("/");
+    if (auth.currentUser) {
+      navigate("/");
+    }
   }
 
   return (
