@@ -4,7 +4,6 @@ import { auth, db } from '../Services/firebase'
 const GET_USERS = 'GET_USERS'
 
 const getUsersAction = (users) => {
-  console.log('getAllUsers action creator called')
   return {
     type: GET_USERS,
     users
