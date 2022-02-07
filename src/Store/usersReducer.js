@@ -32,7 +32,6 @@ export const getAllUsers = () => {
 const usersReducer = (state = [], action) => {
   switch (action.type) {
     case GET_USERS:
-      console.log('Users store set as: ', action.users)
       return [...action.users]
     default:
       return state
