@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import {AddLocationAlt, NotesSharp, AddAPhoto } from "@mui/icons-material";
 
-export function PostEdit() {
+function PostEdit() {
     const navigate = useNavigate();
 
     return(
@@ -113,3 +113,5 @@ export function PostEdit() {
             </Grid>
     )
 }
+
+export default PostEdit;

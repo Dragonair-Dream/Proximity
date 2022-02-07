@@ -25,7 +25,7 @@ import { _getUsersPosts } from '../Store/userPostReducer';
 
 const containerStyle = {
   width: "100%",
-  height: "90vh",
+  height: "90vh"
 };
 
 
@@ -90,12 +90,12 @@ function Map() {
     };
   }, []);
 
-  
+
 
   const usersPosts = useSelector(state => state.usersPosts)
   console.log("-------", usersPosts)
 
-  
+
 
 
   return (
@@ -113,16 +113,16 @@ function Map() {
         {
          usersPosts.map((post, idx) => (
               <Marker key={idx} position={{lat: post.latitude, lng: post.longitude}} onClick={()=> {setSelectedMarker(idx)}} >
-                {selectedMarker === idx ? 
+                {selectedMarker === idx ?
                 <InfoWindow position={{lat: post.latitude, lng: post.longitude}} onCloseClick={()=>{setSelectedMarker(null);}} >
                   <div>{post.caption}</div>
                 </InfoWindow> : null }
               </Marker>
            )
-          ) 
+          )
         }
-        
-        <Marker 
+
+        <Marker
         position={{lat: latitude, lng: longitude}}
         // icon= {{
         //   url: "https://www.clipartmax.com/png/full/5-51090_this-free-clip-arts-design-of-google-maps-pin-green-google-map.png",
