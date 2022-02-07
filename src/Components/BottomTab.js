@@ -58,21 +58,21 @@ function BottomTab() {
       />
       <BottomNavigationAction
         component={Link}
-        to="/Search"
+        to="/search"
         className={styles.root}
         label="Search"
         icon={<Search style={{ fill: "white" }} />}
       />
       <BottomNavigationAction
         component={Link}
-        to="/Notifications"
+        to="/notifications"
         className={styles.root}
         label="Notifications"
         icon={<Notifications style={{ fill: "white" }} />}
       />
       <BottomNavigationAction
         component={Link}
-        to="/Chats"
+        to="/chats"
         className={styles.root}
         label="Chat"
         icon={<ChatBubbleTwoTone style={{ fill: "white" }} />}

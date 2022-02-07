@@ -25,7 +25,7 @@ import { useGoogleMap } from '@react-google-maps/api';
 
 const containerStyle = {
   width: "100%",
-  height: "90vh",
+  height: "90vh"
 };
 
 
@@ -122,16 +122,16 @@ function Map() {
         {
          usersPosts.map((post, idx) => (
               <Marker key={idx} position={{lat: post.latitude, lng: post.longitude}} onClick={()=> {setSelectedMarker(idx)}} >
-                {selectedMarker === idx ? 
+                {selectedMarker === idx ?
                 <InfoWindow position={{lat: post.latitude, lng: post.longitude}} onCloseClick={()=>{setSelectedMarker(null);}} >
                   <div>{post.caption}</div>
                 </InfoWindow> : null }
               </Marker>
            )
-          ) 
+          )
         }
-        
-        <Marker 
+
+        <Marker
         position={{lat: latitude, lng: longitude}}
         icon={iconPin}
         label='me'
