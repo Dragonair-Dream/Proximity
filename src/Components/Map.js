@@ -5,6 +5,8 @@ import PostCreate from './PostCreate';
 import { useDispatch, useSelector } from 'react-redux';
 import { _getUsersPosts } from '../Store/userPostReducer';
 import { _getUsersFriends } from '../Store/userFriendReducer';
+import { collection, query, onSnapshot, where } from 'firebase/firestore';
+import { db, auth } from '../Services/firebase';
 
 
 import PostContent from './PostContent';
@@ -20,6 +22,17 @@ function Map() {
   const [latitude, setLatitude] = useState(41.25861)
   const [longitude, setLongitude] = useState(-95.93779)
   const dispatch = useDispatch()
+
+  const usersPosts = useSelector(state => state.usersPosts)
+  // console.log("-------", usersPosts)
+
+  const usersFriends = useSelector(state => state.usersFriends.accepted)
+  console.log("-------Fr", usersFriends)
+
+  const usersFriendsPosts = useSelector(state => state.friendsPosts)
+  console.log("-------friends posts stuff", usersFriendsPosts)
+
+  const [myPostQueryData, setMyPostQueryData] = useState(null);
 
   const successPos = (pos) => {
     const { latitude, longitude } = pos.coords;
@@ -47,24 +60,26 @@ function Map() {
     };
   }, []);
 
+  useEffect(() => {
+    const postRef = collection(db, 'posts');
+    const q = query(postRef, where('postersId', '==', auth.currentUser.uid));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const data = [];
+      querySnapshot.forEach(doc => (
+        data.push({docId: doc.id, ...doc.data()})
+        ));
+        setMyPostQueryData(data);
+    });
+    return unsubscribe;
+
+  }, []);
+
   const iconPin = {
     path: 'M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z',
     fillColor: 'blue',
     fillOpacity: 0.5,
     scale: 0.05, //to reduce the size of icons
    };
-
-  const usersPosts = useSelector(state => state.usersPosts)
-  // console.log("-------", usersPosts)
-
-  const usersFriends = useSelector(state => state.usersFriends.accepted)
-  console.log("-------Fr", usersFriends)
-
-  const usersFriendsPosts = useSelector(state => state.friendsPosts)
-  console.log("-------friends posts stuff", usersFriendsPosts)
-
-  
-
 
   return (
     <>
@@ -85,14 +100,18 @@ function Map() {
         // onClick={()=> {setSelectedMarker(jerry.post.id)}}
         />
         {
-         usersPosts.map((post, idx) => (
-          <PostContent post={post} idx={idx} />
+         myPostQueryData && myPostQueryData.map((post) => (
+           <div key={post.docId}>
+            <PostContent post={post} />
+           </div>
            )
           )
         }
         {
-         usersFriendsPosts.map((post, idx) => (
-          <PostContent post={post} idx={idx} />
+         usersFriendsPosts.map((post) => (
+          <div key={post.docId}>
+            <PostContent post={post} />
+          </div>
            )
           )
         }

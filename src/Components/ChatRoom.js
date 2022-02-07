@@ -15,8 +15,8 @@ import makeStyles from '@mui/styles/makeStyles';
 const useStyles = makeStyles({
   messageArea: {
     width: '100%',
-    height: '65vh',
-    overflowY: 'auto'
+    height: '70vh',
+    overflowY: 'auto',
   }
 });
 
@@ -65,7 +65,7 @@ const ChatRoom = () => {
         photoURL,
         userId: uid
       });
-    }
+    } else
     setText('');
     snapInPlace.current.scrollIntoView({ behavior: 'smooth' });
   };
@@ -86,8 +86,8 @@ const ChatRoom = () => {
         <div ref={snapInPlace} />
       </List>
       <Divider />
-      <Grid container style={{padding: '20px'}}>
-        <form style={{display: 'flex', flex: 1}} onSubmit={handleSendMessage}>
+      <Grid container style={{padding: '20px', borderTop: 'solid', borderWidth: '1px', borderColor: 'lightgray'}}>
+        <form style={{display: 'flex', flex: 1, justifyContent: 'center'}} onSubmit={handleSendMessage}>
           <Grid item xs={11}>
             <TextField value={text} onChange={(e) => setText(e.target.value)} id="outlined-basic" label="Start Chatting" fullWidth />
           </Grid>

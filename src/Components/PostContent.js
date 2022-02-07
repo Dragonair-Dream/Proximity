@@ -20,7 +20,7 @@ import ChatBubble from '@mui/icons-material/ChatBubble';
 import formatRelative from "date-fns/formatRelative";
 
 export default function PostContent(props) {
-    const {post, idx} = props
+    const {post} = props
     const [anchorEl, setAnchorEl] = useState(null);
     const [selectedMarker, setSelectedMarker] = useState(null);
     const open = Boolean(anchorEl);
@@ -30,11 +30,11 @@ export default function PostContent(props) {
     const handleClick = (event) => {
       setAnchorEl(event.currentTarget);
     };
-  
+
     const handleClose = () => {
       setAnchorEl(null);
     };
-  
+
     const handleCloseEdit = () => {
       setAnchorEl(null);
       navigate('/post-edit')
@@ -43,15 +43,15 @@ export default function PostContent(props) {
     // console.log("0-=-=-=-=0", props.post)
 
     return(
-        <Marker key={idx} position={{lat: post.latitude, lng: post.longitude}} onClick={()=> {setSelectedMarker(idx)}} >
-            {selectedMarker === idx ?    
+        <Marker position={{lat: post.latitude, lng: post.longitude}} onClick={()=> {setSelectedMarker(post.docId)}} >
+            {selectedMarker === post.docId ?
                 <InfoWindow position={{lat: post.latitude, lng: post.longitude}} onCloseClick={()=>{setSelectedMarker(null);}} >
                   <Card sx={{ maxWidth: 345 }}>
                     <CardHeader
                         avatar={
                             <Avatar sx={{ bgcolor: red[500] }} aria-label="name">
                                 J
-                            {/* {post.name.slice(0, 1)} */} 
+                            {/* {post.name.slice(0, 1)} */}
                             </Avatar>
                         }
                         action={
@@ -83,7 +83,7 @@ export default function PostContent(props) {
                             </>
                         }
                         title={post.locationName}
-                        subheader="15 minutes ago"
+                        subheader={formatRelative(new Date(post.postTime.seconds * 1000),new Date())}
                     />
                     <CardMedia
                         component="img"

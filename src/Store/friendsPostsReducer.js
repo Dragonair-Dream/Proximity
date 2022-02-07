@@ -20,15 +20,15 @@ export const _getUsersFriendsPosts = () => {
             const docRef =  doc(db, "friends", uid);
             const docuSnap = await getDoc(docRef);
             const friends = docuSnap.data().accepted
-        
-            if (friends) {
+
+            if (friends.length > 0) {
                 friends.map( async friend => {
                     const friendId = friend.uid;
                     const q =  query(collection(db, "posts"), where("postersId", "==", friendId));
                     const docSnap =  await getDocs(q);
                     // console.log('popopopopo', docSnap)
                     docSnap.forEach((doc) => {
-                        postData.push((doc.id, " => ", doc.data()));
+                        postData.push({docId: doc.id,  ...doc.data()});
                     });
                     console.log('popopopo', postData)
                     dispatch(getUsersFriendsPosts(postData))
