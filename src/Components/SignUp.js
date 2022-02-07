@@ -28,23 +28,17 @@ export default function SignUp() {
         loginEmail,
         loginPassword
       );
-      console.log('User', user)
-      return true
     } catch (error) {
-      return false
+      alert(error.message);
+      console.log(error.message);
     }
   };
   const navigate = useNavigate();
   async function handleSubmit(e) {
     e.preventDefault();
-    if (!regex.test(email)) {
-      window.alert('Email is not valid')
-    } else if (password.length < 6) {
-      window.alert('Password should contain at least 6 characters')
-    } else if (!(await createAccount())) {
-      window.alert('Email is already in use')
-    } else {
-      navigate('/UserProfile')
+    createAccount();
+    if (auth.currentUser) {
+      navigate("/");
     }
   }
 

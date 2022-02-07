@@ -1,11 +1,10 @@
 import { auth } from "../Services/firebase";
 import { db } from "../Services/firebase";
-import { collection, addDoc, getDoc, doc, setDoc, arrayUnion, arrayRemove, updateDoc } from "firebase/firestore";
+import { getDoc, doc, arrayUnion, arrayRemove, updateDoc } from "firebase/firestore";
 
 const GET_RELATIONS = 'GET_RELATIONS'
 
 const getRelationsAction = (relations) => {
-  console.log('getRelations action creator called')
   return {
     type: GET_RELATIONS,
     relations
@@ -15,9 +14,7 @@ const getRelationsAction = (relations) => {
 export const decideRequest = (uid, option) => {
   return async (dispatch) => {
     try {
-      //const uid = auth.currentUser.uid
-      const testUid = 'sVn4XnxzBTVxqRDUKEznfPvpGlJ3'
-      
+      const testUid = auth.currentUser.uid
       const editMine = doc(db, 'friends', testUid)
       const docRef = await getDoc(editMine)
       const findFriend = docRef.data().pending.find(element => element.uid === uid)
@@ -60,15 +57,11 @@ export const decideRequest = (uid, option) => {
 export const getRelations = () => {
   return async (dispatch) => {
     try {
-      //console.log('Current user is: ', auth.currentUser)
-      //const uid = auth.currentUser.uid
-      const uid = 'sVn4XnxzBTVxqRDUKEznfPvpGlJ3'
-      console.log('getRelations thunk called')
+      const uid = auth.currentUser.uid
       if (!uid) throw new Error('UID is undefined or possibly null')
       const userRef = doc(db, 'friends', uid)
       const userSnap = await getDoc(userRef) 
       if (userSnap.exists()) {
-        console.log('User Document Data: ', userSnap.data())
         dispatch(getRelationsAction(userSnap.data()))
       } else {
         console.log('No such user document')
@@ -82,7 +75,6 @@ export const getRelations = () => {
 export default (state = {}, action) => {
   switch (action.type) {
     case GET_RELATIONS:
-      console.log('Friends store set as: ', action.relations)
       return action.relations
     default:
       return state

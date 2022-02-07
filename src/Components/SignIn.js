@@ -24,9 +24,9 @@ const SignIn = () => {
         loginEmail,
         loginPassword
       );
-      console.log(userCredential);
     } catch (error) {
-      window.alert('Invalid credentials, please try again')
+      alert(error.message);
+      console.log(error.message);
     }
   };
 

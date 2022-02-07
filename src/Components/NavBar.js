@@ -18,6 +18,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../Services/firebase";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserData } from "../Store/userProfileReducer";
+import Divider from "@mui/material/Divider";
 
 const settings = ["Logout"];
 
@@ -89,7 +90,13 @@ const NavBar = (props) => {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar src={userData.profilePic} />
+                <Avatar
+                  src={
+                    userData.email == auth.currentUser.email
+                      ? userData.profilePic
+                      : ""
+                  }
+                />
               </IconButton>
             </Tooltip>
             <Menu
@@ -110,20 +117,24 @@ const NavBar = (props) => {
             >
               <Typography
                 sx={{
-                  flexGrow: 1,
+                  backgroundColor: "primary",
                   display: "flex",
                   justifyContent: "center",
-                  paddingLeft: "10px",
-                  paddingRight: "10px",
                 }}
               >
                 {userData?.firstName
                   ? userData.firstName
                   : auth.currentUser.email}
               </Typography>
-              <Typography textAlign="left" paddingLeft={2}>
-                <Link to="/UserProfile">Profile</Link>
-              </Typography>
+              <Divider />
+              <MenuItem>
+                <Link
+                  style={{ textDecoration: "none", color: "black" }}
+                  to="/userProfile"
+                >
+                  Profile
+                </Link>
+              </MenuItem>
               {settings.map((setting) => (
                 <MenuItem key={setting} onClick={handleCloseUserMenu}>
                   <Typography textAlign="center">{setting}</Typography>

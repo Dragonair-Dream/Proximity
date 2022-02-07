@@ -41,24 +41,4 @@ export async function upload(file, currentUser, setLoading) {
   alert("Profile Picture Updated!");
 }
 
-//GET CURRENT USER DATA
-// const colRef = collection(db, "users");
-// const q = query(colRef, where("email", "==", auth.currentUser.email));
-// let users = [];
-// const querySnapshot = getDocs(q).then((snapshot) => {
-//   snapshot.docs.forEach((doc) => {
-//     users.push({ ...doc.data() });
-//   });
-// });
-// console.log(users);
-
-// const colRef = collection(db, "users");
-// const q = query(colRef, where("email", "==", auth.currentUser.email));
-// export const querySnapshot = getDocs(q).then((snapshot) => {
-//   let users = [];
-//   snapshot.docs.forEach((doc) => {
-//     users.push({ ...doc.data() });
-//   });
-// });
-
 export default firebaseApp;
