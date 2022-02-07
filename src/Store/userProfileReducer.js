@@ -59,7 +59,7 @@ export default (state = {}, action) => {
       console.log("create user error", action.error);
       return state;
     case GET_USER_DATA:
-      console.log("got user data", action.userData);
+      // console.log("got user data", action.userData);
       return action.userData;
     default:
       return state;

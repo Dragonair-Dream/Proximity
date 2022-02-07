@@ -198,7 +198,7 @@ function Map() {
               </Card>
             </InfoWindow>
           ) : (
-            <div />
+            console.log("nothingggggg")
           )}
           <PostCreate lat={latitude} lng={longitude} />
 

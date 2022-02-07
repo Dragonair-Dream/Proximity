@@ -8,12 +8,13 @@ import BottomTab from "./Components/BottomTab";
 import NavBar from "./Components/NavBar";
 import Chats from "./Components/Chats";
 import UserProfile from "./Components/UserProfile";
+import Profile from "./Components/Profile";
 import Search from "./Components/Search";
 import Notifications from "./Components/Notifications";
 import Settings from "./Components/Settings";
 import Map from "./Components/Map";
-import Profile from "./Components/Profile";
-import { PostEdit } from "./Components/PostEdit";
+import ChatRoom from "./Components/ChatRoom";
+import PostEdit from "./Components/PostEdit";
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -35,11 +36,12 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Map />} />
           <Route path="/post-edit" element={<PostEdit />} />
-          <Route path="/Search" element={<Search />} />
-          <Route path="/Notifications" element={<Notifications />} />
-          <Route path="/Settings" element={<Settings />} />
+          <Route path="/search" element={<Search />} />
+          <Route path="/notifications" element={<Notifications />} />
+          <Route path="/settings" element={<Settings />} />
           <Route path="/chats" element={<Chats />} />
-          <Route path="/UserProfile" element={<Profile />} />
+          <Route path="/chats/:chatId" element={<ChatRoom />} />
+          <Route path="/userProfile" element={<Profile />} />
           <Route path="/editProfile" element={<UserProfile />} />
         </Routes>
         <BottomTab />
