@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { auth } from "./Services/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import SignIn from "./Components/SignIn";
@@ -18,16 +18,19 @@ import ChatRoom from "./Components/ChatRoom";
 import PostEdit from "./Components/PostEdit";
 import { getRelations } from './Store/relationsReducer'
 import { getAllUsers } from "./Store/usersReducer";
+import { getUserData } from "./Store/userProfileReducer";
 
 const App = () => {
   const [user, setUser] = useState(null);
   const dispatch = useDispatch()
+  const currentUser = useSelector(state => state.userProfile)
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         dispatch(getRelations())
         dispatch(getAllUsers())
+        dispatch(getUserData())
         setUser(user);
       } else {
         setUser(null);
@@ -35,7 +38,16 @@ const App = () => {
     });
   }, [setUser]);
 
-  if (user) {
+  if (user && (!currentUser.didUpdate)) {
+    return (
+      <div>
+        <Routes>
+          <Route path='/' element={<UserProfile/>} />
+        </Routes>
+      </div>
+    )
+  } else if (user) {
+    console.log('Current user doc is: ', currentUser)
     return (
       <div>
         <NavBar />
