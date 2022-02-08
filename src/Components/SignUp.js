@@ -21,6 +21,7 @@ export default function SignUp() {
   const [password, setPassword] = useState("");
   const [displayName, setDisplayName] = useState("");
 
+  const dispatch = useDispatch();
   const createAccount = async () => {
     const loginEmail = email;
     const loginPassword = password;
@@ -33,6 +34,7 @@ export default function SignUp() {
         loginPassword
       );
       updateProfile(auth.currentUser, { displayName: loginDisplayName });
+      dispatch(createUserProfile({ userName: loginDisplayName }));
     } catch (error) {
       alert(error.message);
       console.log(error.message);
