@@ -48,16 +48,11 @@ export default function UserProfile() {
       setPhoto(e.target.files[0]);
     }
   }
-
-  // function handleClick() {
-  //   upload(photo, currentUser, setLoading);
-  //   // dispatch(createUserProfile({ profilePic: currentUser.photoURL }));
-  // }
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!userName) {
-      window.alert("Please enter a User Name");
+    if (!photo) {
+      dispatch(createUserProfile(newData));
+      navigate("/UserProfile");
     } else {
       dispatch(createUserProfile(newData));
       upload(photo, currentUser);
@@ -68,7 +63,7 @@ export default function UserProfile() {
     if (currentUser) {
       setphotoURL(currentUser.photoURL);
     }
-  }, [photo]);
+  }, [currentUser]);
 
   return (
     <Grid container style={{ maxHeight: "100vh" }}>
