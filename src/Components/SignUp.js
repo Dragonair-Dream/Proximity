@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../Services/firebase";
+import { setDoc, doc } from 'firebase/firestore'
 
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -28,6 +29,27 @@ export default function SignUp() {
         loginEmail,
         loginPassword
       );
+      await setDoc(doc(db, 'users', user.uid), {
+        didUpdate: false,
+        DateOfBirth: '',
+        about: '',
+        createdAt: '',
+        email: user.email,
+        createdAt: new Date(),
+        firstName: '',
+        lastName: '',
+        phoneNumber: '',
+        posterId: user.uid,
+        profilePic: '',
+        userName: ''
+        //change this to userName: user.userName when ready
+      })
+      await setDoc(doc(db, 'friends', user.uid), {
+        accepted: [],
+        pending: [],
+        requested: []
+      })
+
     } catch (error) {
       alert(error.message);
       console.log(error.message);
