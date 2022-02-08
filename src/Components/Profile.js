@@ -48,7 +48,7 @@ export default function Profile() {
         <Typography textAlign="center" style={{ padding: "8px" }}>
           {userData.email === auth.currentUser.email
             ? `${userData.firstName} ${userData.lastName}`
-            : ""}
+            : null}
         </Typography>
         <Typography
           textAlign="center"

@@ -34,7 +34,13 @@ export default function SignUp() {
         loginPassword
       );
       updateProfile(auth.currentUser, { displayName: loginDisplayName });
-      dispatch(createUserProfile({ userName: loginDisplayName }));
+      dispatch(
+        createUserProfile({
+          userName: loginDisplayName,
+          email: loginEmail,
+          profilePic: "",
+        })
+      );
     } catch (error) {
       alert(error.message);
       console.log(error.message);
