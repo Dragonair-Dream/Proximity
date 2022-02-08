@@ -33,7 +33,6 @@ export default function SignUp() {
         didUpdate: false,
         DateOfBirth: '',
         about: '',
-        createdAt: '',
         email: user.email,
         createdAt: new Date(),
         firstName: '',

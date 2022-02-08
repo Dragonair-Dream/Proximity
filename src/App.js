@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { auth } from "./Services/firebase";
+import { auth, db } from "./Services/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import SignIn from "./Components/SignIn";
 import SignUp from "./Components/SignUp";
@@ -19,8 +19,12 @@ import PostEdit from "./Components/PostEdit";
 import { getRelations } from './Store/relationsReducer'
 import { getAllUsers } from "./Store/usersReducer";
 import { getUserData } from "./Store/userProfileReducer";
+import { doc, onSnapshot } from 'firebase/firestore'
 
 const App = () => {
+  const unsub = onSnapshot(doc(db, 'notifications', auth.currentUser.uid), (notifs) => {
+    console.log('NOTIFICATIONS: ', notifs.data())
+  })
   const [user, setUser] = useState(null);
   const dispatch = useDispatch()
   const currentUser = useSelector(state => state.userProfile) 
