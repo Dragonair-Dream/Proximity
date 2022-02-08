@@ -16,34 +16,34 @@ import Settings from "./Components/Settings";
 import Map from "./Components/Map";
 import ChatRoom from "./Components/ChatRoom";
 import PostEdit from "./Components/PostEdit";
-import { getRelations } from './Store/relationsReducer'
+import { getRelations } from "./Store/relationsReducer";
 import { getAllUsers } from "./Store/usersReducer";
 import { getUserData } from "./Store/userProfileReducer";
 
 const App = () => {
   const [user, setUser] = useState(null);
-  const dispatch = useDispatch()
-  const currentUser = useSelector(state => state.userProfile) 
+  const dispatch = useDispatch();
+  const currentUser = useSelector((state) => state.userProfile);
   //const [currentUserState, setCurrentUserState] = useState(currentUser) || ''
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        dispatch(getRelations())
-        dispatch(getAllUsers())
-        dispatch(getUserData())
+        dispatch(getRelations());
+        dispatch(getAllUsers());
+        dispatch(getUserData());
         setUser(user);
-      }
+      } else {
       /*
       if (currentUser) {
         setCurrentUserState(currentUser)
-      } */else {
+      } */
         setUser(null);
         //setCurrentUserState('')
       }
     });
   }, [setUser]);
-/*
+  /*
   if (user && (!currentUserState.didUpdate)) {
     console.log('USER HERE ==============', user)
     console.log('CURRENT HERE +++++++++++', currentUser)
@@ -58,7 +58,7 @@ const App = () => {
     )
   } else */
   if (user) {
-    console.log('Current user doc is: ', currentUser)
+    console.log("Current user doc is: ", currentUser);
     if (currentUser.didUpdate) {
       return (
         <div>
@@ -75,18 +75,18 @@ const App = () => {
             <Route path="/editProfile" element={<UserProfile />} />
           </Routes>
           <BottomTab />
-        </div> 
-      )
+        </div>
+      );
     } else {
       return (
         <div>
           <Routes>
-            <Route path="/" element={<Profile />} />
-            <Route path='/SignUp' element={<Profile />} />
-            <Route path="/editProfile" element={<UserProfile />} />
+            <Route path="/" element={<UserProfile />} />
+            <Route path="/SignUp" element={<UserProfile />} />
+            {/* <Route path="/user" element={<UserProfile />} /> */}
           </Routes>
         </div>
-      )
+      );
     }
   } else {
     return (

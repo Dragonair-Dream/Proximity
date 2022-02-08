@@ -1,7 +1,9 @@
 import React, { useState } from "react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, db } from "../Services/firebase";
-import { setDoc, doc } from 'firebase/firestore'
+import { createUserProfile } from "../Store/userProfileReducer";
+import { useDispatch } from "react-redux";
+import { doc, setDoc } from "@firebase/firestore";
 
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -14,14 +16,18 @@ import { AccountCircle, LockRounded } from "@mui/icons-material";
 
 export default function SignUp() {
   //creates regex for valid emails
-  const regex = new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}');
+  const regex = new RegExp("[a-z0-9]+@[a-z]+.[a-z]{2,3}");
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [displayName, setDisplayName] = useState("");
+
+  const dispatch = useDispatch();
 
   const createAccount = async () => {
     const loginEmail = email;
     const loginPassword = password;
+    const loginDisplayName = displayName;
 
     try {
       const { user } = await createUserWithEmailAndPassword(
@@ -29,27 +35,22 @@ export default function SignUp() {
         loginEmail,
         loginPassword
       );
-      await setDoc(doc(db, 'users', user.uid), {
-        didUpdate: false,
-        DateOfBirth: '',
-        about: '',
-        createdAt: '',
-        email: user.email,
-        createdAt: new Date(),
-        firstName: '',
-        lastName: '',
-        phoneNumber: '',
-        posterId: user.uid,
-        profilePic: '',
-        userName: ''
-        //change this to userName: user.userName when ready
-      })
-      await setDoc(doc(db, 'friends', user.uid), {
+      updateProfile(auth.currentUser, { displayName: loginDisplayName });
+      dispatch(
+        createUserProfile({
+          userName: loginDisplayName,
+          email: loginEmail,
+          profilePic: "",
+          didUpdate: false,
+          posterId: user.uid,
+        })
+      );
+
+      await setDoc(doc(db, "friends", user.uid), {
         accepted: [],
         pending: [],
-        requested: []
-      })
-
+        requested: [],
+      });
     } catch (error) {
       alert(error.message);
       console.log(error.message);
@@ -59,9 +60,7 @@ export default function SignUp() {
   async function handleSubmit(e) {
     e.preventDefault();
     createAccount();
-    if (auth.currentUser) {
-      navigate("/");
-    }
+    navigate("/");
   }
 
   return (
@@ -131,6 +130,23 @@ export default function SignUp() {
               startAdornment: (
                 <InputAdornment position="start">
                   <LockRounded />
+                </InputAdornment>
+              ),
+            }}
+          />
+          <TextField
+            required
+            id="signup-basic"
+            label="User Name"
+            variant="standard"
+            type="displayName"
+            value={displayName}
+            onChange={(e) => setDisplayName(e.target.value)}
+            margin="normal"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <AccountCircle />
                 </InputAdornment>
               ),
             }}
