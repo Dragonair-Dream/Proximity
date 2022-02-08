@@ -9,6 +9,8 @@ import {
   ChatBubbleTwoTone,
 } from "@mui/icons-material";
 import { Link } from "react-router-dom";
+import { auth, db} from '../Services/firebase'
+import { onSnapshot, doc } from "firebase/firestore";
 
 const useStyles = makeStyles({
   root: {
@@ -33,6 +35,11 @@ const myStyles = makeStyles({
 });
 
 function BottomTab() {
+  
+  const unsub = onSnapshot(doc(db, 'notifications', auth.currentUser.uid), (notifs) => {
+    console.log('NOTIFICATIONS: ', notifs.data())
+  })
+  
   const classes = useStyles();
   const styles = myStyles();
 
