@@ -2,6 +2,8 @@ import { createStore, combineReducers, applyMiddleware } from "redux";
 import { createLogger } from "redux-logger";
 import thunkMiddleware from "redux-thunk";
 import userProfileReducer from "./userProfileReducer";
+import relationsReducer from './relationsReducer'
+import usersReducer from "./usersReducer";
 import chatsReducer from "./chatsReducer";
 import getSingleUserDoc from "./getSingleUserDoc";
 import messagesReducer from "./messagesReducer";
@@ -16,6 +18,8 @@ const reducer = combineReducers({
   usersPosts: userPostReducer,
   friendsPosts: friendsPostsReducer,
   userProfile: userProfileReducer,
+  relations: relationsReducer,
+  users: usersReducer,
   chats: chatsReducer,
   user: getSingleUserDoc,
   messages: messagesReducer,

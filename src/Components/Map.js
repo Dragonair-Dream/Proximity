@@ -31,6 +31,9 @@ function Map() {
   };
 
   useEffect(() => {
+    dispatch(getRelations())
+    dispatch(getAllUsers())
+
     let watchId;
     dispatch(_getUsersPosts()) // is this the leak???
     dispatch(_getUsersFriends())
