@@ -105,8 +105,8 @@ function Map() {
         // onClick={()=> {setSelectedMarker(jerry.post.id)}}
         />
         {
-         usersPosts.map((post, idx) => (
-          <PostContent post={post} idx={idx} />
+         myPostQueryData && myPostQueryData.map((post, idx) => (
+          <PostContent post={post} />
            )
           )
         }

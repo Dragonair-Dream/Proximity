@@ -43,8 +43,8 @@ export default function PostContent(props) {
     // console.log("0-=-=-=-=0", props.post)
 
     return(
-        <Marker key={idx} position={{lat: post.latitude, lng: post.longitude}} onClick={()=> {setSelectedMarker(idx)}} >
-            {selectedMarker === idx ?    
+        <Marker key={post.docId} position={{lat: post.latitude, lng: post.longitude}} onClick={()=> {setSelectedMarker(post.docId)}} >
+            {selectedMarker === post.docId ?    
                 <InfoWindow position={{lat: post.latitude, lng: post.longitude}} onCloseClick={()=>{setSelectedMarker(null);}} >
                   <Card sx={{ maxWidth: 345 }}>
                     <CardHeader
