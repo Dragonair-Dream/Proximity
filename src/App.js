@@ -36,9 +36,11 @@ const App = () => {
         setUser(null);
       }
     });
-  }, [setUser]);
+  }, [setUser, currentUser]);
 
   if (user && (!currentUser.didUpdate)) {
+    console.log('USER HERE ==============', user)
+    console.log('CURRENT HERE +++++++++++', currentUser)
     return (
       <div>
         <Routes>
