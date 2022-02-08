@@ -34,9 +34,7 @@ export default function SignUp() {
   function handleSubmit(e) {
     e.preventDefault();
     createAccount();
-    if (auth.currentUser) {
-      navigate("/");
-    }
+    navigate("/");
   }
 
   return (
