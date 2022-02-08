@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 // import { useDispatch } from "react-redux";
 // import { auth } from "../Services/firebase";
 import ProfileImage from "./ProfileImage";
 import { useNavigate } from "react-router-dom";
-
+import { useSelector } from "react-redux";
 import {
   TextField,
   Button,
@@ -14,8 +14,14 @@ import {
 import { AddLocationAlt, NotesSharp, AddAPhoto } from "@mui/icons-material";
 
 function PostEdit() {
+  const allPostsData = useSelector((state) => state.usersPosts )
+  console.log('ajnfkjnfkjnfkj post edit allpostsdtata', allPostsData)
+  const postData = allPostsData.filter(post => post.editing === false)
+  console.log('post data from post edit', postData)
+  const [locationName, setLocationName] = useState( '')
+  const [caption, setCaption] = useState( '')
   const navigate = useNavigate();
-
+ 
   return (
     <Grid container style={{ maxHeight: "100vh" }}>
       <Grid
@@ -48,8 +54,8 @@ function PostEdit() {
             label="Location Name..."
             variant="standard"
             type="name"
-            value=""
-            // onChange={(e) => setFirstName(e.target.value)}
+            value={locationName}
+            onChange={(e) => setLocationName(e.target.value)}
             margin="normal"
             InputProps={{
               startAdornment: (
@@ -60,29 +66,12 @@ function PostEdit() {
             }}
           />
           <TextField
-            required
-            id="signup-basic"
-            label="Image url..."
-            variant="standard"
-            type="name"
-            value=""
-            // onChange={(e) => setLastName(e.target.value)}
-            margin="normal"
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <AddAPhoto />
-                </InputAdornment>
-              ),
-            }}
-          />
-          <TextField
             id="signup-basic"
             label="Caption..."
             variant="standard"
             type="email"
-            value=""
-            // onChange={(e) => setEmail(e.target.value)}
+            value={caption}
+            onChange={(e) => setCaption(e.target.value)}
             margin="normal"
             InputProps={{
               startAdornment: (

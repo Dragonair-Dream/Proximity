@@ -24,7 +24,8 @@ export const _addUsersPost = (
   caption,
   latitude,
   longitude,
-  uid
+  uid,
+  editing
 ) => {
   return async (dispatch) => {
     try {
@@ -38,6 +39,7 @@ export const _addUsersPost = (
           longitude: longitude,
           caption: caption,
           postTime: new Date(),
+          editing: editing
         },
         { merge: true }
       );
@@ -58,8 +60,9 @@ export const _getUsersPosts = () => {
 
       if (docSnap) {
         docSnap.forEach((doc) => {
-          postData.push((doc.id, " => ", doc.data()));
+          postData.push({docId: doc.id, ...doc.data()});
         });
+        console.log('_getudersposts  thunk', postData)
         dispatch(getUsersPosts(postData));
       } else {
         // doc.data() will be undefined in this case

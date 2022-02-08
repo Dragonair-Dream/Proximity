@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from "../Services/firebase";
 import { Marker, InfoWindow } from '@react-google-maps/api';
 import { auth } from "../Services/firebase";
 import {useNavigate} from 'react-router-dom'
@@ -35,8 +37,12 @@ export default function PostContent(props) {
       setAnchorEl(null);
     };
   
-    const handleCloseEdit = () => {
-      setAnchorEl(null);
+    const handleCloseEdit = async (postId) => {
+        const washingtonRef = doc(db, "posts", postId);
+        await updateDoc(washingtonRef, {
+        editing: true
+        });
+      setAnchorEl(null); 
       navigate('/post-edit')
     };
 
@@ -75,7 +81,7 @@ export default function PostContent(props) {
                                     MenuListProps={{
                                         'aria-labelledby': 'basic-button',
                                     }}>
-                                    <MenuItem onClick={handleCloseEdit}><EditIcon />edit</MenuItem>
+                                    <MenuItem onClick={() => handleCloseEdit(post.docId)}><EditIcon />edit</MenuItem>
                                     <MenuItem onClick={handleClose}><DeleteIcon />delete</MenuItem>
                                 </Menu>
                                 </> : null

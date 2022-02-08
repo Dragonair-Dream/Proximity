@@ -33,9 +33,10 @@ export default function PostCreate(props) {
     const uid = auth.currentUser.uid;
     const latitude = props.lat;
     const longitude = props.lng;
+    const editing = false
     try {
       dispatch(
-        _addUsersPost(imageUrl, locationName, caption, latitude, longitude, uid)
+        _addUsersPost(imageUrl, locationName, caption, latitude, longitude, uid, editing)
       );
       setOpen(false);
     } catch (error) {
