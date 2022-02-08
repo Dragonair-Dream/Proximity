@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../Services/firebase";
+import { setDoc, doc } from 'firebase/firestore'
 
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -10,7 +11,6 @@ import Typography from "@mui/material/Typography";
 import { Link, useNavigate } from "react-router-dom";
 import InputAdornment from "@mui/material/InputAdornment";
 import { AccountCircle, LockRounded } from "@mui/icons-material";
-import { setDoc } from "firebase/firestore";
 
 export default function SignUp() {
   //creates regex for valid emails
@@ -30,6 +30,7 @@ export default function SignUp() {
         loginPassword
       );
       await setDoc(doc(db, 'users', user.uid), {
+        didUpdate: false,
         DateOfBirth: '',
         about: '',
         createdAt: '',
