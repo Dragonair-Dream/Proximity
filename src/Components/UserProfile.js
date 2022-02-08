@@ -36,6 +36,7 @@ export default function UserProfile() {
     profilePic: auth.currentUser.photoURL,
     posterId: auth.currentUser.uid,
     about: about,
+    didUpdate: true,
   };
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
@@ -72,7 +73,7 @@ export default function UserProfile() {
           <Typography
             style={{ fontSize: "30px", color: "#0458cf ", textShadow: "100px" }}
           >
-            Update User Profile
+            {userData.didUpdate ? "Update Your Profile" : "Create Your Profile"}
           </Typography>
           <TextField
             required
@@ -195,7 +196,7 @@ export default function UserProfile() {
             variant="contained"
             onClick={(e) => handleSubmit(e)}
           >
-            Submit Profile
+            {userData.didUpdate ? "Submit Profile" : "Continue"}
           </Button>
           <br />
           <ProfileImage />

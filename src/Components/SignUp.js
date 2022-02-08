@@ -3,6 +3,7 @@ import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, db } from "../Services/firebase";
 import { createUserProfile } from "../Store/userProfileReducer";
 import { useDispatch } from "react-redux";
+import { doc, setDoc } from "@firebase/firestore";
 
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -22,6 +23,7 @@ export default function SignUp() {
   const [displayName, setDisplayName] = useState("");
 
   const dispatch = useDispatch();
+
   const createAccount = async () => {
     const loginEmail = email;
     const loginPassword = password;
@@ -39,8 +41,16 @@ export default function SignUp() {
           userName: loginDisplayName,
           email: loginEmail,
           profilePic: "",
+          didUpdate: false,
+          posterId: user.uid,
         })
       );
+
+      await setDoc(doc(db, "friends", user.uid), {
+        accepted: [],
+        pending: [],
+        requested: [],
+      });
     } catch (error) {
       alert(error.message);
       console.log(error.message);
