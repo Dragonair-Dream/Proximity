@@ -36,6 +36,7 @@ export default function UserProfile() {
     profilePic: auth.currentUser.photoURL,
     posterId: auth.currentUser.uid,
     about: about,
+    didUpdate: true
   };
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
