@@ -21,7 +21,6 @@ export default function PostCreate(props) {
   const dispatch = useDispatch();
 
   const handleClickOpen = () => {
-    // have a state to set clicked 'createpost' to false when open and true when we click the 'create' button, handled in handle submit
     setOpen(true);
   };
 

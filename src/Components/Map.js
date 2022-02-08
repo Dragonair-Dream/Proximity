@@ -33,7 +33,7 @@ function Map() {
   useEffect(() => {
     let watchId;
     dispatch(_getUsersPosts()) // is this the leak???
-    dispatch(_getUsersFriends())
+    // dispatch(_getUsersFriends())
     dispatch(_getUsersFriendsPosts())
     if(navigator.geolocation) {
       watchId = navigator.geolocation.getCurrentPosition(successPos);
@@ -57,8 +57,8 @@ function Map() {
   const usersPosts = useSelector(state => state.usersPosts)
   // console.log("-------", usersPosts)
 
-  const usersFriends = useSelector(state => state.usersFriends.accepted)
-  console.log("-------Fr", usersFriends)
+  // const usersFriends = useSelector(state => state.usersFriends.accepted)
+  // console.log("-------Fr", usersFriends)
 
   const usersFriendsPosts = useSelector(state => state.friendsPosts)
   console.log("-------friends posts stuff", usersFriendsPosts)
@@ -69,10 +69,10 @@ function Map() {
   return (
     <>
     {/* <button onClick={getPosition}>position</button> */}
-      <LoadScript
+      <LoadScript //Loads the Google Maps API script.(API) interfaces between an application and scripting language. It provides the connection points with the application that allow you to control it
         googleMapsApiKey= {googleMapsKey}
       >
-      <GoogleMap
+      <GoogleMap //GoogleMap - The map component inside which all other components render
         mapContainerStyle={containerStyle}
         center={{lat: latitude, lng: longitude}}
         zoom={10}
