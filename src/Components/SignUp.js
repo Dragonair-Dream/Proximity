@@ -43,6 +43,11 @@ export default function SignUp() {
         userName: ''
         //change this to userName: user.userName when ready
       })
+      await setDoc(doc(db, 'friends', user.uid), {
+        accepted: [],
+        pending: [],
+        requested: []
+      })
 
     } catch (error) {
       alert(error.message);
