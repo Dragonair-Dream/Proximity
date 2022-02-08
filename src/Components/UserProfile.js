@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { auth } from "../Services/firebase";
+import { auth, upload, useAuth } from "../Services/firebase";
 import { createUserProfile } from "../Store/userProfileReducer";
 import ProfileImage from "./ProfileImage";
 import { useNavigate } from "react-router";
@@ -10,11 +10,14 @@ import {
   Grid,
   InputAdornment,
   Typography,
+  Avatar,
 } from "@mui/material";
 import { AccountCircle, ContactPhone, Cake, Badge } from "@mui/icons-material";
 
 export default function UserProfile() {
   const userData = useSelector((state) => state.userProfile);
+  const dispatch = useDispatch();
+  const currentUser = useAuth();
 
   const [email, setEmail] = useState(auth.currentUser.email || "");
   const [userName, setUserName] = useState(auth.currentUser.displayName || "");
@@ -23,8 +26,8 @@ export default function UserProfile() {
   const [firstName, setFirstName] = useState(userData.firstName || "");
   const [lastName, setLastName] = useState(userData.lastName || "");
   const [about, setAbout] = useState(userData.about || "");
-
-  const dispatch = useDispatch();
+  const [photo, setPhoto] = useState(null);
+  const [photoURL, setphotoURL] = useState(null);
 
   const newData = {
     firstName: firstName,
@@ -39,15 +42,33 @@ export default function UserProfile() {
     didUpdate: true,
   };
   const navigate = useNavigate();
+
+  function handleChange(e) {
+    if (e.target.files[0]) {
+      setPhoto(e.target.files[0]);
+    }
+  }
+
+  // function handleClick() {
+  //   upload(photo, currentUser, setLoading);
+  //   // dispatch(createUserProfile({ profilePic: currentUser.photoURL }));
+  // }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!userName) {
       window.alert("Please enter a User Name");
     } else {
       dispatch(createUserProfile(newData));
+      upload(photo, currentUser);
       navigate("/UserProfile");
     }
   };
+  useEffect(() => {
+    if (currentUser) {
+      setphotoURL(currentUser.photoURL);
+    }
+  }, [photo]);
 
   return (
     <Grid container style={{ maxHeight: "100vh" }}>
@@ -190,7 +211,30 @@ export default function UserProfile() {
               ),
             }}
           />
-
+          <Typography
+            style={{
+              fontSize: "30px",
+              fontWeight: "bolder",
+              color: "#0458cf ",
+              textShadow: "100px",
+            }}
+          >
+            Update User Profile Picture
+          </Typography>
+          <br />
+          <input
+            style={{ padding: "8px", alignProperty: "center" }}
+            variant="contained"
+            type="file"
+            onChange={handleChange}
+          />
+          <br />
+          <Avatar
+            alt="Remy Sharp"
+            src={photoURL}
+            sx={{ width: 75, height: 75 }}
+          />
+          <br />
           <Button
             style={{ padding: "8px" }}
             variant="contained"
@@ -199,8 +243,11 @@ export default function UserProfile() {
             {userData.didUpdate ? "Submit Profile" : "Continue"}
           </Button>
           <br />
-          <ProfileImage />
+          {/* <ProfileImage /> */}
         </div>
+        <br />
+        <br />
+        <br />
       </Grid>
     </Grid>
   );
