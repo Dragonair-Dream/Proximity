@@ -60,7 +60,7 @@ export default function SignUp() {
     e.preventDefault();
     createAccount();
     if (auth.currentUser) {
-      navigate("/userProfile");
+      navigate("/");
     }
   }
 

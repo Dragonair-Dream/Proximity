@@ -23,8 +23,8 @@ import { getUserData } from "./Store/userProfileReducer";
 const App = () => {
   const [user, setUser] = useState(null);
   const dispatch = useDispatch()
-  const currentUser = useSelector(state => state.userProfile)
-  const [currentUserState, setCurrentUserState] = useState(currentUser) || ''
+  const currentUser = useSelector(state => state.userProfile) 
+  //const [currentUserState, setCurrentUserState] = useState(currentUser) || ''
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -34,45 +34,60 @@ const App = () => {
         dispatch(getUserData())
         setUser(user);
       }
+      /*
       if (currentUser) {
         setCurrentUserState(currentUser)
-      } else {
+      } */else {
         setUser(null);
-        setCurrentUserState('')
+        //setCurrentUserState('')
       }
     });
-  }, [setUser, setCurrentUserState]);
-
+  }, [setUser]);
+/*
   if (user && (!currentUserState.didUpdate)) {
     console.log('USER HERE ==============', user)
     console.log('CURRENT HERE +++++++++++', currentUser)
     return (
       <div>
         <Routes>
+          <Route path='SignUp' element={}
           <Route path='/' element={<UserProfile/>} />
           <Route path="/userProfile" element={<Profile />} />
         </Routes>
       </div>
     )
-  } else if (user) {
+  } else */
+  if (user) {
     console.log('Current user doc is: ', currentUser)
-    return (
-      <div>
-        <NavBar />
-        <Routes>
-          <Route path="/" element={<Map />} />
-          <Route path="/post-edit" element={<PostEdit />} />
-          <Route path="/search" element={<Search />} />
-          <Route path="/notifications" element={<Notifications />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="/chats" element={<Chats />} />
-          <Route path="/chats/:chatId" element={<ChatRoom />} />
-          <Route path="/userProfile" element={<Profile />} />
-          <Route path="/editProfile" element={<UserProfile />} />
-        </Routes>
-        <BottomTab />
-      </div>
-    );
+    if (currentUser.didUpdate) {
+      return (
+        <div>
+          <NavBar />
+          <Routes>
+            <Route path="/" element={<Map />} />
+            <Route path="/post-edit" element={<PostEdit />} />
+            <Route path="/search" element={<Search />} />
+            <Route path="/notifications" element={<Notifications />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="/chats" element={<Chats />} />
+            <Route path="/chats/:chatId" element={<ChatRoom />} />
+            <Route path="/userProfile" element={<Profile />} />
+            <Route path="/editProfile" element={<UserProfile />} />
+          </Routes>
+          <BottomTab />
+        </div> 
+      )
+    } else {
+      return (
+        <div>
+          <Routes>
+            <Route path="/" element={<Profile />} />
+            <Route path='/SignUp' element={<Profile />} />
+            <Route path="/editProfile" element={<UserProfile />} />
+          </Routes>
+        </div>
+      )
+    }
   } else {
     return (
       <div>
