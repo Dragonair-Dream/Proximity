@@ -27,7 +27,7 @@ export const createUserProfile = (userInfo) => {
       const uid = auth.currentUser.uid;
       if (!uid) throw new Error("UID is undefined or possibly null");
       await setDoc(doc(db, "users", uid), {
-        ...userInfo
+        ...userInfo,
       });
       dispatch(createdUserProfile(userInfo));
     } catch (error) {
