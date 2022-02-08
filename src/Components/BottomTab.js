@@ -35,11 +35,15 @@ const myStyles = makeStyles({
 });
 
 function BottomTab() {
-  
+  const [count, setCount] = useState(0)
   const unsub = onSnapshot(doc(db, 'notifications', auth.currentUser.uid), (notifs) => {
-    console.log('NOTIFICATIONS: ', notifs.data())
+    notifs.data().forEach((notification) => {
+      if (notification.read === false) {
+        setCount(count + 1)
+      }
+    })
   })
-  
+
   const classes = useStyles();
   const styles = myStyles();
 
