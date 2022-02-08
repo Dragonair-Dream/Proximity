@@ -5,6 +5,11 @@ import PostCreate from './PostCreate';
 import { useDispatch, useSelector } from 'react-redux';
 import { _getUsersPosts } from '../Store/userPostReducer';
 import { _getUsersFriends } from '../Store/userFriendReducer';
+import { collection, query, where, onSnapshot } from "@firebase/firestore";
+import { db, auth } from "../Services/firebase";
+
+
+
 
 
 import PostContent from './PostContent';
@@ -19,6 +24,7 @@ const containerStyle = {
 function Map() {
   const [latitude, setLatitude] = useState(41.25861)
   const [longitude, setLongitude] = useState(-95.93779)
+  const [myPostQueryData, setMyPostQueryData] = useState(null)
   const dispatch = useDispatch()
 
   const successPos = (pos) => {
@@ -45,6 +51,20 @@ function Map() {
     return () => {
       navigator.geolocation.clearWatch(watchId);
     };
+  }, []);
+
+  useEffect(() => {
+    const postRef = collection(db, 'posts');
+    const q = query(postRef, where('postersId', '==', auth.currentUser.uid));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const data = [];
+      querySnapshot.forEach(doc => (
+        data.push({docId: doc.id, ...doc.data()})
+        ));
+        setMyPostQueryData(data);
+    });
+    return unsubscribe;
+
   }, []);
 
   const iconPin = {
