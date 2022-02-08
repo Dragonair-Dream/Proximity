@@ -10,6 +10,7 @@ import Typography from "@mui/material/Typography";
 import { Link, useNavigate } from "react-router-dom";
 import InputAdornment from "@mui/material/InputAdornment";
 import { AccountCircle, LockRounded } from "@mui/icons-material";
+import { setDoc } from "firebase/firestore";
 
 export default function SignUp() {
   //creates regex for valid emails
@@ -28,6 +29,21 @@ export default function SignUp() {
         loginEmail,
         loginPassword
       );
+      await setDoc(doc(db, 'users', user.uid), {
+        DateOfBirth: '',
+        about: '',
+        createdAt: '',
+        email: user.email,
+        createdAt: new Date(),
+        firstName: '',
+        lastName: '',
+        phoneNumber: '',
+        posterId: user.uid,
+        profilePic: '',
+        userName: ''
+        //change this to userName: user.userName when ready
+      })
+
     } catch (error) {
       alert(error.message);
       console.log(error.message);
