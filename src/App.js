@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { auth } from "./Services/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import SignIn from "./Components/SignIn";
@@ -15,13 +16,18 @@ import Settings from "./Components/Settings";
 import Map from "./Components/Map";
 import ChatRoom from "./Components/ChatRoom";
 import PostEdit from "./Components/PostEdit";
+import { getRelations } from './Store/relationsReducer'
+import { getAllUsers } from "./Store/usersReducer";
 
 const App = () => {
   const [user, setUser] = useState(null);
+  const dispatch = useDispatch()
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
+        dispatch(getRelations())
+        dispatch(getAllUsers())
         setUser(user);
       } else {
         setUser(null);

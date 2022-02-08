@@ -37,6 +37,8 @@ function Map() {
   };
 
   useEffect(() => {
+    
+
     let watchId;
     dispatch(_getUsersPosts()) // is this the leak???
     // dispatch(_getUsersFriends())
