@@ -16,8 +16,8 @@ import { AccountCircle, ContactPhone, Cake, Badge } from "@mui/icons-material";
 export default function UserProfile() {
   const userData = useSelector((state) => state.userProfile);
 
-  const [email, setEmail] = useState(userData.email || "");
-  const [userName, setUserName] = useState(userData.userName || "");
+  const [email, setEmail] = useState(auth.currentUser.email || "");
+  const [userName, setUserName] = useState(auth.currentUser.displayName || "");
   const [DateOfBirth, setDateOfBirth] = useState(userData.DateOfBirth || "");
   const [phoneNumber, setPhoneNumber] = useState(userData.phoneNumber || "");
   const [firstName, setFirstName] = useState(userData.firstName || "");

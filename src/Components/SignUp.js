@@ -1,6 +1,8 @@
 import React, { useState } from "react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, db } from "../Services/firebase";
+import { createUserProfile } from "../Store/userProfileReducer";
+import { useDispatch } from "react-redux";
 
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -13,14 +15,16 @@ import { AccountCircle, LockRounded } from "@mui/icons-material";
 
 export default function SignUp() {
   //creates regex for valid emails
-  const regex = new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}');
+  const regex = new RegExp("[a-z0-9]+@[a-z]+.[a-z]{2,3}");
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [displayName, setDisplayName] = useState("");
 
   const createAccount = async () => {
     const loginEmail = email;
     const loginPassword = password;
+    const loginDisplayName = displayName;
 
     try {
       const { user } = await createUserWithEmailAndPassword(
@@ -28,6 +32,7 @@ export default function SignUp() {
         loginEmail,
         loginPassword
       );
+      updateProfile(auth.currentUser, { displayName: loginDisplayName });
     } catch (error) {
       alert(error.message);
       console.log(error.message);
@@ -107,6 +112,23 @@ export default function SignUp() {
               startAdornment: (
                 <InputAdornment position="start">
                   <LockRounded />
+                </InputAdornment>
+              ),
+            }}
+          />
+          <TextField
+            required
+            id="signup-basic"
+            label="User Name"
+            variant="standard"
+            type="displayName"
+            value={displayName}
+            onChange={(e) => setDisplayName(e.target.value)}
+            margin="normal"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <AccountCircle />
                 </InputAdornment>
               ),
             }}
