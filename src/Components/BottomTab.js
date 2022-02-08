@@ -1,6 +1,6 @@
 import React from "react";
 import { makeStyles } from "@mui/styles";
-import { BottomNavigation } from "@mui/material";
+import { BottomNavigation, Badge } from "@mui/material";
 import { BottomNavigationAction } from "@mui/material";
 import {
   Notifications,
@@ -79,7 +79,11 @@ function BottomTab() {
         to="/notifications"
         className={styles.root}
         label="Notifications"
-        icon={<Notifications style={{ fill: "white" }} />}
+        icon={
+          <Badge badgeContent={count} color='primary'>
+            <Notifications style={{ fill: "white" }} />
+          </Badge>
+        }
       />
       <BottomNavigationAction
         component={Link}
