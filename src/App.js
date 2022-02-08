@@ -24,6 +24,7 @@ const App = () => {
   const [user, setUser] = useState(null);
   const dispatch = useDispatch()
   const currentUser = useSelector(state => state.userProfile)
+  const [currentUserState, setCurrentUserState] = useState(currentUser) || ''
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -32,19 +33,24 @@ const App = () => {
         dispatch(getAllUsers())
         dispatch(getUserData())
         setUser(user);
+      }
+      if (currentUser) {
+        setCurrentUserState(currentUser)
       } else {
         setUser(null);
+        setCurrentUserState('')
       }
     });
-  }, [setUser, currentUser]);
+  }, [setUser, setCurrentUserState]);
 
-  if (user && (!currentUser.didUpdate)) {
+  if (user && (!currentUserState.didUpdate)) {
     console.log('USER HERE ==============', user)
     console.log('CURRENT HERE +++++++++++', currentUser)
     return (
       <div>
         <Routes>
           <Route path='/' element={<UserProfile/>} />
+          <Route path="/userProfile" element={<Profile />} />
         </Routes>
       </div>
     )
