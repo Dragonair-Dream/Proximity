@@ -3,7 +3,7 @@ import { doc, updateDoc, deleteDoc } from "firebase/firestore";
 import { db } from "../Services/firebase";
 import { Marker, InfoWindow } from '@react-google-maps/api';
 import { auth } from "../Services/firebase";
-import {useNavigate} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
@@ -49,9 +49,9 @@ export default function PostContent(props) {
         // await updateDoc(postRef, {
         // editing: true
         // });
-        dispatch(_updateUsersPost(postId))
+        // dispatch(_updateUsersPost(postId)) //this changes the editing field from false to true
       setAnchorEl(null); 
-      navigate('/post-edit')
+    //   navigate('/post-edit')
     };
 
     // console.log("0-=-=-=-=0", props.post)
@@ -89,7 +89,8 @@ export default function PostContent(props) {
                                     MenuListProps={{
                                         'aria-labelledby': 'basic-button',
                                     }}>
-                                    <MenuItem onClick={() => handleCloseEdit(post.docId)}><EditIcon />edit</MenuItem>
+                                    {/* <MenuItem onClick={() => handleCloseEdit(post.docId)}><EditIcon />edit</MenuItem> */}
+                                    <MenuItem onClick={() => handleCloseEdit(post.docId)}><EditIcon /><Link to="/post-edit" state={{selectedPostId: post.docId}}>Edit</Link></MenuItem>
                                     <MenuItem onClick={() => handleCloseDelete(post.docId)}><DeleteIcon />delete</MenuItem>
                                 </Menu>
                                 </> : null

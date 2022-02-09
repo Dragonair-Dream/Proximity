@@ -12,17 +12,18 @@ const getUsersPosts = (postData) => {
   };
 };
 
-const addUsersPost = (post) => {
+const addUsersPost = (postData) => {
   return {
     type: ADD_USERS_POST,
-    post,
+    postData,
   };
 };
 
-const updateUsersPost = (post) => {
+const updateUsersPost = (postData) => {
+  console.log('jhasbdjhabdhdbiqdbqi',postData)
   return {
     type: UPDATE_USERS_POST,
-    post,
+    postData,
   };
 };
 
@@ -82,14 +83,16 @@ export const _getUsersPosts = () => {
   };
 };
 
-export const _updateUsersPost = (postId) => {
+export const _updateUsersPost = (obj) => {
   return async (dispatch) => {
     try {
-      console.log(postId)
-      const postRef = doc(db, "posts", postId); // move into store
+      console.log('uuuuuuuuuuuuuuuuuu', obj)
+      const postRef = doc(db, "posts", obj.postId); // move into store
        await updateDoc(postRef, {
-        editing: true
+        caption: obj.caption,
+        locationName: obj.locationName
         });
+        dispatch(updateUsersPost(obj))
     } catch (error) {
       console.log("99999 thunk update users post -----", error);
     }
@@ -104,8 +107,13 @@ export default function userPostReducer(state = [], action) {
     case ADD_USERS_POST:
       return [...state, action.postData];
     case UPDATE_USERS_POST:
-      return 
+      console.log('action post data', state)
+      const newState = state.map(post => (
+        post.postId === action.postData.postId ? action.postData : post // figure out logic to update state
+      ))
+      return newState
     default:
       return state;
   }
 }
+

@@ -70,17 +70,6 @@ export default function PostCreate(props) {
             autoFocus
             margin="dense"
             id="name"
-            label="image..."
-            type="imageUrl"
-            value={imageUrl}
-            fullWidth
-            variant="standard"
-            onChange={(e) => setImageUrl(e.target.value)}
-          />
-          <TextField
-            autoFocus
-            margin="dense"
-            id="name"
             label="Location name..."
             type="string"
             value={locationName}

@@ -1,35 +1,47 @@
 import React, { useState } from "react";
-// import { useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 // import { auth } from "../Services/firebase";
 import ProfileImage from "./ProfileImage";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
-import {
-  TextField,
-  Button,
-  Grid,
-  InputAdornment,
-  Typography,
-} from "@mui/material";
+import {TextField, Button, Grid, InputAdornment, Typography } from "@mui/material";
 import { AddLocationAlt, NotesSharp, AddAPhoto } from "@mui/icons-material";
+import { _updateUsersPost } from '../Store/userPostReducer'
 
 function PostEdit() {
-  const allPostsData = useSelector((state) => state.usersPosts )
-  console.log('ajnfkjnfkjnfkj post edit allpostsdtata', allPostsData)
-  // const postData = allPostsData.filter(post => post.editing === false)
-  // console.log('post data from post edit', postData)
-  const [locationName, setLocationName] = useState( '')
-  const [caption, setCaption] = useState( '')
   const navigate = useNavigate();
+  const location = useLocation();
+  const dispatch = useDispatch()
+  const { selectedPostId } = location.state;
+  const allPostsData = useSelector((state) => state.usersPosts );
+  const selectedPost = allPostsData.filter(post => post.docId === selectedPostId)
+  const post = selectedPost[0]
+  const [locationName, setLocationName] = useState(post.locationName);
+  const [caption, setCaption] = useState(post.caption);
+  console.log('caption$$$$', post)
+  const newData = {
+    postId: post.docId,
+    caption,
+    locationName
+  }
+    
+  // console.log('locationname$$$$', locationName)
+  
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log('handle submit hit from post edit', newData);
+    dispatch(_updateUsersPost(newData))
+    navigate('/')
+  }
  
   return (
-    <Grid container style={{ maxHeight: "100vh" }}>
+    <Grid container style={{ maxHeight: "100vh",   justifyContent:"center"  }}>
       <Grid
         container
         item
         xs={12}
         sm={6}
-        style={{ padding: 10 }}
+        style={{ padding: 20 }}
         alignItems="center"
         direction="column"
         justifyContent="center"
@@ -55,7 +67,7 @@ function PostEdit() {
             variant="standard"
             type="name"
             value={locationName}
-            onChange={(e) => setLocationName(e.target.value)}
+            onChange={(e) => {setLocationName(e.target.value); console.log(locationName)}}
             margin="normal"
             InputProps={{
               startAdornment: (
@@ -91,12 +103,12 @@ function PostEdit() {
           <Button
             style={{ padding: "8px" }}
             variant="contained"
-            // onClick={(e) => handleSubmit(e)}
+            onClick={(e) => handleSubmit(e)}
           >
             Submit Changes
           </Button>
           <br />
-          <ProfileImage />
+          {/* <ProfileImage /> */}
         </div>
       </Grid>
     </Grid>
