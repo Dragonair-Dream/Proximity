@@ -12,6 +12,7 @@ import { Link } from "react-router-dom";
 import { auth, db} from '../Services/firebase'
 import { onSnapshot, doc } from "firebase/firestore";
 import { useDispatch } from 'react-redux'
+
 import { setNotifications } from '../Store/notificationsReducer'
 
 const useStyles = makeStyles({
@@ -47,7 +48,7 @@ function BottomTab() {
       console.log('DATA.NOTIFICATIONS IS: ', data.notifications)
       data.notifications.forEach((notification) => {
         console.log('DATA.TEXT IS: ', notification.text)
-        if (notification.read === false) {
+        if (notification.read === false && window.location.pathname !== '/notifications') {
           sum += 1
         }
       })
