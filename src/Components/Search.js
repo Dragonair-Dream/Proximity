@@ -22,9 +22,13 @@ const Search = () => {
       setFiltered([[], [...relations.pending], [...relations.accepted], [...relations.requested]])
     } else {
       const all = users.filter(user => user.userName.includes(search) || user.firstName.includes(search) || user.lastName.includes(search))
+      console.log('ALL++++++++++++++++', all)
       const p = relations.pending.filter(user => user.userName.includes(search) || user.firstName.includes(search) || user.lastName.includes(search))
+      console.log('P++++++++++++++++', p)
       const a = relations.accepted.filter(user => user.userName.includes(search) || user.firstName.includes(search) || user.lastName.includes(search))
+      console.log('A++++++++++++++++', a)
       const r = relations.requested.filter(user => user.userName.includes(search) || user.firstName.includes(search) || user.lastName.includes(search))
+      console.log('R++++++++++++++++', r)
       setFiltered([all, p, a, r])
     }
   }, [search, relations, users])
@@ -57,7 +61,7 @@ const Search = () => {
               {filtered[0].map((add) => (
                 <ListItem key={`add-${add.uid}`}>
                   <ListItemText primary={`Name: ${add.firstName} ${add.lastName} Username: ${add.userName}`} />
-                  <button onClick={() => dispatch(decideRequest(add.uid, 'add'))}>Add Friend</button>
+                  <button onClick={() => dispatch(decideRequest(add.posterId, 'add'))}>Add Friend</button>
                 </ListItem>
               ))}
             </ul>
