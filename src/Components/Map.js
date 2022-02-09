@@ -103,7 +103,7 @@ function Map() {
           )
         }
         {
-         usersFriendsPosts.map((post, idx) => (
+         usersFriendsPosts && usersFriendsPosts.map((post, idx) => (
           <PostContent post={post} idx={idx} />
            )
           )

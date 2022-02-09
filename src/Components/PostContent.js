@@ -97,7 +97,10 @@ export default function PostContent(props) {
                             </>
                         }
                         title={post.locationName}
-                        subheader="15 minutes ago"
+                        subheader={`${formatRelative(
+                            new Date(post.postTime.seconds * 1000),
+                            new Date()
+                          )}`}
                     />
                     <CardMedia
                         component="img"
