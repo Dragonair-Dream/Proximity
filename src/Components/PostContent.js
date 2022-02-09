@@ -45,11 +45,11 @@ export default function PostContent(props) {
       };
   
     const handleCloseEdit = async (postId) => {
-        const postRef = doc(db, "posts", postId); // move into store
-        await updateDoc(postRef, {
-        editing: true
-        });
-        // dispatch(_updateUsersPost(postId))
+        // const postRef = doc(db, "posts", postId); // move into store
+        // await updateDoc(postRef, {
+        // editing: true
+        // });
+        dispatch(_updateUsersPost(postId))
       setAnchorEl(null); 
       navigate('/post-edit')
     };

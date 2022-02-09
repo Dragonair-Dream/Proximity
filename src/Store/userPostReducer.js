@@ -87,7 +87,7 @@ export const _updateUsersPost = (postId) => {
     try {
       console.log(postId)
       const postRef = doc(db, "posts", postId); // move into store
-        await updateDoc(postRef, {
+       await updateDoc(postRef, {
         editing: true
         });
     } catch (error) {
