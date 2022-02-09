@@ -51,7 +51,7 @@ function BottomTab() {
     >
       <BottomNavigationAction
         component={Link}
-        to="/"
+        to="/map"
         className={styles.root}
         label="Map"
         icon={<MapTwoTone style={{ fill: "white" }} />}
