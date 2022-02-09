@@ -43,6 +43,11 @@ export default function SignUp() {
           profilePic: "",
           didUpdate: false,
           posterId: user.uid,
+          DateOfBirth: "",
+          phoneNumber: "",
+          firstName: "",
+          lastName: "",
+          about: "",
         })
       );
 
