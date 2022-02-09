@@ -5,7 +5,7 @@ import { AccountCircle } from '@mui/icons-material'
 import { List, ListItem, ListItemText, ListSubheader } from '@mui/material/'
 import { decideRequest } from "../Store/relationsReducer";
 import { auth, db } from '../Services/firebase'
-import { getDocs } from "firebase/firestore";
+import { onSnapshot, query, doc, where, collection } from "firebase/firestore";
 
 const Search = () => {
   /*
@@ -15,13 +15,15 @@ const Search = () => {
   const users = useSelector(state => state.users)
   const filteredUsers = users.filter(user => !flatRelations.includes(user.posterId))
   */
+  const dispatch = useDispatch()
   const [search, setSearch] = useState('')
   const [filtered, setFiltered] = useState([])
   const [relations, setRelations] = useState([[], [], []])
+  const [flatRelations, setFlatRelations] = useState([''])
   const [filteredSearch, setFilteredSearch] = useState([[], [], [], []])
   useEffect(() => {
     if (search === '' || search === null || search === undefined) {
-      setFilteredSearch([filtered, ...relations])
+      setFilteredSearch([[], ...relations])
     } else {
       const all = filtered.filter(user => user.userName.includes(search) || user.firstName.includes(search) || user.lastName.includes(search))
       const p = relations[0].filter(user => user.userName.includes(search) || user.firstName.includes(search) || user.lastName.includes(search))
@@ -35,25 +37,27 @@ const Search = () => {
     const relations = onSnapshot(doc(db, 'friends', auth.currentUser.uid), (doc) => {
       const relationsArray = [[], [], []]
       const flatRelationsArray = []
-      doc.pending.forEach((relation) => {
+      const document = doc.data()
+      document.pending.forEach((relation) => {
         relationsArray[0].push(relation)
         flatRelationsArray.push(relation.uid)
       })
-      doc.accepted.forEach((relation) => {
+      document.accepted.forEach((relation) => {
         relationsArray[1].push(relation)
         flatRelationsArray.push(relation.uid)
       })
-      doc.requested.forEach((relation) => {
+      document.requested.forEach((relation) => {
         relationsArray[2].push(relation)
         flatRelationsArray.push(relation.uid)
       })
+      setFlatRelations(flatRelationsArray)
       setRelations(relationsArray)
     })
     return relations
   }, [])
 
   useEffect(() => {
-    const usersQuery = query(collection(db, 'users'), where('posterId', 'not-in', flatRelationsArray))
+    const usersQuery = query(collection(db, 'users'), where('posterId', 'not-in', flatRelations))
     const usersSnapshot = onSnapshot(usersQuery, (allDocs) => {
       const filteredUsers = []
       allDocs.forEach((doc) => {
