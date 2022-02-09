@@ -23,6 +23,7 @@ import Send from "@mui/icons-material/Send";
 import Fab from "@mui/material/Fab";
 import { db, auth } from "../Services/firebase";
 import { collection, addDoc, doc, updateDoc, query, getDocs, where } from "firebase/firestore";
+import { ListItemSecondaryAction } from "@mui/material";
 
 export default function PostContent(props) {
     const {post} = props
@@ -33,17 +34,20 @@ export default function PostContent(props) {
     const [message, setMessage] = useState('');
     const open = Boolean(anchorEl);
     const navigate = useNavigate();
+    console.log('CHAT!!!!!', chat);
 
     const { postersId } = post
     const getChat = useCallback(async () => {
         try {
             const chatRef = collection(db, 'chats');
-            const q = query(chatRef, where('userChatRef.user1', '==', postersId ), where('userChatRef.user2', '==', auth.currentUser.uid));
+            // const q = query(chatRef, where('userChatRef.user1', '==', postersId ), where('userChatRef.user2', '==', auth.currentUser.uid));
+            const q = query(chatRef, where('users', 'array-contains', auth.currentUser.uid ));
             const snapshot = await getDocs(q);
-            let data;
+            let data =[];
             snapshot.forEach(item => {
-                data = item.data();
+                data.push(item.data());
             });
+            [data] = data.filter(item => (item.users.includes(postersId) && item.users.includes(auth.currentUser.uid)));
             setChat(data);
         } catch (error) {
             console.error('Error in PostContent useCallback', error);
@@ -93,7 +97,7 @@ export default function PostContent(props) {
                 const data = await addDoc(chatRef, {
                     latestMessage: {createdAt: new Date(), text: message,},
                     users: [uid, post.postersId],
-                    userChatRef: {user1: post.postersId, user2: uid}
+                    // userChatRef: {user1: post.postersId, user2: uid}
                 });
                 const messageRef = collection(doc(db, 'chats', data.id), 'messages');
                 await addDoc(messageRef, {
