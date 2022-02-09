@@ -23,7 +23,7 @@ const Search = () => {
   const [filteredSearch, setFilteredSearch] = useState([[], [], [], []])
   useEffect(() => {
     if (search === '' || search === null || search === undefined) {
-      setFilteredSearch([[], ...relations])
+      setFilteredSearch([filtered, ...relations])
     } else {
       const all = filtered.filter(user => user.userName.includes(search) || user.firstName.includes(search) || user.lastName.includes(search))
       const p = relations[0].filter(user => user.userName.includes(search) || user.firstName.includes(search) || user.lastName.includes(search))
