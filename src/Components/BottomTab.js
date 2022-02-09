@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@mui/styles";
 import { BottomNavigation, Badge } from "@mui/material";
 import { BottomNavigationAction } from "@mui/material";
@@ -35,16 +35,24 @@ const myStyles = makeStyles({
 });
 
 function BottomTab() {
-  let count = 0
-  const unsub = onSnapshot(doc(db, 'notifications', auth.currentUser.uid), (notifs) => {
-    const data = notifs.data()
-    console.log('THIS IS DATA: ', data)
-    data.notifications.forEach((notification) => {
-      if (notification.read === false) {
-        count += 1
-      }
+  let [count, setCount] = useState(0)
+
+  useEffect(() => {
+    const unsub = onSnapshot(doc(db, 'notifications', auth.currentUser.uid), (notifs) => {
+      let sum = 0
+      const data = notifs.data()
+      console.log('DATA.NOTIFICATIONS IS: ', data.notifications)
+      data.notifications.forEach((notification) => {
+        console.log('DATA.TEXT IS: ', notification.text)
+        if (notification.read === false) {
+          sum += 1
+        }
+      })
+      setCount(count + sum)
     })
-  })
+
+    return unsub
+  }, [])
 
   const classes = useStyles();
   const styles = myStyles();
@@ -82,7 +90,7 @@ function BottomTab() {
         className={styles.root}
         label="Notifications"
         icon={
-          <Badge badgeContent={count} color='primary'>
+          <Badge badgeContent={count} color='secondary'>
             <Notifications style={{ fill: "white" }} />
           </Badge>
         }
