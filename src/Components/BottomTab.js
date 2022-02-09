@@ -11,6 +11,8 @@ import {
 import { Link } from "react-router-dom";
 import { auth, db} from '../Services/firebase'
 import { onSnapshot, doc } from "firebase/firestore";
+import { useDispatch } from 'react-redux'
+import { setNotifications } from '../Store/notificationsReducer'
 
 const useStyles = makeStyles({
   root: {
@@ -35,6 +37,7 @@ const myStyles = makeStyles({
 });
 
 function BottomTab() {
+  const dispatch = useDispatch()
   let [count, setCount] = useState(0)
 
   useEffect(() => {
@@ -48,6 +51,7 @@ function BottomTab() {
           sum += 1
         }
       })
+      dispatch(setNotifications(data.notifications))
       setCount(count + sum)
     })
 
