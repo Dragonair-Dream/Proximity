@@ -7,6 +7,7 @@ import { _getUsersPosts } from '../Store/userPostReducer';
 import { _getUsersFriends } from '../Store/userFriendReducer';
 import { collection, query, onSnapshot, where } from 'firebase/firestore';
 import { db, auth } from '../Services/firebase';
+import { getSingleChat } from "../Store/singleChatReducer";
 
 
 import PostContent from './PostContent';
@@ -44,9 +45,6 @@ function Map() {
   };
 
   useEffect(() => {
-    dispatch(getRelations())
-    dispatch(getAllUsers())
-
     let watchId;
     dispatch(_getUsersPosts()) // is this the leak???
     dispatch(_getUsersFriends())
@@ -58,9 +56,7 @@ function Map() {
     } else {
       alert("sorry, Geolocation is not supported by this browser.");
     }
-    return () => {
-      navigator.geolocation.clearWatch(watchId);
-    };
+    return watchId;
   }, []);
 
   useEffect(() => {
@@ -111,8 +107,8 @@ function Map() {
           )
         }
         {
-         usersFriendsPosts.map((post) => (
-          <div key={post.docId}>
+         usersFriendsPosts.map((post, idx) => (
+          <div key={idx}>
             <PostContent post={post} />
           </div>
            )

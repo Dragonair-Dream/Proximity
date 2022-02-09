@@ -28,7 +28,7 @@ const ChatRoom = () => {
   console.log(something)
 
   let  { chatId } = useParams();
-  chatId = chatId.replace(/\s/g, '')
+  if (chatId) chatId = chatId.replace(/\s/g, '');
 
   useEffect(() => {
     snapInPlace.current.scrollIntoView({ behavior: 'smooth' });
