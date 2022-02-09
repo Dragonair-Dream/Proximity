@@ -18,7 +18,7 @@ export const decideRequest = (uid, option) => {
       const editMine = doc(db, 'friends', testUid)
       const docRef = await getDoc(editMine)
       const findFriend = docRef.data().pending.find(element => element.uid === uid)
-      
+
       const editTheirs = doc(db, 'friends', uid)
       const theirDocRef = await getDoc(editTheirs)
       const findTheirs = theirDocRef.data().pending.find(element => element.uid === testUid)
@@ -32,7 +32,7 @@ export const decideRequest = (uid, option) => {
           accepted: arrayUnion(findTheirs),
           requested: arrayRemove(findTheirs)
         })
-      } else if (option === 'decline') { 
+      } else if (option === 'decline') {
         await updateDoc(editMine, {
           pending: arrayRemove(findFriend)
         })
@@ -60,7 +60,7 @@ export const getRelations = () => {
       const uid = auth.currentUser.uid
       if (!uid) throw new Error('UID is undefined or possibly null')
       const userRef = doc(db, 'friends', uid)
-      const userSnap = await getDoc(userRef) 
+      const userSnap = await getDoc(userRef)
       if (userSnap.exists()) {
         dispatch(getRelationsAction(userSnap.data()))
       } else {

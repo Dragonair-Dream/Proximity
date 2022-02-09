@@ -46,9 +46,10 @@ export const _getUsersFriends = () => {
             const uid = auth.currentUser.uid;
             const docRef =  doc(db, "friends", uid);
             const docSnap = await getDoc(docRef);
-        
-            if (docSnap) {
+
+            if (docSnap.exists()) {
                 const friendsData = docSnap.data()
+
               dispatch(getUsersFriends(friendsData))
               console.log("_getusers friends data", docSnap.data().accepted)
             } else {

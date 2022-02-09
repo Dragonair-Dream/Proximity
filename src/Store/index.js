@@ -10,6 +10,7 @@ import messagesReducer from "./messagesReducer";
 import userPostReducer from "./userPostReducer";
 import userFriendReducer from "./userFriendReducer"
 import friendsPostsReducer from "./friendsPostsReducer";
+import singleChatReducer from "./singleChatReducer";
 //import reducers from store here
 
 const reducer = combineReducers({
@@ -23,6 +24,7 @@ const reducer = combineReducers({
   chats: chatsReducer,
   user: getSingleUserDoc,
   messages: messagesReducer,
+  singleChat: singleChatReducer,
 
 
 });
