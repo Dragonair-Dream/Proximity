@@ -48,6 +48,9 @@ export default function SignUp() {
         pending: [],
         requested: []
       })
+      await setDoc(doc(db, 'notifications', user.uid), {
+        notifications: []
+      })
 
     } catch (error) {
       alert(error.message);
