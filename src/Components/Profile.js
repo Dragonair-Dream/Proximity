@@ -31,7 +31,12 @@ export default function Profile() {
   };
 
   const acceptedFriends = friends.accepted;
-  console.log(acceptedFriends);
+  let friendCount = 0;
+  if (acceptedFriends) {
+    friendCount = acceptedFriends.length;
+  }
+  // const friendCount = acceptedFriends.length;
+  console.log(Array.isArray(acceptedFriends));
 
   return (
     <Grid
@@ -81,7 +86,9 @@ export default function Profile() {
         spacing={2}
       >
         <Stack align="center" direction="column" spacing={-1}>
-          <ListItem sx={{ fontWeight: "bolder" }}>1010</ListItem>
+          <ListItem sx={{ fontWeight: "bolder" }}>
+            {friendCount ? friendCount : 0}
+          </ListItem>
           <ListItem sx={{ fontWeight: "lighter" }}>Friends</ListItem>
         </Stack>
         <Stack direction="column" spacing={-1}>
