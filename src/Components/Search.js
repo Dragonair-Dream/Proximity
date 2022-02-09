@@ -35,7 +35,7 @@ const Search = () => {
         <TextField id="input-with-sx" label="Search for Friends..." variant="standard" value={search} onChange={e => setSearch(e.target.value)}/>
         <AccountCircle sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
       </Box>
-      
+
       <List
         sx={{
           width: '100%',
@@ -112,7 +112,7 @@ const Search = () => {
             </ul>
           </li>
         ) : ''}
-        
+
       </List>
     </div>
   )
