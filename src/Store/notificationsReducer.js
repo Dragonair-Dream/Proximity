@@ -25,7 +25,7 @@ export const readAll = () => {
     try {
       const notifDoc = await getDoc(doc(db, 'notifications', auth.currentUser.uid))
       const notifData = notifDoc.data()
-      const updatedArr = notifData.map(element => {
+      const updatedArr = notifData.notifications.map(element => {
         return {
           actionType: element.actionType,
           text: element.text,
@@ -35,7 +35,6 @@ export const readAll = () => {
       await setDoc(doc(db, 'notifications', auth.currentUser.uid), {
         notifications: updatedArr
       })
-      dispatch(_setNotifications([]))
     } catch(err) {
       console.log(err)
     }
