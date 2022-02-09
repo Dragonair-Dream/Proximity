@@ -1,20 +1,25 @@
 import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { auth, db} from '../Services/firebase'
 import { onSnapshot, doc } from "firebase/firestore";
+import { readAll } from '../Store/notificationsReducer'
 
-const Notifications = (props) => {
-  console.log('THIS IS PROPS: ', props)
+const Notifications = () => {
+  const notificationsArr = useSelector(state => state.notifications)
+  const dispatch = useDispatch()
+  console.log('NOTIFICATIONS ARRAY IN COMPONENT IS: ', notificationsArr)
 
   useEffect(() => {
     console.log('NOTIFICATIONS USE EFFECT RAN')
-   
-  })
+    dispatch(readAll())
+  }, [])
 
   return (
-    <div>
-      Hello from Notifications
-    </div>
+    {notificationsArr.map((notif) => {
+      return (
+        <h1>{notif.text}</h1>
+      )
+    })}
   )
 }
 
