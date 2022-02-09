@@ -51,7 +51,7 @@ function BottomTab() {
           sum += 1
         }
       })
-      dispatch(setNotifications(data.notifications))
+      dispatch(setNotifications(data.notifications.reverse()))
       setCount(count + sum)
     })
 
