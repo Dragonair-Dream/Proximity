@@ -21,7 +21,6 @@ export default function PostCreate(props) {
   const dispatch = useDispatch();
 
   const handleClickOpen = () => {
-    // have a state to set clicked 'createpost' to false when open and true when we click the 'create' button, handled in handle submit
     setOpen(true);
   };
 
@@ -34,9 +33,10 @@ export default function PostCreate(props) {
     const uid = auth.currentUser.uid;
     const latitude = props.lat;
     const longitude = props.lng;
+    const editing = false
     try {
       dispatch(
-        _addUsersPost(imageUrl, locationName, caption, latitude, longitude, uid)
+        _addUsersPost(imageUrl, locationName, caption, latitude, longitude, uid, editing)
       );
       setOpen(false);
     } catch (error) {
@@ -66,17 +66,6 @@ export default function PostCreate(props) {
             To create a post at your current location fill out the following
             fields:
           </DialogContentText>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="name"
-            label="image..."
-            type="imageUrl"
-            value={imageUrl}
-            fullWidth
-            variant="standard"
-            onChange={(e) => setImageUrl(e.target.value)}
-          />
           <TextField
             autoFocus
             margin="dense"
