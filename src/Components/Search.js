@@ -119,7 +119,8 @@ const Search = () => {
               </ListSubheader>
               {filteredSearch[1].map((pending) => (
                 <ListItem key={`pending-${pending.uid}`}>
-                  <ListItemText primary={`Name: ${pending.firstName}`} />
+                  <ListItemText primary={`${pending.firstName} ${pending.lastName}`} />
+                  <ListItemText secondary={`${pending.userName}`} />
                   <button onClick={() => dispatch(decideRequest(pending.uid, 'accept'))}>Accept</button>
                   <button onClick={() => dispatch(decideRequest(pending.uid, 'decline'))}>Decline</button>
                 </ListItem>
@@ -136,7 +137,8 @@ const Search = () => {
               </ListSubheader>
               {filteredSearch[2].map((accepted) => (
                 <ListItem key={`accepted-${accepted.uid}`}>
-                  <ListItemText primary={`Name: ${accepted.firstName}`} />
+                  <ListItemText primary={`${accepted.firstName} ${accepted.lastName}`} />
+                  <ListItemText secondary={`${accepted.userName}`} />
                   <button>Message</button>
                 </ListItem>
               ))}
@@ -152,7 +154,8 @@ const Search = () => {
               </ListSubheader>
               {filteredSearch[3].map((request) => (
                 <ListItem key={`request-${request.uid}`}>
-                  <ListItemText primary={`Name: ${request.firstName}`} />
+                  <ListItemText primary={`${request.firstName} ${request.lastName}`} />
+                  <ListItemText secondary={`${request.userName}`} />
                   <button>Send a Reminder</button>
                 </ListItem>
               ))}
