@@ -43,7 +43,6 @@ export const readAll = () => {
 export default (state = [], action) => {
   switch (action.type) {
     case SET_NOTIFICATIONS:
-      console.log('NOTIFICATIONS REDUCER IS BEING SET TO: ', action.arr)
       return action.arr
     default:
       return state
