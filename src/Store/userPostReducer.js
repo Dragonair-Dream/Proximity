@@ -1,5 +1,14 @@
-import { addDoc, collection, where, query, getDocs } from "@firebase/firestore";
-import { db, auth } from "../Services/firebase";
+import {
+  addDoc,
+  collection,
+  where,
+  query,
+  getDocs,
+  doc,
+} from "@firebase/firestore";
+import { updateDoc } from "firebase/firestore";
+import { db, auth, storage } from "../Services/firebase";
+import { uploadBytes, ref, getDownloadURL } from "firebase/storage";
 
 const GET_USERS_POSTS = "GET_USERS_POSTS";
 const ADD_USERS_POST = "ADD_USERS_POST";
@@ -40,6 +49,13 @@ export const _addUsersPost = (
       const post = await addDoc(collection(db, "posts"), postData, {
         merge: true,
       });
+      // const fileRef = ref(storage, "posts/" + post.id + ".png");
+      // await uploadBytes(fileRef, imageUrl);
+      // const postImage = await getDownloadURL(fileRef);
+      // const data = await updateDoc(doc(db, "posts", post.id), {
+      //   imageUrl: postImage,
+      // });
+      // console.log("post data", data.data());
       dispatch(addUsersPost(postData));
     } catch (error) {
       console.log("thunk add post", error);
