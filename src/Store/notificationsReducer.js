@@ -1,4 +1,5 @@
-import { setDoc } from "firebase/firestore"
+import { setDoc, getDoc, doc } from "firebase/firestore"
+import { auth, db } from '../Services/firebase'
 
 const SET_NOTIFICATIONS = 'SET_NOTIFICATIONS'
 
