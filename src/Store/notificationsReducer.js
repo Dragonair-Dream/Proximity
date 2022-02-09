@@ -17,6 +17,15 @@ export const setNotifications = (arr) => {
   }
 }
 
+export const readAll = () => {
+  return async (dispatch) => {
+    try {
+
+    } catch(err) {
+      console.log(err)
+    }
+  }
+}
 export default (state = [], action) => {
   switch (action.type) {
     case SET_NOTIFICATIONS:

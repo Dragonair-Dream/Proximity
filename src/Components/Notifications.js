@@ -5,22 +5,23 @@ import { onSnapshot, doc } from "firebase/firestore";
 import { readAll } from '../Store/notificationsReducer'
 
 const Notifications = () => {
-  const notificationsArr = useSelector(state => state.notifications)
+  const notificationsArr = useSelector(state => state.notifications) || []
   const dispatch = useDispatch()
   console.log('NOTIFICATIONS ARRAY IN COMPONENT IS: ', notificationsArr)
 
   useEffect(() => {
     console.log('NOTIFICATIONS USE EFFECT RAN')
-    dispatch(readAll())
+    //dispatch(readAll())
   }, [])
 
   return (
-    {notificationsArr.map((notif) => {
-      return (
-        <h1>{notif.text}</h1>
-      )
-    })}
+    <div>
+      {notificationsArr.map((notif) => (  
+          <h1>{notif.text}</h1>
+      ))}
+    </div>
   )
+  
 }
 
 export default Notifications
