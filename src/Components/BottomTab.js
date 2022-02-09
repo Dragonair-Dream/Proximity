@@ -5,7 +5,7 @@ import { BottomNavigationAction } from "@mui/material";
 import {
   Notifications,
   Search,
-  Home,
+  MapTwoTone,
   ChatBubbleTwoTone,
 } from "@mui/icons-material";
 import { Link } from "react-router-dom";
@@ -53,8 +53,8 @@ function BottomTab() {
         component={Link}
         to="/"
         className={styles.root}
-        label="Home"
-        icon={<Home style={{ fill: "white" }} />}
+        label="Map"
+        icon={<MapTwoTone style={{ fill: "white" }} />}
       />
       <BottomNavigationAction
         component={Link}

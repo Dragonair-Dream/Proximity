@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Avatar, Button, Typography } from "@mui/material";
 import { useAuth, upload } from "../Services/firebase";
+import { useDispatch } from "react-redux";
+import { createUserProfile } from "../Store/userProfileReducer";
 
 export default function ProfileImage() {
   const currentUser = useAuth();
+  const dispatch = useDispatch();
 
   const [photo, setPhoto] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -16,6 +19,7 @@ export default function ProfileImage() {
   }
   function handleClick() {
     upload(photo, currentUser, setLoading);
+    // dispatch(createUserProfile({ profilePic: currentUser.photoURL }));
   }
 
   useEffect(() => {

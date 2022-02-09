@@ -11,9 +11,8 @@ import { db, auth } from "../Services/firebase";
 
 
 
-
-import PostContent from './PostContent';
-import { _getUsersFriendsPosts } from '../Store/friendsPostsReducer';
+import PostContent from "./PostContent";
+import { _getUsersFriendsPosts } from "../Store/friendsPostsReducer";
 
 const containerStyle = {
   width: "100%",
@@ -46,7 +45,6 @@ function Map() {
     if(navigator.geolocation) {
       watchId = navigator.geolocation.getCurrentPosition(successPos);
       // console.log('use Effect map called')
-
     } else {
       alert("sorry, Geolocation is not supported by this browser.");
     }
@@ -70,13 +68,13 @@ function Map() {
   }, []);
 
   const iconPin = {
-    path: 'M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z',
-    fillColor: 'blue',
+    path: "M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z",
+    fillColor: "blue",
     fillOpacity: 0.5,
     scale: 0.05, //to reduce the size of icons
-   };
+  };
 
-  const usersPosts = useSelector(state => state.usersPosts)
+  const usersPosts = useSelector((state) => state.usersPosts);
   // console.log("-------", usersPosts)
 
   // const usersFriends = useSelector(state => state.usersFriends.accepted)
@@ -84,9 +82,6 @@ function Map() {
 
   const usersFriendsPosts = useSelector(state => state.friendsPosts)
   console.log("-------friends posts stuff", usersFriendsPosts)
-
-  
-
 
   return (
     <>
