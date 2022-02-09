@@ -32,7 +32,7 @@ const Search = () => {
       setFilteredSearch([all, p, a, r])
     }
   }, [search, filtered, relations])
-
+  
   useEffect(() => {
     const relations = onSnapshot(doc(db, 'friends', auth.currentUser.uid), (doc) => {
       const relationsArray = [[], [], []]
