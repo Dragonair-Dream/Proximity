@@ -93,7 +93,7 @@ const NavBar = (props) => {
                 <Avatar
                   src={
                     userData.email === auth.currentUser.email
-                      ? userData.profilePic
+                      ? auth.currentUser.photoURL
                       : ""
                   }
                 />
