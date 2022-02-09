@@ -4,10 +4,8 @@ import { googleMapsKey } from "../secrets";
 import PostCreate from "./PostCreate";
 import { useDispatch, useSelector } from "react-redux";
 import { _getUsersPosts } from "../Store/userPostReducer";
-import { _getUsersFriends } from "../Store/userFriendReducer";
 import { collection, query, onSnapshot, where } from "firebase/firestore";
 import { db, auth } from "../Services/firebase";
-import { getSingleChat } from "../Store/singleChatReducer";
 
 import PostContent from "./PostContent";
 import { _getUsersFriendsPosts } from "../Store/friendsPostsReducer";
@@ -21,6 +19,7 @@ const containerStyle = {
 function Map() {
   const [latitude, setLatitude] = useState(41.25861);
   const [longitude, setLongitude] = useState(-95.93779);
+  const [myPostQueryData, setMyPostQueryData] = useState(null);
   const dispatch = useDispatch();
 
   const usersPosts = useSelector((state) => state.usersPosts);
@@ -31,8 +30,6 @@ function Map() {
 
   const usersFriendsPosts = useSelector((state) => state.friendsPosts);
   console.log("-------friends posts stuff", usersFriendsPosts);
-
-  const [myPostQueryData, setMyPostQueryData] = useState(null);
 
   const successPos = (pos) => {
     const { latitude, longitude } = pos.coords;
@@ -46,7 +43,7 @@ function Map() {
   useEffect(() => {
     let watchId;
     dispatch(_getUsersPosts()); // is this the leak???
-    dispatch(_getUsersFriends());
+    // dispatch(_getUsersFriends())
     dispatch(_getUsersFriendsPosts());
     if (navigator.geolocation) {
       watchId = navigator.geolocation.getCurrentPosition(successPos);
@@ -80,8 +77,10 @@ function Map() {
   return (
     <>
       {/* <button onClick={getPosition}>position</button> */}
-      <LoadScript googleMapsApiKey={googleMapsKey}>
-        <GoogleMap
+      <LoadScript //Loads the Google Maps API script.(API) interfaces between an application and scripting language. It provides the connection points with the application that allow you to control it
+        googleMapsApiKey={googleMapsKey}
+      >
+        <GoogleMap //GoogleMap - The map component inside which all other components render
           mapContainerStyle={containerStyle}
           center={{ lat: latitude, lng: longitude }}
           zoom={10}
@@ -94,21 +93,12 @@ function Map() {
             // onClick={()=> {setSelectedMarker(jerry.post.id)}}
           />
           {myPostQueryData &&
-            myPostQueryData.map((post) => (
-              <div key={post.docId}>
-                <PostContent post={post} />
-              </div>
+            myPostQueryData.map((post, idx) => <PostContent post={post} />)}
+          {usersFriendsPosts &&
+            usersFriendsPosts.map((post, idx) => (
+              <PostContent post={post} idx={idx} />
             ))}
-          {usersFriendsPosts.map((post, idx) => (
-            <div key={idx}>
-              <PostContent post={post} />
-            </div>
-          ))}
-          <PostCreate
-            lat={latitude}
-            lng={longitude}
-            postIdData={myPostQueryData}
-          />
+          <PostCreate lat={latitude} lng={longitude} />
           {/* Child components, such as markers, info windows, etc. */}
         </GoogleMap>
       </LoadScript>

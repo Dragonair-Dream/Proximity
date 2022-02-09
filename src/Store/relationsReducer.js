@@ -14,16 +14,27 @@ const getRelationsAction = (relations) => {
 export const decideRequest = (uid, option) => {
   return async (dispatch) => {
     try {
-      const testUid = auth.currentUser.uid
-      const editMine = doc(db, 'friends', testUid)
+      const myUid = auth.currentUser.uid
+      const editMine = doc(db, 'friends', myUid)
       const docRef = await getDoc(editMine)
-      const findFriend = docRef.data().pending.find(element => element.uid === uid)
-
+      const findFriendData = docRef.data()
+      console.log('GOT MY DOC', findFriendData)
+      //const findFriend = findFriendData.pending.find(element => element.uid === uid)
+      //console.log('GOT MY DATA', findFriend)
+      console.log('Their uid is: ', uid)
       const editTheirs = doc(db, 'friends', uid)
+      console.log(editTheirs)
       const theirDocRef = await getDoc(editTheirs)
-      const findTheirs = theirDocRef.data().pending.find(element => element.uid === testUid)
-
+      console.log('THEIRDOCREF', theirDocRef)
+      console.log('GOT THEIR DOC')
+      const findTheirsData = theirDocRef.data()
+      // const findTheirs = findTheirsData.requested.find(element => element.uid === myUid)
+      //console.log('GOT THEIR DATA')
       if (option === 'accept') {
+        const findFriend = findFriendData.pending.find(element => element.uid === uid)
+        const findTheirs = findTheirsData.requested.find(element => element.uid === myUid)
+
+        console.log('========= IN IF =========')
         await updateDoc(editMine, {
           accepted: arrayUnion(findFriend),
           pending: arrayRemove(findFriend)
@@ -33,6 +44,10 @@ export const decideRequest = (uid, option) => {
           requested: arrayRemove(findTheirs)
         })
       } else if (option === 'decline') {
+        const findFriend = findFriendData.pending.find(element => element.uid === uid)
+        const findTheirs = findTheirsData.requested.find(element => element.uid === myUid)
+
+        console.log('========= IN ELSE IF =========')
         await updateDoc(editMine, {
           pending: arrayRemove(findFriend)
         })
@@ -40,11 +55,31 @@ export const decideRequest = (uid, option) => {
           requested: arrayRemove(findTheirs)
         })
       } else { //send friend request
+        console.log('========= IN ELSE =========')
+        const myDoc = await getDoc(doc(db, 'users', myUid))
+        const myData = myDoc.data()
+        console.log('THIS IS MY DATA: ', myData)
+        const myInfo = {
+          firstName: myData.firstName,
+          lastName: myData.lastName,
+          userName: myData.userName,
+          profilePic: myData.profilePic,
+          uid: myUid,
+        }
+        const theirDoc = await getDoc(doc(db, 'users', uid))
+        const theirData = theirDoc.data()
+        const theirInfo = {
+          firstName: theirData.firstName,
+          lastName: theirData.lastName,
+          userName: theirData.userName,
+          profilePic:theirData.profilePic,
+          uid: uid,
+        }
         await updateDoc(editMine, {
-          requested: arrayUnion(findFriend)
+          requested: arrayUnion(theirInfo)
         })
         await updateDoc(editTheirs, {
-          pending: arrayUnion(findTheirs)
+          pending: arrayUnion(myInfo)
         })
       }
       dispatch(getRelations())

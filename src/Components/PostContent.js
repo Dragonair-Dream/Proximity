@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { useSelector, useDispatch } from "react-redux";
 import { Marker, InfoWindow } from '@react-google-maps/api';
-import {Link, useNavigate} from 'react-router-dom'
+import {Link} from 'react-router-dom'
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
@@ -22,7 +21,7 @@ import TextField from "@mui/material/TextField";
 import Send from "@mui/icons-material/Send";
 import Fab from "@mui/material/Fab";
 import { db, auth } from "../Services/firebase";
-import { collection, addDoc, doc, updateDoc, query, getDocs, where } from "firebase/firestore";
+import { collection, addDoc, doc, updateDoc, query, getDocs, where, deleteDoc } from "firebase/firestore";
 
 export default function PostContent(props) {
     const {post} = props
@@ -32,18 +31,20 @@ export default function PostContent(props) {
     const [chat, setChat] = useState(null);
     const [message, setMessage] = useState('');
     const open = Boolean(anchorEl);
-    const navigate = useNavigate();
+    console.log('CHAT!!!!!', chat);
 
     const { postersId } = post
     const getChat = useCallback(async () => {
         try {
             const chatRef = collection(db, 'chats');
-            const q = query(chatRef, where('userChatRef.user1', '==', postersId ), where('userChatRef.user2', '==', auth.currentUser.uid));
+            // const q = query(chatRef, where('userChatRef.user1', '==', postersId ), where('userChatRef.user2', '==', auth.currentUser.uid));
+            const q = query(chatRef, where('users', 'array-contains', auth.currentUser.uid ));
             const snapshot = await getDocs(q);
-            let data;
+            let data =[];
             snapshot.forEach(item => {
-                data = item.data();
+                data.push(item.data());
             });
+            [data] = data.filter(item => (item.users.includes(postersId) && item.users.includes(auth.currentUser.uid)));
             setChat(data);
         } catch (error) {
             console.error('Error in PostContent useCallback', error);
@@ -61,15 +62,19 @@ export default function PostContent(props) {
     const handleClose = () => {
       setAnchorEl(null);
     };
-
-    const handleOnCloseClick = () => {
-        setToggleMessage(false);
-        setSelectedMarker(null);
-    };
-
-    const handleCloseEdit = () => {
-      setAnchorEl(null);
-      navigate('/post-edit')
+    const handleCloseDelete = async (postId) => {
+        setAnchorEl(null);
+        await deleteDoc(doc(db, "posts", postId))
+      };
+  
+    const handleCloseEdit = async (postId) => {
+        // const postRef = doc(db, "posts", postId); // move into store
+        // await updateDoc(postRef, {
+        // editing: true
+        // });
+        // dispatch(_updateUsersPost(postId)) //this changes the editing field from false to true
+      setAnchorEl(null); 
+    //   navigate('/post-edit')
     };
 
     const handleSubmit = async (e) => {
@@ -93,7 +98,7 @@ export default function PostContent(props) {
                 const data = await addDoc(chatRef, {
                     latestMessage: {createdAt: new Date(), text: message,},
                     users: [uid, post.postersId],
-                    userChatRef: {user1: post.postersId, user2: uid}
+                    // userChatRef: {user1: post.postersId, user2: uid}
                 });
                 const messageRef = collection(doc(db, 'chats', data.id), 'messages');
                 await addDoc(messageRef, {
@@ -112,9 +117,9 @@ export default function PostContent(props) {
     // console.log("0-=-=-=-=0", props.post)
 
     return(
-        <Marker position={{lat: post.latitude, lng: post.longitude}} onClick={()=> {setSelectedMarker(post.docId)}} >
-            {selectedMarker === post.docId ?
-                <InfoWindow position={{lat: post.latitude, lng: post.longitude}} onCloseClick={handleOnCloseClick} >
+        <Marker key={post.docId} position={{lat: post.latitude, lng: post.longitude}} onClick={()=> {setSelectedMarker(post.docId)}} >
+            {selectedMarker === post.docId ?    
+                <InfoWindow position={{lat: post.latitude, lng: post.longitude}} onCloseClick={()=>{setSelectedMarker(null);}} >
                   <Card sx={{ maxWidth: 345 }}>
                     <CardHeader
                         avatar={
@@ -144,15 +149,19 @@ export default function PostContent(props) {
                                     MenuListProps={{
                                         'aria-labelledby': 'basic-button',
                                     }}>
-                                    <MenuItem onClick={handleCloseEdit}><EditIcon />edit</MenuItem>
-                                    <MenuItem onClick={handleClose}><DeleteIcon />delete</MenuItem>
+                                    {/* <MenuItem onClick={() => handleCloseEdit(post.docId)}><EditIcon />edit</MenuItem> */}
+                                    <MenuItem onClick={() => handleCloseEdit(post.docId)}><EditIcon /><Link to="/post-edit" state={{selectedPostId: post.docId}}>Edit</Link></MenuItem>
+                                    <MenuItem onClick={() => handleCloseDelete(post.docId)}><DeleteIcon />delete</MenuItem>
                                 </Menu>
                                 </> : null
                             }
                             </>
                         }
                         title={post.locationName}
-                        subheader={formatRelative(new Date(post.postTime.seconds * 1000),new Date())}
+                        subheader={`${formatRelative(
+                            new Date(post.postTime.seconds * 1000),
+                            new Date()
+                          )}`}
                     />
                     <CardMedia
                         component="img"
