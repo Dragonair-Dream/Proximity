@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { auth } from "../Services/firebase";
 import { getUserData } from "../Store/userProfileReducer";
 import { useNavigate } from "react-router";
+import { _getUsersFriends } from "../Store/userFriendReducer";
 import {
   Button,
   Grid,
@@ -19,13 +20,19 @@ export default function Profile() {
   const dispatch = useDispatch();
 
   const userData = useSelector((state) => state.userProfile);
+  const friends = useSelector((state) => state.usersFriends);
   useEffect(() => {
     dispatch(getUserData());
+    dispatch(_getUsersFriends());
   }, []);
 
   const handleSubmit = () => {
     navigate("/editProfile");
   };
+
+  const acceptedFriends = friends.accepted;
+  console.log(acceptedFriends);
+
   return (
     <Grid
       sx={{ backgroundColor: "Azure", height: "100vh", marginBottom: "17%" }}
@@ -130,6 +137,38 @@ export default function Profile() {
       </p>
       <Grid align="center">
         <Typography sx={{ fontWeight: "bolder" }}>Friends</Typography>
+      </Grid>
+      <Grid>
+        <Stack
+          direction="row"
+          justifyContent="center"
+          alignItems="center"
+          spacing={2}
+        >
+          {acceptedFriends &&
+            acceptedFriends.map((friend) => (
+              <Stack
+                key={friend.uid}
+                align="center"
+                direction="column"
+                spacing={-1}
+              >
+                <Avatar
+                  alt="Remy Sharp"
+                  src={friend.profilePic}
+                  sx={{
+                    width: 75,
+                    height: 75,
+                    border: 0.5,
+                    margin: "auto",
+                  }}
+                />
+                <Typography textAlign="center" style={{ padding: "8px" }}>
+                  {friend.firstName}
+                </Typography>
+              </Stack>
+            ))}
+        </Stack>
       </Grid>
     </Grid>
   );
