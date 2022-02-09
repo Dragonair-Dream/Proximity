@@ -10,11 +10,8 @@ const Search = () => {
   const [search, setSearch] = useState('')
   const relations = useSelector(state => state.relations)
   const flatRelations = [...relations.accepted, ...relations.pending, ...relations.requested].map(user => user.uid)
-  console.log('FLATRELATIONS IS: ', flatRelations)
   const users = useSelector(state => state.users)
   const filteredUsers = users.filter(user => !flatRelations.includes(user.posterId))
-  console.log('FILTERED USERS IS: ', filteredUsers)
-  console.log('RELATIONS IS: ', relations)
   const [filtered, setFiltered] = useState([[],[...relations.pending],[...relations.accepted], [...relations.requested]])
 
   useEffect(() => {
