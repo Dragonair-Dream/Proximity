@@ -28,20 +28,19 @@ export const _addUsersPost = (
 ) => {
   return async (dispatch) => {
     try {
-      const post = await addDoc(
-        collection(db, "posts"),
-        {
-          postersId: uid,
-          imageUrl: imageUrl,
-          locationName: locationName,
-          latitude: latitude,
-          longitude: longitude,
-          caption: caption,
-          postTime: new Date(),
-        },
-        { merge: true }
-      );
-      dispatch(addUsersPost(post.data()));
+      const postData = {
+        postersId: uid,
+        imageUrl: imageUrl,
+        locationName: locationName,
+        latitude: latitude,
+        longitude: longitude,
+        caption: caption,
+        postTime: new Date(),
+      };
+      const post = await addDoc(collection(db, "posts"), postData, {
+        merge: true,
+      });
+      dispatch(addUsersPost(postData));
     } catch (error) {
       console.log("thunk add post", error);
     }
