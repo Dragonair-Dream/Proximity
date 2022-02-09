@@ -4,34 +4,72 @@ import { Box, TextField } from '@mui/material'
 import { AccountCircle } from '@mui/icons-material'
 import { List, ListItem, ListItemText, ListSubheader } from '@mui/material/'
 import { decideRequest } from "../Store/relationsReducer";
+import { auth, db } from '../Services/firebase'
+import { getDocs } from "firebase/firestore";
 
 const Search = () => {
-  const dispatch = useDispatch()
-  const [search, setSearch] = useState('')
+  /*
   const relations = useSelector(state => state.relations)
   const flatRelations = [...relations.accepted, ...relations.pending, ...relations.requested].map(user => user.uid)
   console.log('FLATRELATIONS IS: ', flatRelations)
   const users = useSelector(state => state.users)
   const filteredUsers = users.filter(user => !flatRelations.includes(user.posterId))
-  console.log('FILTERED USERS IS: ', filteredUsers)
-  console.log('RELATIONS IS: ', relations)
-  const [filtered, setFiltered] = useState([[],[...relations.pending],[...relations.accepted], [...relations.requested]])
-
+  */
+  const [search, setSearch] = useState('')
+  const [filtered, setFiltered] = useState([])
+  const [relations, setRelations] = useState([[], [], []])
+  const [filteredSearch, setFilteredSearch] = useState([[], [], [], []])
   useEffect(() => {
     if (search === '' || search === null || search === undefined) {
-      setFiltered([[], [...relations.pending], [...relations.accepted], [...relations.requested]])
+      setFilteredSearch([filtered, ...relations])
     } else {
-      const all = users.filter(user => user.userName.includes(search) || user.firstName.includes(search) || user.lastName.includes(search))
-      console.log('ALL++++++++++++++++', all)
-      const p = relations.pending.filter(user => user.userName.includes(search) || user.firstName.includes(search) || user.lastName.includes(search))
-      console.log('P++++++++++++++++', p)
-      const a = relations.accepted.filter(user => user.userName.includes(search) || user.firstName.includes(search) || user.lastName.includes(search))
-      console.log('A++++++++++++++++', a)
-      const r = relations.requested.filter(user => user.userName.includes(search) || user.firstName.includes(search) || user.lastName.includes(search))
-      console.log('R++++++++++++++++', r)
-      setFiltered([all, p, a, r])
+      const all = filtered.filter(user => user.userName.includes(search) || user.firstName.includes(search) || user.lastName.includes(search))
+      const p = relations[0].filter(user => user.userName.includes(search) || user.firstName.includes(search) || user.lastName.includes(search))
+      const a = relations[1].filter(user => user.userName.includes(search) || user.firstName.includes(search) || user.lastName.includes(search))
+      const r = relations[2].filter(user => user.userName.includes(search) || user.firstName.includes(search) || user.lastName.includes(search))
+      setFilteredSearch([all, p, a, r])
     }
-  }, [search, relations, users])
+  }, [search, filtered, relations])
+
+  useEffect(() => {
+    const relations = onSnapshot(doc(db, 'friends', auth.currentUser.uid), (doc) => {
+      const relationsArray = [[], [], []]
+      const flatRelationsArray = []
+      doc.pending.forEach((relation) => {
+        relationsArray[0].push(relation)
+        flatRelationsArray.push(relation.uid)
+      })
+      doc.accepted.forEach((relation) => {
+        relationsArray[1].push(relation)
+        flatRelationsArray.push(relation.uid)
+      })
+      doc.requested.forEach((relation) => {
+        relationsArray[2].push(relation)
+        flatRelationsArray.push(relation.uid)
+      })
+      setRelations(relationsArray)
+    })
+    return relations
+  }, [])
+
+  useEffect(() => {
+    const usersQuery = query(collection(db, 'users'), where('posterId', 'not-in', flatRelationsArray))
+    const usersSnapshot = onSnapshot(usersQuery, (allDocs) => {
+      const filteredUsers = []
+      allDocs.forEach((doc) => {
+        const data = doc.data()
+        filteredUsers.push({
+          firstName: data.firstName,
+          lastName: data.lastName,
+          profilePic: data.profilePic,
+          uid: data.posterId,
+          userName: data.userName
+        })
+      })
+      setFiltered(filteredUsers)
+    })
+    return usersSnapshot
+  }, [])
 
   return (
     <div>
@@ -52,29 +90,30 @@ const Search = () => {
         }}
         subheader={<li />}
       >
-        {filtered[0].length ? (
+        {filteredSearch[0].length ? (
           <li key='notFriends'>
             <ul>
               <ListSubheader>
                 {`Add a Friend`}
               </ListSubheader>
-              {filtered[0].map((add) => (
+              {filteredSearch[0].map((add) => (
                 <ListItem key={`add-${add.uid}`}>
-                  <ListItemText primary={`Name: ${add.firstName} ${add.lastName} Username: ${add.userName}`} />
-                  <button onClick={() => dispatch(decideRequest(add.posterId, 'add'))}>Add Friend</button>
+                  <ListItemText primary={`${add.firstName} ${add.lastName}`} />
+                  <ListItemText secondary={`${add.userName}`} />
+                  <button onClick={() => dispatch(decideRequest(add.uid, 'add'))}>Add Friend</button>
                 </ListItem>
               ))}
             </ul>
           </li>
         ) : ''}
 
-        {filtered[1].length ? (
+        {filteredSearch[1].length ? (
           <li key='pending'>
             <ul>
               <ListSubheader>
-                {`${filtered[1].length} Pending Request(s)`}
+                {`${filteredSearch[1].length} Pending Request(s)`}
               </ListSubheader>
-              {filtered[1].map((pending) => (
+              {filteredSearch[1].map((pending) => (
                 <ListItem key={`pending-${pending.uid}`}>
                   <ListItemText primary={`Name: ${pending.firstName}`} />
                   <button onClick={() => dispatch(decideRequest(pending.uid, 'accept'))}>Accept</button>
@@ -85,13 +124,13 @@ const Search = () => {
           </li>
         ) : ''}
 
-        {filtered[2].length ? (
+        {filteredSearch[2].length ? (
           <li key='accepted'>
             <ul>
               <ListSubheader>
-                {`${filtered[2].length} Friend(s)`}
+                {`${filteredSearch[2].length} Friend(s)`}
               </ListSubheader>
-              {filtered[2].map((accepted) => (
+              {filteredSearch[2].map((accepted) => (
                 <ListItem key={`accepted-${accepted.uid}`}>
                   <ListItemText primary={`Name: ${accepted.firstName}`} />
                   <button>Message</button>
@@ -101,13 +140,13 @@ const Search = () => {
           </li>
         ) : ''}
 
-        {filtered[3].length ? (
+        {filteredSearch[3].length ? (
           <li key='requested'>
             <ul>
               <ListSubheader>
-                {`${filtered[3].length} Sent Request(s)`}
+                {`${filteredSearch[3].length} Sent Request(s)`}
               </ListSubheader>
-              {filtered[3].map((request) => (
+              {filteredSearch[3].map((request) => (
                 <ListItem key={`request-${request.uid}`}>
                   <ListItemText primary={`Name: ${request.firstName}`} />
                   <button>Send a Reminder</button>
