@@ -24,12 +24,10 @@ export const gotUserData = (userData) => {
 export const createUserProfile = (userInfo) => {
   return async (dispatch) => {
     try {
-      console.log('auth.currentUser: ', auth.currentUser)
       const uid = auth.currentUser.uid;
       if (!uid) throw new Error("UID is undefined or possibly null");
       await setDoc(doc(db, "users", uid), {
         ...userInfo,
-        createdAt: new Date(),
       });
       dispatch(createdUserProfile(userInfo));
     } catch (error) {
@@ -55,7 +53,7 @@ export default (state = {}, action) => {
   switch (action.type) {
     case CREATE_USER_PROFILE:
       console.log("created User", action.userInfo);
-      return state;
+      return action.userInfo;
     case CREATE_USER_PROFILE_ERROR:
       console.log("create user error", action.error);
       return state;

@@ -9,9 +9,8 @@ import { collection, query, onSnapshot, where } from 'firebase/firestore';
 import { db, auth } from '../Services/firebase';
 import { getSingleChat } from "../Store/singleChatReducer";
 
-
-import PostContent from './PostContent';
-import { _getUsersFriendsPosts } from '../Store/friendsPostsReducer';
+import PostContent from "./PostContent";
+import { _getUsersFriendsPosts } from "../Store/friendsPostsReducer";
 
 const containerStyle = {
   width: "100%",
@@ -20,9 +19,9 @@ const containerStyle = {
 };
 
 function Map() {
-  const [latitude, setLatitude] = useState(41.25861)
-  const [longitude, setLongitude] = useState(-95.93779)
-  const dispatch = useDispatch()
+  const [latitude, setLatitude] = useState(41.25861);
+  const [longitude, setLongitude] = useState(-95.93779);
+  const dispatch = useDispatch();
 
   const usersPosts = useSelector(state => state.usersPosts)
   // console.log("-------", usersPosts)
@@ -46,13 +45,12 @@ function Map() {
 
   useEffect(() => {
     let watchId;
-    dispatch(_getUsersPosts()) // is this the leak???
-    dispatch(_getUsersFriends())
-    dispatch(_getUsersFriendsPosts())
-    if(navigator.geolocation) {
+    dispatch(_getUsersPosts()); // is this the leak???
+    dispatch(_getUsersFriends());
+    dispatch(_getUsersFriendsPosts());
+    if (navigator.geolocation) {
       watchId = navigator.geolocation.getCurrentPosition(successPos);
       // console.log('use Effect map called')
-
     } else {
       alert("sorry, Geolocation is not supported by this browser.");
     }
@@ -74,11 +72,11 @@ function Map() {
   }, []);
 
   const iconPin = {
-    path: 'M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z',
-    fillColor: 'blue',
+    path: "M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z",
+    fillColor: "blue",
     fillOpacity: 0.5,
     scale: 0.05, //to reduce the size of icons
-   };
+  };
 
   return (
     <>

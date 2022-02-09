@@ -28,7 +28,7 @@ export function useAuth() {
 export async function upload(file, currentUser, setLoading) {
   const fileRef = ref(storage, currentUser.uid + ".png");
 
-  setLoading(true);
+  // setLoading(true);
   const snapshot = await uploadBytes(fileRef, file);
 
   const photoURL = await getDownloadURL(fileRef);
@@ -36,9 +36,6 @@ export async function upload(file, currentUser, setLoading) {
   updateProfile(currentUser, {
     photoURL: photoURL,
   });
-
-  setLoading(false);
-  alert("Profile Picture Updated!");
 }
 
 export default firebaseApp;
