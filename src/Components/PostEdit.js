@@ -16,8 +16,8 @@ import { AddLocationAlt, NotesSharp, AddAPhoto } from "@mui/icons-material";
 function PostEdit() {
   const allPostsData = useSelector((state) => state.usersPosts )
   console.log('ajnfkjnfkjnfkj post edit allpostsdtata', allPostsData)
-  const postData = allPostsData.filter(post => post.editing === false)
-  console.log('post data from post edit', postData)
+  // const postData = allPostsData.filter(post => post.editing === false)
+  // console.log('post data from post edit', postData)
   const [locationName, setLocationName] = useState( '')
   const [caption, setCaption] = useState( '')
   const navigate = useNavigate();

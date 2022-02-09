@@ -1,8 +1,9 @@
-import { addDoc, collection, where, query, getDocs } from "@firebase/firestore";
+import { addDoc, collection, where, query, getDocs, doc, updateDoc } from "@firebase/firestore";
 import { db, auth } from "../Services/firebase";
 
 const GET_USERS_POSTS = "GET_USERS_POSTS";
 const ADD_USERS_POST = "ADD_USERS_POST";
+const UPDATE_USERS_POST = "UPDATE_USERS_POST"
 
 const getUsersPosts = (postData) => {
   return {
@@ -14,6 +15,13 @@ const getUsersPosts = (postData) => {
 const addUsersPost = (post) => {
   return {
     type: ADD_USERS_POST,
+    post,
+  };
+};
+
+const updateUsersPost = (post) => {
+  return {
+    type: UPDATE_USERS_POST,
     post,
   };
 };
@@ -74,6 +82,20 @@ export const _getUsersPosts = () => {
   };
 };
 
+export const _updateUsersPost = (postId) => {
+  return async (dispatch) => {
+    try {
+      console.log(postId)
+      const postRef = doc(db, "posts", postId); // move into store
+        await updateDoc(postRef, {
+        editing: true
+        });
+    } catch (error) {
+      console.log("99999 thunk update users post -----", error);
+    }
+  }
+}
+
 export default function userPostReducer(state = [], action) {
   switch (action.type) {
     case GET_USERS_POSTS:
@@ -81,6 +103,8 @@ export default function userPostReducer(state = [], action) {
       return action.postData;
     case ADD_USERS_POST:
       return [...state, action.postData];
+    case UPDATE_USERS_POST:
+      return 
     default:
       return state;
   }

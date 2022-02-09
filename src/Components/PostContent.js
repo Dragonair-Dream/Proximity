@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, updateDoc, deleteDoc } from "firebase/firestore";
 import { db } from "../Services/firebase";
 import { Marker, InfoWindow } from '@react-google-maps/api';
 import { auth } from "../Services/firebase";
@@ -20,6 +20,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import ChatBubble from '@mui/icons-material/ChatBubble';
 import formatRelative from "date-fns/formatRelative";
+import { useDispatch } from "react-redux";
+import { _updateUsersPost } from "../Store/userPostReducer";
 
 export default function PostContent(props) {
     const {post, idx} = props
@@ -27,6 +29,7 @@ export default function PostContent(props) {
     const [selectedMarker, setSelectedMarker] = useState(null);
     const open = Boolean(anchorEl);
     const navigate = useNavigate()
+    const dispatch = useDispatch()
 
 
     const handleClick = (event) => {
@@ -36,12 +39,17 @@ export default function PostContent(props) {
     const handleClose = () => {
       setAnchorEl(null);
     };
+    const handleCloseDelete = async (postId) => {
+        setAnchorEl(null);
+        await deleteDoc(doc(db, "posts", postId))
+      };
   
     const handleCloseEdit = async (postId) => {
-        // const postRef = doc(db, "posts", postId); // move into store
-        // await updateDoc(postRef, {
-        // editing: true
-        // });
+        const postRef = doc(db, "posts", postId); // move into store
+        await updateDoc(postRef, {
+        editing: true
+        });
+        // dispatch(_updateUsersPost(postId))
       setAnchorEl(null); 
       navigate('/post-edit')
     };
@@ -82,7 +90,7 @@ export default function PostContent(props) {
                                         'aria-labelledby': 'basic-button',
                                     }}>
                                     <MenuItem onClick={() => handleCloseEdit(post.docId)}><EditIcon />edit</MenuItem>
-                                    <MenuItem onClick={handleClose}><DeleteIcon />delete</MenuItem>
+                                    <MenuItem onClick={() => handleCloseDelete(post.docId)}><DeleteIcon />delete</MenuItem>
                                 </Menu>
                                 </> : null
                             }

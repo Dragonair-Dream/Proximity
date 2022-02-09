@@ -7,10 +7,6 @@ import { _getUsersPosts } from '../Store/userPostReducer';
 import { _getUsersFriends } from '../Store/userFriendReducer';
 import { collection, query, where, onSnapshot } from "@firebase/firestore";
 import { db, auth } from "../Services/firebase";
-
-
-
-
 import PostContent from "./PostContent";
 import { _getUsersFriendsPosts } from "../Store/friendsPostsReducer";
 
@@ -64,7 +60,6 @@ function Map() {
         setMyPostQueryData(data);
     });
     return unsubscribe;
-
   }, []);
 
   const iconPin = {
