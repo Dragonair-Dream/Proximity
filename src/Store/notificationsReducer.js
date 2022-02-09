@@ -1,3 +1,5 @@
+import { setDoc } from "firebase/firestore"
+
 const SET_NOTIFICATIONS = 'SET_NOTIFICATIONS'
 
 const _setNotifications = (arr) => {
@@ -20,7 +22,19 @@ export const setNotifications = (arr) => {
 export const readAll = () => {
   return async (dispatch) => {
     try {
-
+      const notifDoc = await getDoc(doc(db, 'notifications', auth.currentUser.uid))
+      const notifData = notifDoc.data()
+      const updatedArr = notifData.map(element => {
+        return {
+          actionType: element.actionType,
+          text: element.text,
+          read: true
+        }
+      })
+      await setDoc(doc(db, 'notifications', auth.currentUser.uid), {
+        notifications: updatedArr
+      })
+      dispatch(_setNotifications([]))
     } catch(err) {
       console.log(err)
     }
