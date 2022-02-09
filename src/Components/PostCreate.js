@@ -8,13 +8,16 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
-import { auth } from "../Services/firebase";
-import {useDispatch, useSelector} from "react-redux";
+import { auth, postUpload, storage } from "../Services/firebase";
+import { useDispatch, useSelector } from "react-redux";
 import { _addUsersPost } from "../Store/userPostReducer";
+import { uploadBytes, ref, getDownloadURL } from "firebase/storage";
 
 export default function PostCreate(props) {
   const user = useSelector((state) => state.user);
+
   const [open, setOpen] = useState(false);
+  const [image, setImage] = useState(null);
   const [imageUrl, setImageUrl] = useState("");
   const [caption, setCaption] = useState("");
   const [locationName, setLocationName] = useState("");
@@ -27,16 +30,33 @@ export default function PostCreate(props) {
   const handleClose = () => {
     setOpen(false);
   };
-
+  const handleChange = (e) => {
+    if (e.target.files[0]) {
+      setImage(e.target.files[0]);
+    }
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // const random = Math.floor(Math.random() * 1000);
+
     const uid = auth.currentUser.uid;
+    // const fileRef = ref(storage, "posts/" + random + ".png");
+    // const snapshot = await uploadBytes(fileRef, image);
+    // const postImage = await getDownloadURL(fileRef);
     const latitude = props.lat;
     const longitude = props.lng;
-    const editing = false
+    const editing = false;
     try {
       dispatch(
-        _addUsersPost(imageUrl, locationName, caption, latitude, longitude, uid, editing)
+        _addUsersPost(
+          imageUrl,
+          locationName,
+          caption,
+          latitude,
+          longitude,
+          uid,
+          editing
+        )
       );
       setOpen(false);
     } catch (error) {
@@ -50,7 +70,7 @@ export default function PostCreate(props) {
         sx={{
           position: "fixed",
           top: (theme) => theme.spacing("auto"),
-          right: (theme) => theme.spacing(1)
+          right: (theme) => theme.spacing(1),
         }}
         size="small"
         color="primary"
@@ -66,6 +86,12 @@ export default function PostCreate(props) {
             To create a post at your current location fill out the following
             fields:
           </DialogContentText>
+          <input
+            style={{ padding: "8px", alignProperty: "center" }}
+            variant="contained"
+            type="file"
+            onChange={handleChange}
+          />
           <TextField
             autoFocus
             margin="dense"

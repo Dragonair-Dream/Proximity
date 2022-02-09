@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react'
-import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
-import { googleMapsKey } from '../secrets';
-import PostCreate from './PostCreate';
-import { useDispatch, useSelector } from 'react-redux';
-import { _getUsersPosts } from '../Store/userPostReducer';
-import { collection, query, onSnapshot, where } from 'firebase/firestore';
-import { db, auth } from '../Services/firebase';
+import React, { useEffect, useState } from "react";
+import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
+import { googleMapsKey } from "../secrets";
+import PostCreate from "./PostCreate";
+import { useDispatch, useSelector } from "react-redux";
+import { _getUsersPosts } from "../Store/userPostReducer";
+import { collection, query, onSnapshot, where } from "firebase/firestore";
+import { db, auth } from "../Services/firebase";
 
 import PostContent from "./PostContent";
 import { _getUsersFriendsPosts } from "../Store/friendsPostsReducer";
@@ -17,20 +17,19 @@ const containerStyle = {
 };
 
 function Map() {
-  const [latitude, setLatitude] = useState(41.25861)
-  const [longitude, setLongitude] = useState(-95.93779)
-  const [myPostQueryData, setMyPostQueryData] = useState(null)
-  const dispatch = useDispatch()
+  const [latitude, setLatitude] = useState(41.25861);
+  const [longitude, setLongitude] = useState(-95.93779);
+  const [myPostQueryData, setMyPostQueryData] = useState(null);
+  const dispatch = useDispatch();
 
-  const usersPosts = useSelector(state => state.usersPosts)
+  const usersPosts = useSelector((state) => state.usersPosts);
   // console.log("-------", usersPosts)
 
-  const usersFriends = useSelector(state => state.usersFriends.accepted)
-  console.log("-------Fr", usersFriends)
+  const usersFriends = useSelector((state) => state.usersFriends.accepted);
+  console.log("-------Fr", usersFriends);
 
-  const usersFriendsPosts = useSelector(state => state.friendsPosts)
-  console.log("-------friends posts stuff", usersFriendsPosts)
-
+  const usersFriendsPosts = useSelector((state) => state.friendsPosts);
+  console.log("-------friends posts stuff", usersFriendsPosts);
 
   const successPos = (pos) => {
     const { latitude, longitude } = pos.coords;
@@ -43,10 +42,10 @@ function Map() {
 
   useEffect(() => {
     let watchId;
-    dispatch(_getUsersPosts()) // is this the leak???
+    dispatch(_getUsersPosts()); // is this the leak???
     // dispatch(_getUsersFriends())
-    dispatch(_getUsersFriendsPosts())
-    if(navigator.geolocation) {
+    dispatch(_getUsersFriendsPosts());
+    if (navigator.geolocation) {
       watchId = navigator.geolocation.getCurrentPosition(successPos);
       // console.log('use Effect map called')
     } else {
@@ -56,19 +55,17 @@ function Map() {
   }, []);
 
   useEffect(() => {
-    const postRef = collection(db, 'posts');
-    const q = query(postRef, where('postersId', '==', auth.currentUser.uid));
+    const postRef = collection(db, "posts");
+    const q = query(postRef, where("postersId", "==", auth.currentUser.uid));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const data = [];
-      querySnapshot.forEach(doc => (
-        data.push({docId: doc.id, ...doc.data()})
-        ));
-        setMyPostQueryData(data);
+      querySnapshot.forEach((doc) =>
+        data.push({ docId: doc.id, ...doc.data() })
+      );
+      setMyPostQueryData(data);
     });
     return unsubscribe;
-
   }, []);
-
 
   const iconPin = {
     path: "M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z",
@@ -79,38 +76,32 @@ function Map() {
 
   return (
     <>
-    {/* <button onClick={getPosition}>position</button> */}
+      {/* <button onClick={getPosition}>position</button> */}
       <LoadScript //Loads the Google Maps API script.(API) interfaces between an application and scripting language. It provides the connection points with the application that allow you to control it
-        googleMapsApiKey= {googleMapsKey}
+        googleMapsApiKey={googleMapsKey}
       >
-      <GoogleMap //GoogleMap - The map component inside which all other components render
-        mapContainerStyle={containerStyle}
-        center={{lat: latitude, lng: longitude}}
-        zoom={10}
-        options={{ gestureHandling: "cooperative", fullscreenControl: false}}
-      >
-        <Marker
-        position={{lat: latitude, lng: longitude}}
-        icon={iconPin}
-        label='me'
-        // onClick={()=> {setSelectedMarker(jerry.post.id)}}
-        />
-        {
-         myPostQueryData && myPostQueryData.map((post, idx) => (
-          <PostContent post={post} />
-           )
-          )
-        }
-        {
-         usersFriendsPosts && usersFriendsPosts.map((post, idx) => (
-          <PostContent post={post} idx={idx} />
-           )
-          )
-        }
-        <PostCreate lat={latitude} lng={longitude} />
-        { /* Child components, such as markers, info windows, etc. */ }
-      </GoogleMap>
-    </LoadScript>
+        <GoogleMap //GoogleMap - The map component inside which all other components render
+          mapContainerStyle={containerStyle}
+          center={{ lat: latitude, lng: longitude }}
+          zoom={10}
+          options={{ gestureHandling: "cooperative", fullscreenControl: false }}
+        >
+          <Marker
+            position={{ lat: latitude, lng: longitude }}
+            icon={iconPin}
+            label="me"
+            // onClick={()=> {setSelectedMarker(jerry.post.id)}}
+          />
+          {myPostQueryData &&
+            myPostQueryData.map((post, idx) => <PostContent post={post} />)}
+          {usersFriendsPosts &&
+            usersFriendsPosts.map((post, idx) => (
+              <PostContent post={post} idx={idx} />
+            ))}
+          <PostCreate lat={latitude} lng={longitude} />
+          {/* Child components, such as markers, info windows, etc. */}
+        </GoogleMap>
+      </LoadScript>
     </>
   );
 }
