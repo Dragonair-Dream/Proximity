@@ -34,7 +34,7 @@ const App = () => {
         dispatch(getUserData());
         setUser(user);
       } else {
-      /*
+        /*
       if (currentUser) {
         setCurrentUserState(currentUser)
       } */
@@ -81,7 +81,7 @@ const App = () => {
       return (
         <div>
           <Routes>
-            <Route path="/" element={<UserProfile />} />
+            <Route path="/createProfile" element={<UserProfile />} />
             <Route path="/SignUp" element={<UserProfile />} />
             {/* <Route path="/user" element={<UserProfile />} /> */}
           </Routes>

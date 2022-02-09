@@ -36,9 +36,6 @@ export async function upload(file, currentUser, setLoading) {
   updateProfile(currentUser, {
     photoURL: photoURL,
   });
-
-  // setLoading(false);
-  alert("Profile Picture Updated!");
 }
 
 export default firebaseApp;

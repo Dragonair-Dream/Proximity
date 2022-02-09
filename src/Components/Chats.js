@@ -27,11 +27,7 @@ const Chats = () => {
   return (
     <List sx={{ width: "100%", maxWidth: "100%", bgcolor: "background.paper" }}>
       {chatsArray.map((item) => (
-        <Link
-          style={{ textDecoration: "none" }}
-          to={`/chats/${item.chatID}`}
-          key={item.chatID}
-        >
+        <Link style={{textDecoration: 'none'}} to={`/chats/${item.chatID}`} key={item.chatID} state={{/*Use this to pass props*/}}>
           <ListItem alignItems="flex-start">
             <ListItemAvatar>
               <Avatar alt={userName} />

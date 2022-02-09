@@ -4,9 +4,9 @@ import { googleMapsKey } from '../secrets';
 import PostCreate from './PostCreate';
 import { useDispatch, useSelector } from 'react-redux';
 import { _getUsersPosts } from '../Store/userPostReducer';
-import { _getUsersFriends } from '../Store/userFriendReducer';
-import { collection, query, where, onSnapshot } from "@firebase/firestore";
-import { db, auth } from "../Services/firebase";
+import { collection, query, onSnapshot, where } from 'firebase/firestore';
+import { db, auth } from '../Services/firebase';
+
 import PostContent from "./PostContent";
 import { _getUsersFriendsPosts } from "../Store/friendsPostsReducer";
 
@@ -22,6 +22,16 @@ function Map() {
   const [myPostQueryData, setMyPostQueryData] = useState(null)
   const dispatch = useDispatch()
 
+  const usersPosts = useSelector(state => state.usersPosts)
+  // console.log("-------", usersPosts)
+
+  const usersFriends = useSelector(state => state.usersFriends.accepted)
+  console.log("-------Fr", usersFriends)
+
+  const usersFriendsPosts = useSelector(state => state.friendsPosts)
+  console.log("-------friends posts stuff", usersFriendsPosts)
+
+
   const successPos = (pos) => {
     const { latitude, longitude } = pos.coords;
     setLatitude(latitude);
@@ -32,8 +42,6 @@ function Map() {
   };
 
   useEffect(() => {
-    
-
     let watchId;
     dispatch(_getUsersPosts()) // is this the leak???
     // dispatch(_getUsersFriends())
@@ -44,9 +52,7 @@ function Map() {
     } else {
       alert("sorry, Geolocation is not supported by this browser.");
     }
-    return () => {
-      navigator.geolocation.clearWatch(watchId);
-    };
+    return watchId;
   }, []);
 
   useEffect(() => {
@@ -60,7 +66,9 @@ function Map() {
         setMyPostQueryData(data);
     });
     return unsubscribe;
+
   }, []);
+
 
   const iconPin = {
     path: "M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z",
@@ -68,15 +76,6 @@ function Map() {
     fillOpacity: 0.5,
     scale: 0.05, //to reduce the size of icons
   };
-
-  const usersPosts = useSelector((state) => state.usersPosts);
-  // console.log("-------", usersPosts)
-
-  // const usersFriends = useSelector(state => state.usersFriends.accepted)
-  // console.log("-------Fr", usersFriends)
-
-  const usersFriendsPosts = useSelector(state => state.friendsPosts)
-  console.log("-------friends posts stuff", usersFriendsPosts)
 
   return (
     <>
