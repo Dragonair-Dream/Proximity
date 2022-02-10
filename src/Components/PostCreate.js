@@ -37,19 +37,19 @@ export default function PostCreate(props) {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // const random = Math.floor(Math.random() * 1000);
+    const random = Math.floor(Math.random() * 1000);
 
     const uid = auth.currentUser.uid;
-    // const fileRef = ref(storage, "posts/" + random + ".png");
-    // const snapshot = await uploadBytes(fileRef, image);
-    // const postImage = await getDownloadURL(fileRef);
     const latitude = props.lat;
     const longitude = props.lng;
     const editing = false;
     try {
+      const fileRef = ref(storage, "posts/" + random + ".png");
+      const snapshot = await uploadBytes(fileRef, image);
+      const postImage = await getDownloadURL(fileRef);
       dispatch(
         _addUsersPost(
-          imageUrl,
+          postImage,
           locationName,
           caption,
           latitude,
