@@ -10,7 +10,7 @@ import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 //import Link from "@mui/material/Link";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import InputAdornment from "@mui/material/InputAdornment";
 import { AccountCircle, LockRounded } from "@mui/icons-material";
 
@@ -65,9 +65,12 @@ export default function SignUp() {
       console.log(error.message);
     }
   };
+  const navigate = useNavigate();
+
   async function handleSubmit(e) {
     e.preventDefault();
     createAccount();
+    navigate("/UserProfile");
   }
 
   return (
@@ -126,7 +129,7 @@ export default function SignUp() {
             id="signup-password-input"
             label="Password"
             variant="standard"
-            type="text"
+            type="password"
             autoComplete="current-password"
             value={password}
             onChange={(e) => {
