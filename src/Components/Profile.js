@@ -14,6 +14,7 @@ import {
   Stack,
   ListItem,
   Divider,
+  responsiveFontSizes,
 } from "@mui/material";
 
 export default function Profile() {
@@ -149,7 +150,11 @@ export default function Profile() {
         ></Typography>
       </p>
       <Grid align="center">
-        <Typography sx={{ fontWeight: "bolder" }}>Friends</Typography>
+        <Typography
+          sx={{ fontWeight: "bolder", fontSize: "150%", paddingBottom: "20px" }}
+        >
+          ~ Friends ~
+        </Typography>
       </Grid>
       <Grid>
         <Stack
