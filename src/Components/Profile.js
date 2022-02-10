@@ -46,7 +46,7 @@ export default function Profile() {
   console.log(Array.isArray(acceptedFriends));
 
   return (
-    <Grid sx={{ backgroundColor: "Azure", height: "100vh", marginBottom: "0" }}>
+    <Grid sx={{ backgroundColor: "Azure", height: "100%", marginBottom: "0" }}>
       <Box sx={{ paddingTop: 1 }}>
         <Avatar
           alt="Remy Sharp"
