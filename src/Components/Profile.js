@@ -4,6 +4,7 @@ import { auth } from "../Services/firebase";
 import { getUserData } from "../Store/userProfileReducer";
 import { useNavigate } from "react-router";
 import { _getUsersFriends } from "../Store/userFriendReducer";
+import { _getUsersPosts } from "../Store/userPostReducer";
 import {
   Button,
   Grid,
@@ -21,15 +22,20 @@ export default function Profile() {
 
   const userData = useSelector((state) => state.userProfile);
   const friends = useSelector((state) => state.usersFriends);
+  const posts = useSelector((state) => state.usersPosts);
   useEffect(() => {
     dispatch(getUserData());
     dispatch(_getUsersFriends());
+    dispatch(_getUsersPosts());
   }, []);
 
   const handleSubmit = () => {
     navigate("/editProfile");
   };
-
+  let postCount = 0;
+  if (posts) {
+    postCount = posts.length;
+  }
   const acceptedFriends = friends.accepted;
   let friendCount = 0;
   if (acceptedFriends) {
@@ -92,7 +98,9 @@ export default function Profile() {
           <ListItem sx={{ fontWeight: "lighter" }}>Friends</ListItem>
         </Stack>
         <Stack direction="column" spacing={-1}>
-          <ListItem sx={{ fontWeight: "bolder" }}>136</ListItem>
+          <ListItem sx={{ fontWeight: "bolder" }}>
+            {postCount ? postCount : 0}
+          </ListItem>
           <ListItem sx={{ fontWeight: "lighter" }}>Posts</ListItem>
         </Stack>
       </Stack>
