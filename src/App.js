@@ -19,6 +19,7 @@ import PostEdit from "./Components/PostEdit";
 import { getRelations } from "./Store/relationsReducer";
 import { getAllUsers } from "./Store/usersReducer";
 import { getUserData } from "./Store/userProfileReducer";
+import PageDoesNotExist from "./Components/PageDoesntExist";
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -63,6 +64,7 @@ const App = () => {
         <NavBar />
         <Routes>
           <Route path="/" element={<Map />} />
+          <Route path="/SignUp" element={<PageDoesNotExist />} />
           <Route path="/post-edit" element={<PostEdit />} />
           <Route path="/search" element={<Search />} />
           <Route path="/notifications" element={<Notifications />} />
