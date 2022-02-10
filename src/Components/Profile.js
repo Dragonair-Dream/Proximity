@@ -45,9 +45,7 @@ export default function Profile() {
   console.log(Array.isArray(acceptedFriends));
 
   return (
-    <Grid
-      sx={{ backgroundColor: "Azure", height: "100vh", marginBottom: "17%" }}
-    >
+    <Grid sx={{ backgroundColor: "Azure", height: "100vh", marginBottom: "0" }}>
       <Box sx={{ paddingTop: 1 }}>
         <Avatar
           alt="Remy Sharp"
@@ -159,6 +157,8 @@ export default function Profile() {
           justifyContent="center"
           alignItems="center"
           spacing={2}
+          display="flex"
+          flexWrap="wrap"
         >
           {acceptedFriends &&
             acceptedFriends.map((friend) => (
@@ -185,6 +185,11 @@ export default function Profile() {
             ))}
         </Stack>
       </Grid>
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
     </Grid>
   );
 }
