@@ -21,6 +21,8 @@ export default function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [displayName, setDisplayName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setlastName] = useState("");
 
   const dispatch = useDispatch();
 
@@ -28,6 +30,8 @@ export default function SignUp() {
     const loginEmail = email;
     const loginPassword = password;
     const loginDisplayName = displayName;
+    const loginFirstName = firstName;
+    const loginLastName = lastName;
 
     try {
       const { user } = await createUserWithEmailAndPassword(
@@ -45,8 +49,8 @@ export default function SignUp() {
           posterId: user.uid,
           DateOfBirth: "",
           phoneNumber: "",
-          firstName: "",
-          lastName: "",
+          firstName: loginFirstName,
+          lastName: loginLastName,
           about: "",
         })
       );
@@ -122,11 +126,51 @@ export default function SignUp() {
             id="signup-password-input"
             label="Password"
             variant="standard"
-            type="password"
+            type="text"
             autoComplete="current-password"
             value={password}
             onChange={(e) => {
               setPassword(e.target.value);
+            }}
+            margin="normal"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <LockRounded />
+                </InputAdornment>
+              ),
+            }}
+          />
+          <TextField
+            required
+            style={{ marginBottom: "20px" }}
+            id="signup-firstName-input"
+            label="First Name"
+            variant="standard"
+            type="text"
+            value={firstName}
+            onChange={(e) => {
+              setFirstName(e.target.value);
+            }}
+            margin="normal"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <LockRounded />
+                </InputAdornment>
+              ),
+            }}
+          />
+          <TextField
+            required
+            style={{ marginBottom: "20px" }}
+            id="signup-lastName-input"
+            label="Last Name"
+            variant="standard"
+            type="text"
+            value={lastName}
+            onChange={(e) => {
+              setlastName(e.target.value);
             }}
             margin="normal"
             InputProps={{
