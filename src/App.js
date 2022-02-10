@@ -73,6 +73,7 @@ const App = () => {
           <Route path="/chats/:chatId" element={<ChatRoom />} />
           <Route path="/userProfile" element={<Profile />} />
           <Route path="/editProfile" element={<UserProfile />} />
+          <Route path="/:slug" element={<PageDoesNotExist />} />
         </Routes>
         <BottomTab />
       </div>
@@ -83,6 +84,7 @@ const App = () => {
         <Routes>
           <Route exact path="/" element={<SignIn />} />
           <Route path="/SignUp" element={<SignUp />} />
+          <Route path="/:slug" element={<PageDoesNotExist />} />
         </Routes>
       </div>
     );
