@@ -156,7 +156,7 @@ export default function Profile() {
           ~ Friends ~
         </Typography>
       </Grid>
-      <Grid>
+      <Grid sx={{ backgroundColor: "Azure" }}>
         <Stack
           direction="row"
           justifyContent="center"
@@ -189,12 +189,12 @@ export default function Profile() {
               </Stack>
             ))}
         </Stack>
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
       </Grid>
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
     </Grid>
   );
 }

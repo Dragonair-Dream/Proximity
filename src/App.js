@@ -58,37 +58,23 @@ const App = () => {
     )
   } else */
   if (user) {
-    console.log("Current user doc is: ", currentUser);
-    if (currentUser.didUpdate) {
-      return (
-        <div>
-          <NavBar />
-          <Routes>
-            <Route path="/" element={<Map />} />
-            <Route path="/post-edit" element={<PostEdit />} />
-            <Route path="/search" element={<Search />} />
-            <Route path="/notifications" element={<Notifications />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="/chats" element={<Chats />} />
-            <Route path="/chats/:chatId" element={<ChatRoom />} />
-            <Route path="/userProfile" element={<Profile />} />
-            <Route path="/editProfile" element={<UserProfile />} />
-          </Routes>
-          <BottomTab />
-        </div>
-      );
-    } else {
-      return (
-        <div>
-          <Routes>
-            <Route path="/" element={<UserProfile />} />
-            <Route path="/createProfile" element={<UserProfile />} />
-            <Route path="/SignUp" element={<UserProfile />} />
-            {/* <Route path="/user" element={<UserProfile />} /> */}
-          </Routes>
-        </div>
-      );
-    }
+    return (
+      <div>
+        <NavBar />
+        <Routes>
+          <Route path="/" element={<Map />} />
+          <Route path="/post-edit" element={<PostEdit />} />
+          <Route path="/search" element={<Search />} />
+          <Route path="/notifications" element={<Notifications />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/chats" element={<Chats />} />
+          <Route path="/chats/:chatId" element={<ChatRoom />} />
+          <Route path="/userProfile" element={<Profile />} />
+          <Route path="/editProfile" element={<UserProfile />} />
+        </Routes>
+        <BottomTab />
+      </div>
+    );
   } else {
     return (
       <div>
