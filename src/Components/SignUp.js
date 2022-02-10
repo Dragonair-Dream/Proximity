@@ -10,7 +10,7 @@ import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 //import Link from "@mui/material/Link";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import InputAdornment from "@mui/material/InputAdornment";
 import { AccountCircle, LockRounded } from "@mui/icons-material";
 
@@ -21,6 +21,8 @@ export default function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [displayName, setDisplayName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setlastName] = useState("");
 
   const dispatch = useDispatch();
 
@@ -28,6 +30,8 @@ export default function SignUp() {
     const loginEmail = email;
     const loginPassword = password;
     const loginDisplayName = displayName;
+    const loginFirstName = firstName;
+    const loginLastName = lastName;
 
     try {
       const { user } = await createUserWithEmailAndPassword(
@@ -45,8 +49,8 @@ export default function SignUp() {
           posterId: user.uid,
           DateOfBirth: "",
           phoneNumber: "",
-          firstName: "",
-          lastName: "",
+          firstName: loginFirstName,
+          lastName: loginLastName,
           about: "",
         })
       );
@@ -61,9 +65,12 @@ export default function SignUp() {
       console.log(error.message);
     }
   };
+  const navigate = useNavigate();
+
   async function handleSubmit(e) {
     e.preventDefault();
     createAccount();
+    navigate("/UserProfile");
   }
 
   return (
@@ -127,6 +134,46 @@ export default function SignUp() {
             value={password}
             onChange={(e) => {
               setPassword(e.target.value);
+            }}
+            margin="normal"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <LockRounded />
+                </InputAdornment>
+              ),
+            }}
+          />
+          <TextField
+            required
+            style={{ marginBottom: "20px" }}
+            id="signup-firstName-input"
+            label="First Name"
+            variant="standard"
+            type="text"
+            value={firstName}
+            onChange={(e) => {
+              setFirstName(e.target.value);
+            }}
+            margin="normal"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <LockRounded />
+                </InputAdornment>
+              ),
+            }}
+          />
+          <TextField
+            required
+            style={{ marginBottom: "20px" }}
+            id="signup-lastName-input"
+            label="Last Name"
+            variant="standard"
+            type="text"
+            value={lastName}
+            onChange={(e) => {
+              setlastName(e.target.value);
             }}
             margin="normal"
             InputProps={{
