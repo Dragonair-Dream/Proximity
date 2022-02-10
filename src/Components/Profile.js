@@ -4,6 +4,7 @@ import { auth } from "../Services/firebase";
 import { getUserData } from "../Store/userProfileReducer";
 import { useNavigate } from "react-router";
 import { _getUsersFriends } from "../Store/userFriendReducer";
+import { _getUsersPosts } from "../Store/userPostReducer";
 import {
   Button,
   Grid,
@@ -13,6 +14,7 @@ import {
   Stack,
   ListItem,
   Divider,
+  responsiveFontSizes,
 } from "@mui/material";
 
 export default function Profile() {
@@ -21,22 +23,30 @@ export default function Profile() {
 
   const userData = useSelector((state) => state.userProfile);
   const friends = useSelector((state) => state.usersFriends);
+  const posts = useSelector((state) => state.usersPosts);
   useEffect(() => {
     dispatch(getUserData());
     dispatch(_getUsersFriends());
+    dispatch(_getUsersPosts());
   }, []);
 
   const handleSubmit = () => {
     navigate("/editProfile");
   };
-
+  let postCount = 0;
+  if (posts) {
+    postCount = posts.length;
+  }
   const acceptedFriends = friends.accepted;
-  console.log(acceptedFriends);
+  let friendCount = 0;
+  if (acceptedFriends) {
+    friendCount = acceptedFriends.length;
+  }
+  // const friendCount = acceptedFriends.length;
+  console.log(Array.isArray(acceptedFriends));
 
   return (
-    <Grid
-      sx={{ backgroundColor: "Azure", height: "100vh", marginBottom: "17%" }}
-    >
+    <Grid sx={{ backgroundColor: "Azure", height: "100vh", marginBottom: "0" }}>
       <Box sx={{ paddingTop: 1 }}>
         <Avatar
           alt="Remy Sharp"
@@ -81,11 +91,15 @@ export default function Profile() {
         spacing={2}
       >
         <Stack align="center" direction="column" spacing={-1}>
-          <ListItem sx={{ fontWeight: "bolder" }}>1010</ListItem>
+          <ListItem sx={{ fontWeight: "bolder" }}>
+            {friendCount ? friendCount : 0}
+          </ListItem>
           <ListItem sx={{ fontWeight: "lighter" }}>Friends</ListItem>
         </Stack>
         <Stack direction="column" spacing={-1}>
-          <ListItem sx={{ fontWeight: "bolder" }}>136</ListItem>
+          <ListItem sx={{ fontWeight: "bolder" }}>
+            {postCount ? postCount : 0}
+          </ListItem>
           <ListItem sx={{ fontWeight: "lighter" }}>Posts</ListItem>
         </Stack>
       </Stack>
@@ -136,7 +150,11 @@ export default function Profile() {
         ></Typography>
       </p>
       <Grid align="center">
-        <Typography sx={{ fontWeight: "bolder" }}>Friends</Typography>
+        <Typography
+          sx={{ fontWeight: "bolder", fontSize: "150%", paddingBottom: "20px" }}
+        >
+          ~ Friends ~
+        </Typography>
       </Grid>
       <Grid>
         <Stack
@@ -144,6 +162,8 @@ export default function Profile() {
           justifyContent="center"
           alignItems="center"
           spacing={2}
+          display="flex"
+          flexWrap="wrap"
         >
           {acceptedFriends &&
             acceptedFriends.map((friend) => (
@@ -170,6 +190,11 @@ export default function Profile() {
             ))}
         </Stack>
       </Grid>
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
     </Grid>
   );
 }
