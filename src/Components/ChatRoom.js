@@ -11,6 +11,7 @@ import Divider from '@mui/material/Divider';
 import Fab from '@mui/material/Fab';
 import Send from '@mui/icons-material/Send';
 import makeStyles from '@mui/styles/makeStyles';
+import { Alert } from '@mui/material';
 
 const useStyles = makeStyles({
   messageArea: {
@@ -24,8 +25,8 @@ const ChatRoom = () => {
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState('');
   const snapInPlace = useRef(null);
-  const something = useLocation();
-  console.log(something)
+  const { state } = useLocation();
+
 
   let  { chatId } = useParams();
   if (chatId) chatId = chatId.replace(/\s/g, '');
@@ -52,22 +53,26 @@ const ChatRoom = () => {
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
-    const { uid, photoURL } = auth.currentUser;
-    if (chatId) {
-      const chatRef = doc(db, 'chats', chatId);
-      await updateDoc(chatRef, {
-        latestMessage: {createdAt: new Date(), text,},
-      });
-      const messageRef = collection(chatRef, 'messages');
-      await addDoc(messageRef, {
-        createdAt: new Date(),
-        text,
-        photoURL,
-        userId: uid
-      });
-    } else
-    setText('');
-    snapInPlace.current.scrollIntoView({ behavior: 'smooth' });
+    if (text) {
+      const { uid, photoURL } = auth.currentUser;
+      if (chatId) {
+        const chatRef = doc(db, 'chats', chatId);
+        await updateDoc(chatRef, {
+          latestMessage: {createdAt: new Date(), text,},
+        });
+        const messageRef = collection(chatRef, 'messages');
+        await addDoc(messageRef, {
+          createdAt: new Date(),
+          text,
+          photoUrl: photoURL,
+          userId: uid
+        });
+      } else
+      snapInPlace.current.scrollIntoView({ behavior: 'smooth' });
+      setText('');
+    } else {
+      alert('Empty string')
+    }
   };
 
   const classes = useStyles();
@@ -78,7 +83,7 @@ const ChatRoom = () => {
           <ListItem key={msg.docId}>
             <Grid container>
               <Grid item xs={12}>
-                <ChatMessages message={msg} />
+                <ChatMessages message={msg} friend={state} />
               </Grid>
             </Grid>
           </ListItem>

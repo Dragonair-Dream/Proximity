@@ -13,7 +13,7 @@ import { _getUsersFriends } from "../Store/userFriendReducer";
 const containerStyle = {
   width: "100%",
   height: "90vh",
-  marginBottom: "17%",
+  // marginBottom: "17%",
 };
 
 function Map() {
