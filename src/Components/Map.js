@@ -4,7 +4,7 @@ import { googleMapsKey } from "../secrets";
 import PostCreate from "./PostCreate";
 import { useDispatch, useSelector } from "react-redux";
 import { _getUsersPosts } from "../Store/userPostReducer";
-import { collection, query, onSnapshot, where, doc, getDoc } from "firebase/firestore";
+import { collection, query, onSnapshot, where } from "firebase/firestore";
 import { db, auth } from "../Services/firebase";
 import PostContent from "./PostContent";
 import { _getUsersFriendsPosts } from "../Store/friendsPostsReducer";
@@ -14,7 +14,7 @@ import { set } from "date-fns";
 const containerStyle = {
   width: "100%",
   height: "90vh",
-  // marginBottom: "17%",
+  marginBottom: "17%",
 };
 
 function Map() {
@@ -24,8 +24,8 @@ function Map() {
   const [myPostQueryData, setMyPostQueryData] = useState(null);
   const [allUsersPostQueryData, setAllUsersPostQueryData] = useState([]);
   const usersFriends = useSelector((state) => state.usersFriends);
-  const usersFriendsPosts = useSelector((state) => state.friendsPosts);
 
+<<<<<<< HEAD
   console.log('USERFRIENDSPOST!!!!!', usersFriendsPosts)
   console.log('USERPOSTQUERY', allUsersPostQueryData)
 
@@ -40,18 +40,40 @@ function Map() {
 //           friendsPosts.push(usersFriendsPosts.filter(doc => doc.docId === post.docId));
 //         });
 //   };
+=======
+  let actualFriendsPosts = [];
+  if(Object.keys(usersFriends).length > 0){
+    usersFriends.accepted.forEach(friend => {
+    let cycle = (allUsersPostQueryData.filter(post => post.postersId === friend.uid))
+    console.log('cycycycycyc', cycle)
+    let friendsPosts = [];
+    if(cycle.length > 0) {
+      friendsPosts.push(cycle)
+      if(friendsPosts.length > 0) {
+        friendsPosts.map(postEl => { 
+          if(Array.isArray(postEl)) 
+          postEl.forEach(post => actualFriendsPosts.push(post))}
+        )}
+    }
+  })}
 
-// console.log('friedns filter map all userspost ', friendsPosts)
+>>>>>>> main
+
+
+// console.log('friends posts with query listening ', actualFriendsPosts )
+console.log('friends posts with query listening ', actualFriendsPosts )
+
 
   const dispatch = useDispatch();
 
-  // const usersPosts = useSelector((state) => state.usersPosts);
-  // console.log("-------", usersPosts)
+  const usersPosts = useSelector((state) => state.usersPosts);
+  console.log("-------", usersPosts)
 
   // const usersFriends = useSelector((state) => state.usersFriends.accepted);
-  // console.log("-------Fr", usersFriends);
+  console.log("-------Fr", usersFriends);
 
-  // console.log("-------friends posts stuff", usersFriendsPosts);
+  const usersFriendsPosts = useSelector((state) => state.friendsPosts);
+  console.log("-------friends posts stuff", usersFriendsPosts);
 
   const successPos = (pos) => {
     const { latitude, longitude } = pos.coords;
@@ -129,7 +151,7 @@ function Map() {
         <GoogleMap //GoogleMap - The map component inside which all other components render
           mapContainerStyle={containerStyle}
           center={{ lat: latitude, lng: longitude }}
-          zoom={4}
+          zoom={5}
           options={{ gestureHandling: "cooperative", fullscreenControl: false }}
         >
           <Marker
@@ -139,11 +161,17 @@ function Map() {
             // onClick={()=> {setSelectedMarker(jerry.post.id)}}
           />
           {myPostQueryData &&
-            myPostQueryData.map((post) => <PostContent post={post} key={post.docId}/>)
+            myPostQueryData.map((post) => <PostContent post={post} />)
           }
+<<<<<<< HEAD
           {usersFriendsPosts &&
             usersFriendsPosts.map((post) => (
               <PostContent post={post} key={post.docId} />
+=======
+          {actualFriendsPosts &&
+            actualFriendsPosts.map((post) => (
+              <PostContent post={post} /> //create div
+>>>>>>> main
             ))
           }
           <PostCreate lat={latitude} lng={longitude} />

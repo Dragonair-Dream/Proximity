@@ -1,10 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { auth } from "../Services/firebase";
-import { getUserData } from "../Store/userProfileReducer";
+import { auth, db } from "../Services/firebase";
 import { useNavigate } from "react-router";
-import { _getUsersFriends } from "../Store/userFriendReducer";
 import { _getUsersPosts } from "../Store/userPostReducer";
+import { doc, onSnapshot } from "@firebase/firestore";
 import {
   Button,
   Grid,
@@ -14,21 +13,37 @@ import {
   Stack,
   ListItem,
   Divider,
-  responsiveFontSizes,
 } from "@mui/material";
 
 export default function Profile() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const userData = useSelector((state) => state.userProfile);
-  const friends = useSelector((state) => state.usersFriends);
+  const [userData, setUserData] = useState([]);
+  const [friends, setFriendsNew] = useState([]);
+
+  //get user posts for count
   const posts = useSelector((state) => state.usersPosts);
   useEffect(() => {
-    dispatch(getUserData());
-    dispatch(_getUsersFriends());
     dispatch(_getUsersPosts());
   }, []);
+
+  //get user data
+  useEffect(
+    () =>
+      onSnapshot(doc(db, "users", auth.currentUser.uid), (doc) =>
+        setUserData(doc.data())
+      ),
+    []
+  );
+  //get friends data
+  useEffect(
+    () =>
+      onSnapshot(doc(db, "friends", auth.currentUser.uid), (doc) =>
+        setFriendsNew(doc.data().accepted)
+      ),
+    []
+  );
 
   const handleSubmit = () => {
     navigate("/editProfile");
@@ -37,24 +52,18 @@ export default function Profile() {
   if (posts) {
     postCount = posts.length;
   }
-  const acceptedFriends = friends.accepted;
+
   let friendCount = 0;
-  if (acceptedFriends) {
-    friendCount = acceptedFriends.length;
+  if (friends) {
+    friendCount = friends.length;
   }
-  // const friendCount = acceptedFriends.length;
-  console.log(Array.isArray(acceptedFriends));
 
   return (
-    <Grid sx={{ backgroundColor: "Azure", height: "100vh", marginBottom: "0" }}>
+    <Grid sx={{ backgroundColor: "Azure", height: "100%", marginBottom: "0" }}>
       <Box sx={{ paddingTop: 1 }}>
         <Avatar
           alt="Remy Sharp"
-          src={
-            userData.email === auth.currentUser.email
-              ? auth.currentUser.photoURL
-              : ""
-          }
+          src={userData.profilePic ? userData.profilePic : ""}
           sx={{
             width: 175,
             height: 175,
@@ -63,9 +72,7 @@ export default function Profile() {
           }}
         />
         <Typography textAlign="center" style={{ padding: "8px" }}>
-          {userData.email === auth.currentUser.email
-            ? `${userData.firstName} ${userData.lastName}`
-            : null}
+          {userData ? `${userData.firstName} ${userData.lastName}` : ""}
         </Typography>
         <Typography
           textAlign="center"
@@ -165,8 +172,8 @@ export default function Profile() {
           display="flex"
           flexWrap="wrap"
         >
-          {acceptedFriends &&
-            acceptedFriends.map((friend) => (
+          {friends &&
+            friends.map((friend) => (
               <Stack
                 key={friend.uid}
                 align="center"

@@ -19,11 +19,7 @@ const SignIn = () => {
     const loginPassword = password;
 
     try {
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        loginEmail,
-        loginPassword
-      );
+      await signInWithEmailAndPassword(auth, loginEmail, loginPassword);
     } catch (error) {
       alert(error.message);
       console.log(error.message);
