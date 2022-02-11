@@ -39,6 +39,16 @@ export default function SignUp() {
         loginEmail,
         loginPassword
       );
+      console.log('SETTING NOTIFICATIONS UNDER: ', auth.currentUser.uid)
+      await setDoc(doc(db, "friends", auth.currentUser.uid), {
+        accepted: [],
+        pending: [],
+        requested: [],
+      });
+      
+      await setDoc(doc(db, "notifications", auth.currentUser.uid), {
+        notifications: [],
+      });
       updateProfile(auth.currentUser, { displayName: loginDisplayName });
       dispatch(
         createUserProfile({
@@ -55,11 +65,7 @@ export default function SignUp() {
         })
       );
 
-      await setDoc(doc(db, "friends", user.uid), {
-        accepted: [],
-        pending: [],
-        requested: [],
-      });
+      
     } catch (error) {
       alert(error.message);
       console.log(error.message);

@@ -56,23 +56,28 @@ const Search = () => {
   }, [])
 
   useEffect(() => {
-    const usersQuery = query(collection(db, 'users'), where('posterId', 'not-in', flatRelations))
-    const usersSnapshot = onSnapshot(usersQuery, (allDocs) => {
+    console.log('FLAT RELATIONS: ', flatRelations)
+    //const usersQuery = query(collection(db, 'users'), where('posterId', 'not-in', flatRelations))
+    const usersSnapshot = onSnapshot(collection(db, 'users'), (allDocs) => {
       const filteredUsers = []
       allDocs.forEach((doc) => {
         const data = doc.data()
-        filteredUsers.push({
-          firstName: data.firstName,
-          lastName: data.lastName,
-          profilePic: data.profilePic,
-          uid: data.posterId,
-          userName: data.userName
-        })
+        console.log('EACH USERS UID: ', data.posterId)
+        console.log('FR INCLUDES UID? :', flatRelations.includes(data.posterId))
+        if (!flatRelations.includes(data.posterId) && data.posterId !== auth.currentUser.uid) {
+          filteredUsers.push({
+            firstName: data.firstName,
+            lastName: data.lastName,
+            profilePic: data.profilePic,
+            uid: data.posterId,
+            userName: data.userName
+          })
+        }
       })
       setFiltered(filteredUsers)
     })
     return usersSnapshot
-  }, [])
+  }, [flatRelations])
 
   return (
     <div>
