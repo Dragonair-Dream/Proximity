@@ -23,14 +23,27 @@ function Map() {
   const [allUsersPostQueryData, setAllUsersPostQueryData] = useState([]);
   const usersFriends = useSelector((state) => state.usersFriends);
 
-  let friendsPosts = []
+  let actualFriendsPosts = [];
   if(Object.keys(usersFriends).length > 0){
     usersFriends.accepted.forEach(friend => {
     let cycle = (allUsersPostQueryData.filter(post => post.postersId === friend.uid))
-    friendsPosts = cycle
+    console.log('cycycycycyc', cycle)
+    let friendsPosts = [];
+    if(cycle.length > 0) {
+      friendsPosts.push(cycle)
+      if(friendsPosts.length > 0) {
+        friendsPosts.map(postEl => { 
+          if(Array.isArray(postEl)) 
+          postEl.forEach(post => actualFriendsPosts.push(post))}
+        )}
+    }
   })}
 
-console.log('friedns filter map all userspost ', friendsPosts)
+
+
+// console.log('friends posts with query listening ', actualFriendsPosts )
+console.log('friends posts with query listening ', actualFriendsPosts )
+
 
   const dispatch = useDispatch();
 
@@ -119,8 +132,8 @@ console.log('friedns filter map all userspost ', friendsPosts)
           {myPostQueryData &&
             myPostQueryData.map((post) => <PostContent post={post} />)
           }
-          {friendsPosts &&
-            friendsPosts.map((post) => (
+          {actualFriendsPosts &&
+            actualFriendsPosts.map((post) => (
               <PostContent post={post} />
             ))
           }
