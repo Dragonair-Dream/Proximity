@@ -23,16 +23,14 @@ export default function Profile() {
   const dispatch = useDispatch();
 
   const [userData, setUserData] = useState([]);
+  const [friends, setFriendsNew] = useState([]);
 
-  // const userData = useSelector((state) => state.userProfile);
-  const friends = useSelector((state) => state.usersFriends);
   const posts = useSelector((state) => state.usersPosts);
   useEffect(() => {
-    // dispatch(getUserData());
-    dispatch(_getUsersFriends());
     dispatch(_getUsersPosts());
   }, []);
 
+  //get user data
   useEffect(
     () =>
       onSnapshot(doc(db, "users", auth.currentUser.uid), (doc) =>
@@ -40,10 +38,17 @@ export default function Profile() {
       ),
     []
   );
-  console.log("userData:::::", userData);
+  //get friends data
+  useEffect(
+    () =>
+      onSnapshot(doc(db, "friends", auth.currentUser.uid), (doc) =>
+        setFriendsNew(doc.data().accepted)
+      ),
+    []
+  );
 
-  // const userDatanew = userData[0];
-  // console.log("!!!!!!!!!!!", userDatanew);
+  console.log("!!!!!!!!!!!", friends);
+
   const handleSubmit = () => {
     navigate("/editProfile");
   };
@@ -51,10 +56,10 @@ export default function Profile() {
   if (posts) {
     postCount = posts.length;
   }
-  const acceptedFriends = friends.accepted;
+
   let friendCount = 0;
-  if (acceptedFriends) {
-    friendCount = acceptedFriends.length;
+  if (friends) {
+    friendCount = friends.length;
   }
 
   return (
@@ -173,8 +178,8 @@ export default function Profile() {
           display="flex"
           flexWrap="wrap"
         >
-          {acceptedFriends &&
-            acceptedFriends.map((friend) => (
+          {friends &&
+            friends.map((friend) => (
               <Stack
                 key={friend.uid}
                 align="center"
