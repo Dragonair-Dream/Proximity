@@ -24,18 +24,20 @@ function Map() {
   const usersFriends = useSelector((state) => state.usersFriends);
   const usersFriendsPosts = useSelector((state) => state.friendsPosts);
 
+  console.log('USERFRIENDSPOST!!!!!', usersFriendsPosts)
+  console.log('USERPOSTQUERY', allUsersPostQueryData)
 
-  const friendsPosts = []
-  // if(Object.keys(usersFriends).length > 0){
-  //   allUsersPostQueryData.forEach((post) => {
-  //     friendsPosts.push(usersFriends.accepted.find(user => user.uid === post.postersId));
-  //   });
-  // }
-  if (usersFriendsPosts.length > 0) {
-    allUsersPostQueryData.forEach((post) => {
-          friendsPosts.push(usersFriendsPosts.find(doc => doc.docId === post.docId));
-        });
-  };
+//   const friendsPosts = []
+//   // if(Object.keys(usersFriends).length > 0){
+//   //   allUsersPostQueryData.forEach((post) => {
+//   //     friendsPosts.push(usersFriends.accepted.find(user => user.uid === post.postersId));
+//   //   });
+//   // }
+//   if (usersFriendsPosts.length > 0) {
+//     allUsersPostQueryData.forEach((post) => {
+//           friendsPosts.push(usersFriendsPosts.filter(doc => doc.docId === post.docId));
+//         });
+//   };
 
 // console.log('friedns filter map all userspost ', friendsPosts)
 
@@ -60,7 +62,7 @@ function Map() {
 
   useEffect(() => {
     let watchId;
-    dispatch(_getUsersFriends())
+    // dispatch(_getUsersFriends())
     dispatch(_getUsersPosts()); // is this the leak???
     dispatch(_getUsersFriendsPosts());
     if (navigator.geolocation) {
