@@ -16,8 +16,8 @@ function PostEdit() {
   const allPostsData = useSelector((state) => state.usersPosts );
   const selectedPost = allPostsData.filter(post => post.docId === selectedPostId)
   const post = selectedPost[0]
-  const [locationName, setLocationName] = useState(post.locationName);
-  const [caption, setCaption] = useState(post.caption);
+  const [locationName, setLocationName] = useState(post.locationName || '');
+  const [caption, setCaption] = useState(post.caption || '');
   console.log('caption$$$$', post)
   const newData = {
     postId: post.docId,
@@ -25,7 +25,7 @@ function PostEdit() {
     locationName
   }
     
-  // console.log('locationname$$$$', locationName)
+  console.log('locationname$$$$', selectedPost)
   
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -67,7 +67,7 @@ function PostEdit() {
             variant="standard"
             type="name"
             value={locationName}
-            onChange={(e) => {setLocationName(e.target.value); console.log(locationName)}}
+            onChange={(e) => {setLocationName(e.target.value)}}
             margin="normal"
             InputProps={{
               startAdornment: (
