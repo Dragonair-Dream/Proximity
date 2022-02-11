@@ -9,7 +9,6 @@ import { db, auth } from "../Services/firebase";
 import PostContent from "./PostContent";
 import { _getUsersFriendsPosts } from "../Store/friendsPostsReducer";
 import { _getUsersFriends } from "../Store/userFriendReducer";
-import { set } from "date-fns";
 
 const containerStyle = {
   width: "100%",
@@ -25,22 +24,6 @@ function Map() {
   const [allUsersPostQueryData, setAllUsersPostQueryData] = useState([]);
   const usersFriends = useSelector((state) => state.usersFriends);
 
-<<<<<<< HEAD
-  console.log('USERFRIENDSPOST!!!!!', usersFriendsPosts)
-  console.log('USERPOSTQUERY', allUsersPostQueryData)
-
-//   const friendsPosts = []
-//   // if(Object.keys(usersFriends).length > 0){
-//   //   allUsersPostQueryData.forEach((post) => {
-//   //     friendsPosts.push(usersFriends.accepted.find(user => user.uid === post.postersId));
-//   //   });
-//   // }
-//   if (usersFriendsPosts.length > 0) {
-//     allUsersPostQueryData.forEach((post) => {
-//           friendsPosts.push(usersFriendsPosts.filter(doc => doc.docId === post.docId));
-//         });
-//   };
-=======
   let actualFriendsPosts = [];
   if(Object.keys(usersFriends).length > 0){
     usersFriends.accepted.forEach(friend => {
@@ -50,15 +33,12 @@ function Map() {
     if(cycle.length > 0) {
       friendsPosts.push(cycle)
       if(friendsPosts.length > 0) {
-        friendsPosts.map(postEl => { 
-          if(Array.isArray(postEl)) 
+        friendsPosts.map(postEl => {
+          if(Array.isArray(postEl))
           postEl.forEach(post => actualFriendsPosts.push(post))}
         )}
     }
   })}
-
->>>>>>> main
-
 
 // console.log('friends posts with query listening ', actualFriendsPosts )
 console.log('friends posts with query listening ', actualFriendsPosts )
@@ -85,19 +65,18 @@ console.log('friends posts with query listening ', actualFriendsPosts )
   };
 
   useEffect(() => {
-    // dispatch(_getUsersFriends())
+    dispatch(_getUsersFriends())
     dispatch(_getUsersPosts()); // is this the leak???
     dispatch(_getUsersFriendsPosts());
   }, []);
 
   const onError = (err) => {
-    setMapError(err.message)
+    setMapError(err);
   };
 
   useEffect(() => {
     if (!navigator.geolocation) {
-      setMapError('Geolocation is not supported by this browser.');
-      return;
+      setMapError("sorry, Geolocation is not supported by this browser.");
     }
     const watchId = navigator.geolocation.watchPosition(successPos, onError);
     return () => navigator.geolocation.clearWatch(watchId);
@@ -136,9 +115,11 @@ console.log('friends posts with query listening ', actualFriendsPosts )
     scale: 0.05, //to reduce the size of icons
   };
 
-  if (mapError){
+  if (mapError) {
     return (
-      <div>Something went wrong with getting your location: {mapError}</div>
+      <div>
+        {mapError}
+      </div>
     );
   }
 
@@ -163,15 +144,9 @@ console.log('friends posts with query listening ', actualFriendsPosts )
           {myPostQueryData &&
             myPostQueryData.map((post) => <PostContent post={post} />)
           }
-<<<<<<< HEAD
-          {usersFriendsPosts &&
-            usersFriendsPosts.map((post) => (
-              <PostContent post={post} key={post.docId} />
-=======
           {actualFriendsPosts &&
             actualFriendsPosts.map((post) => (
               <PostContent post={post} /> //create div
->>>>>>> main
             ))
           }
           <PostCreate lat={latitude} lng={longitude} />

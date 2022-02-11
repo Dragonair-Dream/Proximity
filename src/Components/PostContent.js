@@ -90,7 +90,7 @@ export default function PostContent(props) {
                 await addDoc(messageRef, {
                   createdAt: new Date(),
                   text: message,
-                  photoURL,
+                //   photoURL,
                   userId: uid
                 });
             } else {
@@ -104,7 +104,7 @@ export default function PostContent(props) {
                 await addDoc(messageRef, {
                     createdAt: new Date(),
                     text: message,
-                    photoURL,
+                    // photoURL,
                     userId: uid
                 });
                 await updateDoc(doc(db, 'chats', data.id), {chatID: data.id});
