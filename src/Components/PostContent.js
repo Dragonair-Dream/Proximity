@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Marker, InfoWindow } from '@react-google-maps/api';
-import { auth } from "../Services/firebase";
-import {useNavigate} from 'react-router-dom'
+import {Link} from 'react-router-dom'
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
@@ -18,40 +17,114 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import ChatBubble from '@mui/icons-material/ChatBubble';
 import formatRelative from "date-fns/formatRelative";
+import TextField from "@mui/material/TextField";
+import Send from "@mui/icons-material/Send";
+import Fab from "@mui/material/Fab";
+import { db, auth } from "../Services/firebase";
+import { collection, addDoc, doc, updateDoc, query, getDocs, where, deleteDoc } from "firebase/firestore";
 
 export default function PostContent(props) {
-    const {post, idx} = props
+    const {post} = props
     const [anchorEl, setAnchorEl] = useState(null);
     const [selectedMarker, setSelectedMarker] = useState(null);
+    const [toggleMessage, setToggleMessage] = useState(false);
+    const [chat, setChat] = useState(null);
+    const [message, setMessage] = useState('');
     const open = Boolean(anchorEl);
-    const navigate = useNavigate()
 
+    const { postersId } = post
+    const getChat = useCallback(async () => {
+        try {
+            const chatRef = collection(db, 'chats');
+            // const q = query(chatRef, where('userChatRef.user1', '==', postersId ), where('userChatRef.user2', '==', auth.currentUser.uid));
+            const q = query(chatRef, where('users', 'array-contains', auth.currentUser.uid ));
+            const snapshot = await getDocs(q);
+            let data =[];
+            snapshot.forEach(item => {
+                data.push(item.data());
+            });
+            [data] = data.filter(item => (item.users.includes(postersId) && item.users.includes(auth.currentUser.uid)));
+            setChat(data);
+        } catch (error) {
+            console.error('Error in PostContent useCallback', error);
+        }
+    }, [postersId, toggleMessage]);
+
+    useEffect(() =>{
+        getChat();
+    }, [getChat]);
 
     const handleClick = (event) => {
       setAnchorEl(event.currentTarget);
     };
-  
+
     const handleClose = () => {
       setAnchorEl(null);
     };
-  
-    const handleCloseEdit = () => {
+    const handleCloseDelete = async (postId) => {
+        setAnchorEl(null);
+        await deleteDoc(doc(db, "posts", postId))
+      };
+
+    const handleCloseEdit = async (postId) => {
+        // const postRef = doc(db, "posts", postId); // move into store
+        // await updateDoc(postRef, {
+        // editing: true
+        // });
+        // dispatch(_updateUsersPost(postId)) //this changes the editing field from false to true
       setAnchorEl(null);
-      navigate('/post-edit')
+    //   navigate('/post-edit')
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (message !== '') {
+            const { uid, photoURL } = auth.currentUser;
+            if (chat) {
+                const chatRef = doc(db, 'chats', chat.chatID);
+                await updateDoc(chatRef, {
+                  latestMessage: {createdAt: new Date(), text: message,},
+                });
+                const messageRef = collection(chatRef, 'messages');
+                await addDoc(messageRef, {
+                  createdAt: new Date(),
+                  text: message,
+                  photoURL,
+                  userId: uid
+                });
+            } else {
+                const chatRef = collection(db, 'chats');
+                const data = await addDoc(chatRef, {
+                    latestMessage: {createdAt: new Date(), text: message,},
+                    users: [uid, post.postersId],
+                    // userChatRef: {user1: post.postersId, user2: uid}
+                });
+                const messageRef = collection(doc(db, 'chats', data.id), 'messages');
+                await addDoc(messageRef, {
+                    createdAt: new Date(),
+                    text: message,
+                    photoURL,
+                    userId: uid
+                });
+                await updateDoc(doc(db, 'chats', data.id), {chatID: data.id});
+            }
+        }
+        setToggleMessage(false);
+        setMessage('');
     };
 
     // console.log("0-=-=-=-=0", props.post)
 
     return(
-        <Marker key={idx} position={{lat: post.latitude, lng: post.longitude}} onClick={()=> {setSelectedMarker(idx)}} >
-            {selectedMarker === idx ?    
+        <Marker key={post.docId} position={{lat: post.latitude, lng: post.longitude}} onClick={()=> {setSelectedMarker(post.docId)}} >
+            {selectedMarker === post.docId ?
                 <InfoWindow position={{lat: post.latitude, lng: post.longitude}} onCloseClick={()=>{setSelectedMarker(null);}} >
                   <Card sx={{ maxWidth: 345 }}>
                     <CardHeader
                         avatar={
                             <Avatar sx={{ bgcolor: red[500] }} aria-label="name">
                                 J
-                            {/* {post.name.slice(0, 1)} */} 
+                            {/* {post.name.slice(0, 1)} */}
                             </Avatar>
                         }
                         action={
@@ -75,15 +148,19 @@ export default function PostContent(props) {
                                     MenuListProps={{
                                         'aria-labelledby': 'basic-button',
                                     }}>
-                                    <MenuItem onClick={handleCloseEdit}><EditIcon />edit</MenuItem>
-                                    <MenuItem onClick={handleClose}><DeleteIcon />delete</MenuItem>
+                                    {/* <MenuItem onClick={() => handleCloseEdit(post.docId)}><EditIcon />edit</MenuItem> */}
+                                    <MenuItem onClick={() => handleCloseEdit(post.docId)}><EditIcon /><Link to="/post-edit" state={{selectedPostId: post.docId}}>Edit</Link></MenuItem>
+                                    <MenuItem onClick={() => handleCloseDelete(post.docId)}><DeleteIcon />delete</MenuItem>
                                 </Menu>
                                 </> : null
                             }
                             </>
                         }
                         title={post.locationName}
-                        subheader="15 minutes ago"
+                        subheader={`${formatRelative(
+                            new Date(post.postTime.seconds * 1000),
+                            new Date()
+                          )}`}
                     />
                     <CardMedia
                         component="img"
@@ -98,9 +175,15 @@ export default function PostContent(props) {
                     </CardContent>
                     { auth.currentUser.uid !== post.postersId ?
                         <CardActions disableSpacing>
-                            <IconButton aria-label="chat with poster" >
+                            <IconButton aria-label="chat with poster" onClick={() => setToggleMessage(true)} >
                                 <ChatBubble />
                             </IconButton>
+                            { toggleMessage && (
+                                <form onSubmit={handleSubmit}>
+                                    <TextField id="Message" label="Send Message" variant="outlined" value={message} onChange={(e) => setMessage(e.target.value) } />
+                                    <Fab type='submit' color="primary" aria-label="add"><Send /></Fab>
+                                </form>
+                                ) }
                         </CardActions> : null
                     }
                   </Card>

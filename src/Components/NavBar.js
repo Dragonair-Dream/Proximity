@@ -92,8 +92,8 @@ const NavBar = (props) => {
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar
                   src={
-                    userData.email == auth.currentUser.email
-                      ? userData.profilePic
+                    userData.email === auth.currentUser.email
+                      ? auth.currentUser.photoURL
                       : ""
                   }
                 />

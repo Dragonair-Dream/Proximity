@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { auth, db } from '../Services/firebase';
 import { collection, doc, updateDoc, limitToLast, orderBy, query, onSnapshot, addDoc } from 'firebase/firestore';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import ChatMessages from './ChatMessages';
 import Grid from '@mui/material/Grid';
 import List from '@mui/material/List';
@@ -11,12 +11,13 @@ import Divider from '@mui/material/Divider';
 import Fab from '@mui/material/Fab';
 import Send from '@mui/icons-material/Send';
 import makeStyles from '@mui/styles/makeStyles';
+import { Alert } from '@mui/material';
 
 const useStyles = makeStyles({
   messageArea: {
     width: '100%',
-    height: '65vh',
-    overflowY: 'auto'
+    height: '70vh',
+    overflowY: 'auto',
   }
 });
 
@@ -24,9 +25,11 @@ const ChatRoom = () => {
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState('');
   const snapInPlace = useRef(null);
+  const { state } = useLocation();
+
 
   let  { chatId } = useParams();
-  chatId = chatId.replace(/\s/g, '')
+  if (chatId) chatId = chatId.replace(/\s/g, '');
 
   useEffect(() => {
     snapInPlace.current.scrollIntoView({ behavior: 'smooth' });
@@ -50,22 +53,26 @@ const ChatRoom = () => {
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
-    const { uid, photoURL } = auth.currentUser;
-    if (chatId) {
-      const chatRef = doc(db, 'chats', chatId);
-      await updateDoc(chatRef, {
-        latestMessage: {createdAt: new Date(), text,},
-      });
-      const messageRef = collection(chatRef, 'messages');
-      await addDoc(messageRef, {
-        createdAt: new Date(),
-        text,
-        photoURL,
-        userId: uid
-      });
+    if (text) {
+      const { uid, photoURL } = auth.currentUser;
+      if (chatId) {
+        const chatRef = doc(db, 'chats', chatId);
+        await updateDoc(chatRef, {
+          latestMessage: {createdAt: new Date(), text,},
+        });
+        const messageRef = collection(chatRef, 'messages');
+        await addDoc(messageRef, {
+          createdAt: new Date(),
+          text,
+          photoUrl: photoURL,
+          userId: uid
+        });
+      } else
+      snapInPlace.current.scrollIntoView({ behavior: 'smooth' });
+      setText('');
+    } else {
+      alert('Empty string')
     }
-    setText('');
-    snapInPlace.current.scrollIntoView({ behavior: 'smooth' });
   };
 
   const classes = useStyles();
@@ -76,7 +83,7 @@ const ChatRoom = () => {
           <ListItem key={msg.docId}>
             <Grid container>
               <Grid item xs={12}>
-                <ChatMessages message={msg} />
+                <ChatMessages message={msg} friend={state} />
               </Grid>
             </Grid>
           </ListItem>
@@ -84,8 +91,8 @@ const ChatRoom = () => {
         <div ref={snapInPlace} />
       </List>
       <Divider />
-      <Grid container style={{padding: '20px'}}>
-        <form style={{display: 'flex', flex: 1}} onSubmit={handleSendMessage}>
+      <Grid container style={{padding: '20px', borderTop: 'solid', borderWidth: '1px', borderColor: 'lightgray'}}>
+        <form style={{display: 'flex', flex: 1, justifyContent: 'center'}} onSubmit={handleSendMessage}>
           <Grid item xs={11}>
             <TextField value={text} onChange={(e) => setText(e.target.value)} id="outlined-basic" label="Start Chatting" fullWidth />
           </Grid>

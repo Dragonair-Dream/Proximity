@@ -8,10 +8,14 @@ import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 
 const ChatMessages = (props) => {
-  const { text, userId, photoURL, createdAt } = props.message;
+  const { text, userId, photoUrl, createdAt } = props.message;
+  const { friend } = props
   const messagePosition = userId === auth.currentUser.uid ? 'right' : 'left';
-  // const avatarPosition = userId === auth.currentUser.uid && {flexDirection: 'row-reverse'};
-  const profilePic = userId === auth.currentUser.uid ? photoURL : '';
+  const textAlignment = userId === auth.currentUser.uid ? 'row-reverse' : 'row';
+  const profilePic = userId === auth.currentUser.uid ? photoUrl : friend.profilePic;
+  const userName = userId === auth.currentUser.uid ? auth.currentUser.displayName : friend.userName
+
+  console.log(auth.currentUser)
 
   return (
       <Grid container align={messagePosition} display='flex'>
@@ -19,6 +23,9 @@ const ChatMessages = (props) => {
             <ListItemAvatar>
               <Avatar src={profilePic} />
             </ListItemAvatar>
+            <Typography>
+              {userName}
+            </Typography>
             <ListItemText
               primary={
                 <React.Fragment>
@@ -36,7 +43,8 @@ const ChatMessages = (props) => {
               secondary={
                 <React.Fragment>
                   <Typography
-                    sx={{ display: 'inline' }}
+                    style={{width: '300px'}}
+                    sx={{ display: 'flex', flexWrap: 'wrap', flexDirection: `${textAlignment}` }}
                     component="span"
                     variant="body2"
                     color="text.primary"

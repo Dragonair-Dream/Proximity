@@ -1,27 +1,37 @@
 import React, { useState } from "react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, db } from "../Services/firebase";
-import { setDoc, doc } from 'firebase/firestore'
+import { createUserProfile } from "../Store/userProfileReducer";
+import { useDispatch } from "react-redux";
+import { doc, setDoc } from "@firebase/firestore";
 
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 //import Link from "@mui/material/Link";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import InputAdornment from "@mui/material/InputAdornment";
 import { AccountCircle, LockRounded } from "@mui/icons-material";
 
 export default function SignUp() {
   //creates regex for valid emails
-  const regex = new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}');
+  const regex = new RegExp("[a-z0-9]+@[a-z]+.[a-z]{2,3}");
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [displayName, setDisplayName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setlastName] = useState("");
+
+  const dispatch = useDispatch();
 
   const createAccount = async () => {
     const loginEmail = email;
     const loginPassword = password;
+    const loginDisplayName = displayName;
+    const loginFirstName = firstName;
+    const loginLastName = lastName;
 
     try {
       const { user } = await createUserWithEmailAndPassword(
@@ -29,41 +39,38 @@ export default function SignUp() {
         loginEmail,
         loginPassword
       );
-      await setDoc(doc(db, 'users', user.uid), {
-        didUpdate: false,
-        DateOfBirth: '',
-        about: '',
-        email: user.email,
-        createdAt: new Date(),
-        firstName: '',
-        lastName: '',
-        phoneNumber: '',
-        posterId: user.uid,
-        profilePic: '',
-        userName: ''
-        //change this to userName: user.userName when ready
-      })
-      await setDoc(doc(db, 'friends', user.uid), {
+      updateProfile(auth.currentUser, { displayName: loginDisplayName });
+      dispatch(
+        createUserProfile({
+          userName: loginDisplayName,
+          email: loginEmail,
+          profilePic: "",
+          didUpdate: false,
+          posterId: user.uid,
+          DateOfBirth: "",
+          phoneNumber: "",
+          firstName: loginFirstName,
+          lastName: loginLastName,
+          about: "",
+        })
+      );
+
+      await setDoc(doc(db, "friends", user.uid), {
         accepted: [],
         pending: [],
-        requested: []
-      })
-      await setDoc(doc(db, 'notifications', user.uid), {
-        notifications: []
-      })
-
+        requested: [],
+      });
     } catch (error) {
       alert(error.message);
       console.log(error.message);
     }
   };
   const navigate = useNavigate();
+
   async function handleSubmit(e) {
     e.preventDefault();
     createAccount();
-    if (auth.currentUser) {
-      navigate("/");
-    }
+    navigate("/UserProfile");
   }
 
   return (
@@ -133,6 +140,63 @@ export default function SignUp() {
               startAdornment: (
                 <InputAdornment position="start">
                   <LockRounded />
+                </InputAdornment>
+              ),
+            }}
+          />
+          <TextField
+            required
+            style={{ marginBottom: "20px" }}
+            id="signup-firstName-input"
+            label="First Name"
+            variant="standard"
+            type="text"
+            value={firstName}
+            onChange={(e) => {
+              setFirstName(e.target.value);
+            }}
+            margin="normal"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <LockRounded />
+                </InputAdornment>
+              ),
+            }}
+          />
+          <TextField
+            required
+            style={{ marginBottom: "20px" }}
+            id="signup-lastName-input"
+            label="Last Name"
+            variant="standard"
+            type="text"
+            value={lastName}
+            onChange={(e) => {
+              setlastName(e.target.value);
+            }}
+            margin="normal"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <LockRounded />
+                </InputAdornment>
+              ),
+            }}
+          />
+          <TextField
+            required
+            id="signup-basic"
+            label="User Name"
+            variant="standard"
+            type="displayName"
+            value={displayName}
+            onChange={(e) => setDisplayName(e.target.value)}
+            margin="normal"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <AccountCircle />
                 </InputAdornment>
               ),
             }}
