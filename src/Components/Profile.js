@@ -1,10 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { auth } from "../Services/firebase";
+import { auth, db } from "../Services/firebase";
 import { getUserData } from "../Store/userProfileReducer";
 import { useNavigate } from "react-router";
 import { _getUsersFriends } from "../Store/userFriendReducer";
 import { _getUsersPosts } from "../Store/userPostReducer";
+import { doc, onSnapshot } from "@firebase/firestore";
 import {
   Button,
   Grid,
@@ -21,15 +22,28 @@ export default function Profile() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const userData = useSelector((state) => state.userProfile);
+  const [userData, setUserData] = useState([]);
+
+  // const userData = useSelector((state) => state.userProfile);
   const friends = useSelector((state) => state.usersFriends);
   const posts = useSelector((state) => state.usersPosts);
   useEffect(() => {
-    dispatch(getUserData());
+    // dispatch(getUserData());
     dispatch(_getUsersFriends());
     dispatch(_getUsersPosts());
   }, []);
 
+  useEffect(
+    () =>
+      onSnapshot(doc(db, "users", auth.currentUser.uid), (doc) =>
+        setUserData(doc.data())
+      ),
+    []
+  );
+  console.log("userData:::::", userData);
+
+  // const userDatanew = userData[0];
+  // console.log("!!!!!!!!!!!", userDatanew);
   const handleSubmit = () => {
     navigate("/editProfile");
   };
@@ -42,19 +56,13 @@ export default function Profile() {
   if (acceptedFriends) {
     friendCount = acceptedFriends.length;
   }
-  // const friendCount = acceptedFriends.length;
-  console.log(Array.isArray(acceptedFriends));
 
   return (
     <Grid sx={{ backgroundColor: "Azure", height: "100%", marginBottom: "0" }}>
       <Box sx={{ paddingTop: 1 }}>
         <Avatar
           alt="Remy Sharp"
-          src={
-            userData.email === auth.currentUser.email
-              ? auth.currentUser.photoURL
-              : ""
-          }
+          src={userData.profilePic ? userData.profilePic : ""}
           sx={{
             width: 175,
             height: 175,
