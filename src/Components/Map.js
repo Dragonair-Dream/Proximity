@@ -4,7 +4,7 @@ import { googleMapsKey } from "../secrets";
 import PostCreate from "./PostCreate";
 import { useDispatch, useSelector } from "react-redux";
 import { _getUsersPosts } from "../Store/userPostReducer";
-import { collection, query, onSnapshot, where, doc, getDoc } from "firebase/firestore";
+import { collection, query, onSnapshot, where } from "firebase/firestore";
 import { db, auth } from "../Services/firebase";
 import PostContent from "./PostContent";
 import { _getUsersFriendsPosts } from "../Store/friendsPostsReducer";
@@ -107,7 +107,7 @@ console.log('friedns filter map all userspost ', friendsPosts)
         <GoogleMap //GoogleMap - The map component inside which all other components render
           mapContainerStyle={containerStyle}
           center={{ lat: latitude, lng: longitude }}
-          zoom={10}
+          zoom={5}
           options={{ gestureHandling: "cooperative", fullscreenControl: false }}
         >
           <Marker
