@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Box, TextField } from '@mui/material'
 import { AccountCircle } from '@mui/icons-material'
 import { List, ListItem, ListItemText, ListSubheader } from '@mui/material/'
 import { decideRequest } from "../Store/relationsReducer";
 import { auth, db } from '../Services/firebase'
-import { onSnapshot, query, doc, where, collection } from "firebase/firestore";
+import { onSnapshot, doc, collection } from "firebase/firestore";
 
 const Search = () => {
   const dispatch = useDispatch()
@@ -76,11 +76,9 @@ const Search = () => {
 
   return (
     <div>
-      <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+      <Box sx={{ width: '100%' }}>
         <TextField id="input-with-sx" label="Search for Friends..." variant="standard" value={search} onChange={e => setSearch(e.target.value)}/>
-        <AccountCircle sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
       </Box>
-
       <List
         sx={{
           width: '100%',
