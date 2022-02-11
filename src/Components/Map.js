@@ -9,6 +9,7 @@ import { db, auth } from "../Services/firebase";
 import PostContent from "./PostContent";
 import { _getUsersFriendsPosts } from "../Store/friendsPostsReducer";
 import { _getUsersFriends } from "../Store/userFriendReducer";
+import { set } from "date-fns";
 
 const containerStyle = {
   width: "100%",
@@ -19,6 +20,7 @@ const containerStyle = {
 function Map() {
   const [latitude, setLatitude] = useState(41.25861);
   const [longitude, setLongitude] = useState(-95.93779);
+  const [mapError, setMapError] = useState(null);
   const [myPostQueryData, setMyPostQueryData] = useState(null);
   const [allUsersPostQueryData, setAllUsersPostQueryData] = useState([]);
   const usersFriends = useSelector((state) => state.usersFriends);
@@ -61,16 +63,22 @@ function Map() {
   };
 
   useEffect(() => {
-    let watchId;
     // dispatch(_getUsersFriends())
     dispatch(_getUsersPosts()); // is this the leak???
     dispatch(_getUsersFriendsPosts());
-    if (navigator.geolocation) {
-      watchId = navigator.geolocation.getCurrentPosition(successPos);
-    } else {
-      alert("sorry, Geolocation is not supported by this browser.");
+  }, []);
+
+  const onError = (err) => {
+    setMapError(err.message)
+  };
+
+  useEffect(() => {
+    if (!navigator.geolocation) {
+      setMapError('Geolocation is not supported by this browser.');
+      return;
     }
-    return watchId;
+    const watchId = navigator.geolocation.watchPosition(successPos, onError);
+    return () => navigator.geolocation.clearWatch(watchId);
   }, []);
 
   useEffect(() => {
@@ -106,6 +114,12 @@ function Map() {
     scale: 0.05, //to reduce the size of icons
   };
 
+  if (mapError){
+    return (
+      <div>Something went wrong with getting your location: {mapError}</div>
+    );
+  }
+
   return (
     <>
       {/* <button onClick={getPosition}>position</button> */}
@@ -127,8 +141,8 @@ function Map() {
           {myPostQueryData &&
             myPostQueryData.map((post) => <PostContent post={post} key={post.docId}/>)
           }
-          {friendsPosts &&
-            friendsPosts.map((post) => (
+          {usersFriendsPosts &&
+            usersFriendsPosts.map((post) => (
               <PostContent post={post} key={post.docId} />
             ))
           }
