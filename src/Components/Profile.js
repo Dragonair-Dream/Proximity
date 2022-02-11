@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { auth, db } from "../Services/firebase";
-import { getUserData } from "../Store/userProfileReducer";
 import { useNavigate } from "react-router";
-import { _getUsersFriends } from "../Store/userFriendReducer";
 import { _getUsersPosts } from "../Store/userPostReducer";
 import { doc, onSnapshot } from "@firebase/firestore";
 import {
@@ -15,7 +13,6 @@ import {
   Stack,
   ListItem,
   Divider,
-  responsiveFontSizes,
 } from "@mui/material";
 
 export default function Profile() {
@@ -25,6 +22,7 @@ export default function Profile() {
   const [userData, setUserData] = useState([]);
   const [friends, setFriendsNew] = useState([]);
 
+  //get user posts for count
   const posts = useSelector((state) => state.usersPosts);
   useEffect(() => {
     dispatch(_getUsersPosts());
@@ -46,8 +44,6 @@ export default function Profile() {
       ),
     []
   );
-
-  console.log("!!!!!!!!!!!", friends);
 
   const handleSubmit = () => {
     navigate("/editProfile");
@@ -76,9 +72,7 @@ export default function Profile() {
           }}
         />
         <Typography textAlign="center" style={{ padding: "8px" }}>
-          {userData.email === auth.currentUser.email
-            ? `${userData.firstName} ${userData.lastName}`
-            : null}
+          {userData ? `${userData.firstName} ${userData.lastName}` : ""}
         </Typography>
         <Typography
           textAlign="center"
