@@ -76,7 +76,7 @@ export default function SignUp() {
   async function handleSubmit(e) {
     e.preventDefault();
     createAccount();
-    navigate("/UserProfile");
+    navigate("/");
   }
 
   return (

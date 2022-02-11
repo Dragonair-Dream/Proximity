@@ -8,12 +8,6 @@ import { auth, db } from '../Services/firebase'
 import { onSnapshot, query, doc, where, collection } from "firebase/firestore";
 
 const Search = () => {
-  /*
-  const relations = useSelector(state => state.relations)
-  const flatRelations = [...relations.accepted, ...relations.pending, ...relations.requested].map(user => user.uid)
-  const users = useSelector(state => state.users)
-  const filteredUsers = users.filter(user => !flatRelations.includes(user.posterId))
-  */
   const dispatch = useDispatch()
   const [search, setSearch] = useState('')
   const [filtered, setFiltered] = useState([])
@@ -24,10 +18,11 @@ const Search = () => {
     if (search === '' || search === null || search === undefined) {
       setFilteredSearch([filtered, ...relations])
     } else {
-      const all = filtered.filter(user => user.userName.includes(search) || user.firstName.includes(search) || user.lastName.includes(search))
-      const p = relations[0].filter(user => user.userName.includes(search) || user.firstName.includes(search) || user.lastName.includes(search))
-      const a = relations[1].filter(user => user.userName.includes(search) || user.firstName.includes(search) || user.lastName.includes(search))
-      const r = relations[2].filter(user => user.userName.includes(search) || user.firstName.includes(search) || user.lastName.includes(search))
+      const searchLower = search.toLowerCase()
+      const all = filtered.filter(user => user.userName.toLowerCase().includes(searchLower) || user.firstName.toLowerCase().includes(searchLower) || user.lastName.toLowerCase().includes(searchLower))
+      const p = relations[0].filter(user => user.userName.toLowerCase().includes(searchLower) || user.firstName.toLowerCase().includes(searchLower) || user.lastName.toLowerCase().includes(searchLower))
+      const a = relations[1].filter(user => user.userName.toLowerCase().includes(searchLower) || user.firstName.toLowerCase().includes(searchLower) || user.lastName.toLowerCase().includes(searchLower))
+      const r = relations[2].filter(user => user.userName.toLowerCase().includes(searchLower) || user.firstName.toLowerCase().includes(searchLower) || user.lastName.toLowerCase().includes(searchLower))
       setFilteredSearch([all, p, a, r])
     }
   }, [search, filtered, relations])
