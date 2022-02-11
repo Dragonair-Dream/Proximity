@@ -11,7 +11,6 @@ const PageDoesNotExist = () => {
 
   return (
     <div
-      container
       style={{
         minHeight: "100vh",
         minWidth: "100%",
