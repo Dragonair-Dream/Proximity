@@ -134,7 +134,7 @@ console.log('friends posts with query listening ', actualFriendsPosts )
           }
           {actualFriendsPosts &&
             actualFriendsPosts.map((post) => (
-              <PostContent post={post} />
+              <PostContent post={post} /> //create div
             ))
           }
           <PostCreate lat={latitude} lng={longitude} />

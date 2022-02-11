@@ -66,14 +66,14 @@ export default function PostContent(props) {
         setAnchorEl(null);
         await deleteDoc(doc(db, "posts", postId))
       };
-  
+
     const handleCloseEdit = async (postId) => {
         // const postRef = doc(db, "posts", postId); // move into store
         // await updateDoc(postRef, {
         // editing: true
         // });
         // dispatch(_updateUsersPost(postId)) //this changes the editing field from false to true
-      setAnchorEl(null); 
+      setAnchorEl(null);
     //   navigate('/post-edit')
     };
 
@@ -118,7 +118,7 @@ export default function PostContent(props) {
 
     return(
         <Marker key={post.docId} position={{lat: post.latitude, lng: post.longitude}} onClick={()=> {setSelectedMarker(post.docId)}} >
-            {selectedMarker === post.docId ?    
+            {selectedMarker === post.docId ?
                 <InfoWindow position={{lat: post.latitude, lng: post.longitude}} onCloseClick={()=>{setSelectedMarker(null);}} >
                   <Card sx={{ maxWidth: 345 }}>
                     <CardHeader

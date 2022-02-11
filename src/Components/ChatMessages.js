@@ -8,10 +8,14 @@ import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 
 const ChatMessages = (props) => {
-  const { text, userId, photoURL, createdAt } = props.message;
+  const { text, userId, photoUrl, createdAt } = props.message;
+  const { friend } = props
   const messagePosition = userId === auth.currentUser.uid ? 'right' : 'left';
   const textAlignment = userId === auth.currentUser.uid ? 'row-reverse' : 'row';
-  const profilePic = userId === auth.currentUser.uid ? photoURL : ''; //This is where i will put other person's photoURL
+  const profilePic = userId === auth.currentUser.uid ? photoUrl : friend.profilePic;
+  const userName = userId === auth.currentUser.uid ? auth.currentUser.displayName : friend.userName
+
+  console.log(auth.currentUser)
 
   return (
       <Grid container align={messagePosition} display='flex'>
@@ -19,6 +23,9 @@ const ChatMessages = (props) => {
             <ListItemAvatar>
               <Avatar src={profilePic} />
             </ListItemAvatar>
+            <Typography>
+              {userName}
+            </Typography>
             <ListItemText
               primary={
                 <React.Fragment>
