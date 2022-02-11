@@ -31,7 +31,6 @@ export default function PostContent(props) {
     const [chat, setChat] = useState(null);
     const [message, setMessage] = useState('');
     const open = Boolean(anchorEl);
-    console.log('CHAT!!!!!', post);
 
     const { postersId } = post
     const getChat = useCallback(async () => {

@@ -60,7 +60,7 @@ export const _addUsersPost = (
         },
         { merge: true }
       );
-      dispatch(addUsersPost(post.data()));
+      dispatch(addUsersPost(imageUrl, locationName, caption, latitude, longitude, uid, editing));
     } catch (error) {
       console.log("thunk add post", error);
     }
