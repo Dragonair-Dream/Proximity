@@ -118,11 +118,10 @@ export default function PostContent(props) {
                 <InfoWindow position={{lat: post.latitude, lng: post.longitude}} onCloseClick={()=>{setSelectedMarker(null);}} >
                   <Card sx={{ maxWidth: 345 }}>
                     <CardHeader
-                        avatar={
-                            <Avatar sx={{ bgcolor: red[500] }} aria-label="name" src={props.userPhoto ? props.userPhoto : ""} />
-                            //     J
-                            // {/* {post.name.slice(0, 1)} */}
-                            // </Avatar>
+                        avatar={ post.postersId === auth.currentUser.uid ?
+                            <Avatar sx={{ bgcolor: red[500] }} aria-label="name" src={props.userPhoto ? props.userPhoto : ""} /> : 
+                            props.friends.map(friend => friend.uid === post.postersId ? 
+                                <Avatar sx={{ bgcolor: red[500] }} aria-label="name" src={friend.profilePic} /> : null )
                         }
                         action={
                             <>
