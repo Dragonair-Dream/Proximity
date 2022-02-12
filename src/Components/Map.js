@@ -22,6 +22,9 @@ function Map() {
   const [myPostQueryData, setMyPostQueryData] = useState(null);
   const [allUsersPostQueryData, setAllUsersPostQueryData] = useState([]);
   const usersFriends = useSelector((state) => state.usersFriends);
+  const usersData = useSelector(state => state.userProfile)
+  console.log('usersssssDDDDData!!!!!', usersData.profilePic);
+  const userPhoto = usersData.profilePic
 
   let actualFriendsPosts = [];
   if(Object.keys(usersFriends).length > 0){
@@ -40,21 +43,24 @@ function Map() {
   })}
 
 
-
+ 
 // console.log('friends posts with query listening ', actualFriendsPosts )
 console.log('friends posts with query listening ', actualFriendsPosts )
 
 
   const dispatch = useDispatch();
 
-  const usersPosts = useSelector((state) => state.usersPosts);
-  console.log("-------", usersPosts)
+  // const userInfo = useSelector(state => state.userProfile) // we get what we need for post content avatar
+  // console.log("-------userInfo", userPhoto)
+
+  // const usersPosts = useSelector((state) => state.usersPosts);
+  // console.log("-------usersPOsts", usersPosts)
 
   // const usersFriends = useSelector((state) => state.usersFriends.accepted);
-  console.log("-------Fr", usersFriends);
+  console.log("-------Fr", usersFriends.accepted);
 
-  const usersFriendsPosts = useSelector((state) => state.friendsPosts);
-  console.log("-------friends posts stuff", usersFriendsPosts);
+  // const usersFriendsPosts = useSelector((state) => state.friendsPosts);
+  // console.log("-------friends posts", usersFriendsPosts);
 
   const successPos = (pos) => {
     const { latitude, longitude } = pos.coords;
@@ -130,11 +136,11 @@ console.log('friends posts with query listening ', actualFriendsPosts )
             // onClick={()=> {setSelectedMarker(jerry.post.id)}}
           />
           {myPostQueryData &&
-            myPostQueryData.map((post) => <PostContent post={post} />)
+            myPostQueryData.map((post) => <PostContent post={post} userPhoto={userPhoto} />)
           }
           {actualFriendsPosts &&
             actualFriendsPosts.map((post) => (
-              <PostContent post={post} /> //create div
+              <PostContent post={post} friends={usersFriends.accepted} /> //create div
             ))
           }
           <PostCreate lat={latitude} lng={longitude} />

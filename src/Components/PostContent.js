@@ -22,6 +22,7 @@ import Send from "@mui/icons-material/Send";
 import Fab from "@mui/material/Fab";
 import { db, auth } from "../Services/firebase";
 import { collection, addDoc, doc, updateDoc, query, getDocs, where, deleteDoc } from "firebase/firestore";
+import { useSelector } from "react-redux";
 
 export default function PostContent(props) {
     const {post} = props
@@ -31,15 +32,16 @@ export default function PostContent(props) {
     const [chat, setChat] = useState(null);
     const [message, setMessage] = useState('');
     const open = Boolean(anchorEl);
-    console.log('selectedMarker!!!!!', selectedMarker);
-    console.log('poooooosssst!!!!!', post);
+    console.log('ffffrrrriiiieeeennnnddddsss', props.friends)
+
+   
+
 
 
     const { postersId } = post
     const getChat = useCallback(async () => {
         try {
             const chatRef = collection(db, 'chats');
-            // const q = query(chatRef, where('userChatRef.user1', '==', postersId ), where('userChatRef.user2', '==', auth.currentUser.uid));
             const q = query(chatRef, where('users', 'array-contains', auth.currentUser.uid ));
             const snapshot = await getDocs(q);
             let data =[];
@@ -70,13 +72,7 @@ export default function PostContent(props) {
       };
 
     const handleCloseEdit = async (postId) => {
-        // const postRef = doc(db, "posts", postId); // move into store
-        // await updateDoc(postRef, {
-        // editing: true
-        // });
-        // dispatch(_updateUsersPost(postId)) //this changes the editing field from false to true
       setAnchorEl(null);
-    //   navigate('/post-edit')
     };
 
     const handleSubmit = async (e) => {
@@ -116,8 +112,6 @@ export default function PostContent(props) {
         setMessage('');
     };
 
-    // console.log("0-=-=-=-=0", props.post)
-
     return(
         <Marker key={post.docId} position={{lat: post.latitude, lng: post.longitude}} onClick={()=> {setSelectedMarker(post.docId)}} >
             {selectedMarker === post.docId ?
@@ -125,10 +119,10 @@ export default function PostContent(props) {
                   <Card sx={{ maxWidth: 345 }}>
                     <CardHeader
                         avatar={
-                            <Avatar sx={{ bgcolor: red[500] }} aria-label="name">
-                                J
-                            {/* {post.name.slice(0, 1)} */}
-                            </Avatar>
+                            <Avatar sx={{ bgcolor: red[500] }} aria-label="name" src={props.userPhoto ? props.userPhoto : ""} />
+                            //     J
+                            // {/* {post.name.slice(0, 1)} */}
+                            // </Avatar>
                         }
                         action={
                             <>
