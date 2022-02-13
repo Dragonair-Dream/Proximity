@@ -114,7 +114,7 @@ export default function PostContent(props) {
     <Marker key={post.docId} position={{lat: post.latitude, lng: post.longitude}} onClick={()=> {setSelectedMarker(post.docId)}} >
             {selectedMarker === post.docId ?
                 <InfoWindow position={{lat: post.latitude, lng: post.longitude}} onCloseClick={()=>{setSelectedMarker(null);}} >
-                  <Card sx={{ maxWidth: 345 }}>
+                  <Card sx={{ maxWidth: 345, height: 'auto'}}>
                     <CardHeader
                         avatar={ post.postersId === auth.currentUser.uid ?
                             <Avatar sx={{ bgcolor: red[500] }} aria-label="name" src={props.userPhoto ? props.userPhoto : ""} /> : 
@@ -158,7 +158,7 @@ export default function PostContent(props) {
                     />
                     <CardMedia
                         component="img"
-                        height="194"
+                        height="auto" // auto makes a slider if photos are too large
                         src={post.imageUrl}
                         alt=""
                     />
