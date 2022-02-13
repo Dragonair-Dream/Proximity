@@ -12,13 +12,14 @@ import Toolbar from "@mui/material/Toolbar";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
-import { auth } from "../Services/firebase";
+import { auth, db } from "../Services/firebase";
 import { signOut } from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../Services/firebase";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserData } from "../Store/userProfileReducer";
 import Divider from "@mui/material/Divider";
+import { onSnapshot, doc } from "@firebase/firestore";
 
 const settings = ["Logout"];
 
@@ -27,6 +28,8 @@ const NavBar = (props) => {
   const [locationServices, setLocationServices] = useState("On");
   const [switchStatus, setSwitchStatus] = useState(true);
   const dispatch = useDispatch();
+
+  const [userData, setUserData] = useState([]);
 
   const navigate = useNavigate();
   const logout = async () => {
@@ -54,10 +57,16 @@ const NavBar = (props) => {
     }
   };
   const thisUser = useAuth();
-  const userData = useSelector((state) => state.userProfile);
-  useEffect(() => {
-    dispatch(getUserData());
-  }, [thisUser]);
+  // const userData = useSelector((state) => state.userProfile);
+  useEffect(
+    () => () =>
+      onSnapshot(
+        doc(db, "users", auth.currentUser.uid),
+        (doc) => setUserData(doc.data())
+        // console.log("klasjfl;ajsdfl;kadsf", doc.data())
+      ),
+    [thisUser]
+  );
 
   return (
     <AppBar position="sticky">
