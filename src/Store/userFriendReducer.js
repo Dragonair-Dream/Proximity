@@ -50,7 +50,6 @@ export const _getUsersFriends = () => {
                 const friendsData = docSnap.data()
 
               dispatch(getUsersFriends(friendsData))
-              console.log("_getusers friends data", docSnap.data().accepted)
             } else {
               // doc.data() will be undefined in this case
               console.log("No such friends  document!");
@@ -65,7 +64,6 @@ export const _getUsersFriends = () => {
 export default function userFriendReducer(state = {}, action) {
     switch(action.type){
         case GET_USERS_FRIENDS:
-            console.log("reducer check length of posts",action.friends)
             return action.friends;
         case ADD_USERS_FRIENDS:
             return [...state, action.friends]
