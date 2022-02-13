@@ -21,9 +21,6 @@ export default function Profile() {
 
   const [userData, setUserData] = useState([]);
   const [friends, setFriendsNew] = useState([]);
-  console.log('juahbdhb friendsss ojndfkmof', friends)
-  console.log('juahbdhb userrrrr ojndfkmof', userData)
-
 
   //get user posts for count
   const posts = useSelector((state) => state.usersPosts);
