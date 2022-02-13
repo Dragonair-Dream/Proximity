@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-// import { auth } from "../Services/firebase";
-import ProfileImage from "./ProfileImage";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import {TextField, Button, Grid, InputAdornment, Typography } from "@mui/material";
-import { AddLocationAlt, NotesSharp, AddAPhoto } from "@mui/icons-material";
+import { AddLocationAlt, NotesSharp } from "@mui/icons-material";
 import { _updateUsersPost } from '../Store/userPostReducer'
 
 function PostEdit() {

@@ -1,4 +1,4 @@
-import { addDoc, collection, doc, getDoc, getDocs, query, where } from "@firebase/firestore";
+import { addDoc, collection, doc, getDoc } from "@firebase/firestore";
 import { db, auth } from "../Services/firebase";
 
 const GET_USERS_FRIENDS = "GET_USERS_FRIENDS";
@@ -42,7 +42,6 @@ export const _addUsersFriends = (accepted, pending, requested) => {
 export const _getUsersFriends = () => {
     return(async(dispatch) => {
         try {
-            const friendData = []
             const uid = auth.currentUser.uid;
             const docRef =  doc(db, "friends", uid);
             const docSnap = await getDoc(docRef);

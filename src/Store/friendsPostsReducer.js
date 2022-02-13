@@ -30,7 +30,6 @@ export const _getUsersFriendsPosts = () => {
                     docSnap.forEach((doc) => {
                         postData.push({docId: doc.id,  ...doc.data()});
                     });
-                    console.log('popopopo', postData)
                     dispatch(getUsersFriendsPosts(postData))
                 })
             //   dispatch(getUsersFriendsPosts(postData))
