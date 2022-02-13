@@ -119,7 +119,9 @@ export default function PostContent(props) {
                         avatar={ post.postersId === auth.currentUser.uid ?
                             <Avatar sx={{ bgcolor: red[500] }} aria-label="name" src={props.userPhoto ? props.userPhoto : ""} /> : 
                             props.friends.map(friend => friend.uid === post.postersId ? 
-                                <Avatar sx={{ bgcolor: red[500] }} aria-label="name" src={friend.profilePic} /> : null )
+                                friend.profilePic ? 
+                                <Avatar sx={{ bgcolor: red[500] }} aria-label="name" src={friend.profilePic} /> : 
+                                <Avatar sx={{ bgcolor: red[500] }} aria-label="name" >{`${friend.firstName.slice(0,1)} ${friend.firstName.slice(0,1)}`}</Avatar> : null)
                         }
                         action={
                             <>
