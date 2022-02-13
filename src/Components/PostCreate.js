@@ -8,17 +8,15 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
-import { auth, postUpload, storage } from "../Services/firebase";
-import { useDispatch, useSelector } from "react-redux";
+import { auth, storage } from "../Services/firebase";
+import { useDispatch } from "react-redux";
 import { _addUsersPost } from "../Store/userPostReducer";
 import { uploadBytes, ref, getDownloadURL } from "firebase/storage";
 
 export default function PostCreate(props) {
-  const user = useSelector((state) => state.user);
 
   const [open, setOpen] = useState(false);
   const [image, setImage] = useState(null);
-  const [imageUrl, setImageUrl] = useState("");
   const [caption, setCaption] = useState("");
   const [locationName, setLocationName] = useState("");
   const dispatch = useDispatch();

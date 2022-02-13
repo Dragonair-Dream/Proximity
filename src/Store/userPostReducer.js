@@ -79,7 +79,6 @@ export const _getUsersPosts = () => {
         docSnap.forEach((doc) => {
           postData.push({ docId: doc.id, ...doc.data() });
         });
-        console.log("_getudersposts  thunk", postData);
         dispatch(getUsersPosts(postData));
       } else {
         // doc.data() will be undefined in this case
@@ -94,7 +93,6 @@ export const _getUsersPosts = () => {
 export const _updateUsersPost = (obj) => {
   return async (dispatch) => {
     try {
-      console.log("uuuuuuuuuuuuuuuuuu", obj);
       const postRef = doc(db, "posts", obj.postId); // move into store
       await updateDoc(postRef, {
         caption: obj.caption,
@@ -110,12 +108,10 @@ export const _updateUsersPost = (obj) => {
 export default function userPostReducer(state = [], action) {
   switch (action.type) {
     case GET_USERS_POSTS:
-      console.log("reducer check length of posts", action.postData);
       return action.postData;
     case ADD_USERS_POST:
       return [...state, action.postData];
     case UPDATE_USERS_POST:
-      console.log("action post data", state);
       const newState = state.map((post) =>
         post.postId === action.postData.postId ? action.postData : post // figure out logic to update state
       );
