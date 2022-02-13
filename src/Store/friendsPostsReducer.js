@@ -26,17 +26,12 @@ export const _getUsersFriendsPosts = () => {
                     const friendId = friend.uid;
                     const q =  query(collection(db, "posts"), where("postersId", "==", friendId));
                     const docSnap =  await getDocs(q);
-                    // console.log('popopopopo', docSnap)
                     docSnap.forEach((doc) => {
                         postData.push({docId: doc.id,  ...doc.data()});
                     });
-                    console.log('popopopo', postData)
                     dispatch(getUsersFriendsPosts(postData))
                 })
-            //   dispatch(getUsersFriendsPosts(postData))
-              console.log("_getusers friends posts", postData)
             } else {
-              // doc.data() will be undefined in this case
               console.log("No such document!");
             }
         } catch (error) {
