@@ -24,7 +24,9 @@ function Map() {
   const usersFriends = useSelector((state) => state.usersFriends);
   const usersData = useSelector(state => state.userProfile)
   const userPhoto = usersData.profilePic
+  const allUsers = useSelector((state) => state.users);
   const dispatch = useDispatch();
+  console.log('uuussseeeeerrrrsss list', allUsers)
 
 
   let actualFriendsPosts = [];
@@ -121,7 +123,7 @@ function Map() {
           {actualFriendsPosts &&
             actualFriendsPosts.map((post) => (
               <div key={post.docId}>
-                <PostContent post={post} friends={usersFriends.accepted} /> 
+                <PostContent post={post} users={allUsers} /> 
               </div>
             ))
           }
