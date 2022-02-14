@@ -66,13 +66,7 @@ export default function PostContent(props) {
       };
 
     const handleCloseEdit = async (postId) => {
-        // const postRef = doc(db, "posts", postId); // move into store
-        // await updateDoc(postRef, {
-        // editing: true
-        // });
-        // dispatch(_updateUsersPost(postId)) //this changes the editing field from false to true
       setAnchorEl(null);
-    //   navigate('/post-edit')
     };
 
     const navigate = useNavigate();
@@ -116,19 +110,16 @@ export default function PostContent(props) {
         navigate(`/chats`);
     };
 
-    // console.log("0-=-=-=-=0", props.post)
-
     return(
-        <Marker key={post.docId} position={{lat: post.latitude, lng: post.longitude}} onClick={()=> {setSelectedMarker(post.docId)}} >
+    <Marker key={post.docId} position={{lat: post.latitude, lng: post.longitude}} onClick={()=> {setSelectedMarker(post.docId)}} >
             {selectedMarker === post.docId ?
                 <InfoWindow position={{lat: post.latitude, lng: post.longitude}} onCloseClick={()=>{setSelectedMarker(null);}} >
-                  <Card sx={{ maxWidth: 345 }}>
+                  <Card sx={{ maxWidth: 345, height: 'auto'}}>
                     <CardHeader
-                        avatar={
-                            <Avatar sx={{ bgcolor: red[500] }} aria-label="name">
-                                J
-                            {/* {post.name.slice(0, 1)} */}
-                            </Avatar>
+                        avatar={ post.postersId === auth.currentUser.uid ?
+                            <Avatar sx={{ bgcolor: red[500] }} aria-label="name" src={props.userPhoto ? props.userPhoto : ""} /> :
+                            props.friends.map(friend => friend.uid === post.postersId ?
+                                <Avatar sx={{ bgcolor: red[500] }} aria-label="name" src={friend.profilePic} /> : null )
                         }
                         action={
                             <>
@@ -167,7 +158,7 @@ export default function PostContent(props) {
                     />
                     <CardMedia
                         component="img"
-                        height="194"
+                        height="auto" // auto makes a slider if photos are too large
                         src={post.imageUrl}
                         alt=""
                     />

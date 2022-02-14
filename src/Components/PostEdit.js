@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-// import { auth } from "../Services/firebase";
-import ProfileImage from "./ProfileImage";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import {TextField, Button, Grid, InputAdornment, Typography } from "@mui/material";
-import { AddLocationAlt, NotesSharp, AddAPhoto } from "@mui/icons-material";
+import { AddLocationAlt, NotesSharp } from "@mui/icons-material";
 import { _updateUsersPost } from '../Store/userPostReducer'
 
 function PostEdit() {
@@ -16,8 +14,8 @@ function PostEdit() {
   const allPostsData = useSelector((state) => state.usersPosts );
   const selectedPost = allPostsData.filter(post => post.docId === selectedPostId)
   const post = selectedPost[0]
-  const [locationName, setLocationName] = useState(post.locationName);
-  const [caption, setCaption] = useState(post.caption);
+  const [locationName, setLocationName] = useState(post.locationName || '');
+  const [caption, setCaption] = useState(post.caption || '');
   console.log('caption$$$$', post)
   const newData = {
     postId: post.docId,
@@ -25,7 +23,7 @@ function PostEdit() {
     locationName
   }
     
-  // console.log('locationname$$$$', locationName)
+  console.log('locationname$$$$', selectedPost)
   
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -67,7 +65,7 @@ function PostEdit() {
             variant="standard"
             type="name"
             value={locationName}
-            onChange={(e) => {setLocationName(e.target.value); console.log(locationName)}}
+            onChange={(e) => {setLocationName(e.target.value)}}
             margin="normal"
             InputProps={{
               startAdornment: (
