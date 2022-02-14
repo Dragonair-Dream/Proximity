@@ -10,13 +10,13 @@ import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 //import Link from "@mui/material/Link";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import InputAdornment from "@mui/material/InputAdornment";
 import { AccountCircle, LockRounded } from "@mui/icons-material";
 
 export default function SignUp() {
   //creates regex for valid emails
-  const regex = new RegExp("[a-z0-9]+@[a-z]+.[a-z]{2,3}");
+  // const regex = new RegExp("[a-z0-9]+@[a-z]+.[a-z]{2,3}");
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

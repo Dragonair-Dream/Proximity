@@ -34,7 +34,7 @@ const Chats = () => {
   return (
     <List sx={{ width: "100%", maxWidth: "100%", bgcolor: "background.paper" }}>
       {chatsArray.map((item) => (
-        <Link style={{textDecoration: 'none'}} to={`/chats/${item.chatID}`} key={item.chatID} state={users.find(user => user.posterId === item.users.find(userId => userId !== auth.currentUser.uid))}>
+        <Link style={{color: 'black', textDecoration: 'none'}} to={`/chats/${item.chatID}`} key={item.chatID} state={users.find(user => user.posterId === item.users.find(userId => userId !== auth.currentUser.uid))}>
           <ListItem alignItems="flex-start">
             <ListItemAvatar>
               <Avatar src={users.find(user => user.posterId === item.users.find(userId => userId !== auth.currentUser.uid)).profilePic} />

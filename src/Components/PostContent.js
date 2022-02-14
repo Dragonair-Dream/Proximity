@@ -22,7 +22,7 @@ import Send from "@mui/icons-material/Send";
 import Fab from "@mui/material/Fab";
 import { db, auth } from "../Services/firebase";
 import { collection, addDoc, doc, updateDoc, query, getDocs, where, deleteDoc } from "firebase/firestore";
-
+import { useNavigate } from "react-router-dom";
 export default function PostContent(props) {
     const {post} = props
     const [anchorEl, setAnchorEl] = useState(null);
@@ -31,13 +31,11 @@ export default function PostContent(props) {
     const [chat, setChat] = useState(null);
     const [message, setMessage] = useState('');
     const open = Boolean(anchorEl);
-    // console.log('CHAT!!!!!', chat);
 
     const { postersId } = post
     const getChat = useCallback(async () => {
         try {
             const chatRef = collection(db, 'chats');
-            // const q = query(chatRef, where('userChatRef.user1', '==', postersId ), where('userChatRef.user2', '==', auth.currentUser.uid));
             const q = query(chatRef, where('users', 'array-contains', auth.currentUser.uid ));
             const snapshot = await getDocs(q);
             let data =[];
@@ -68,15 +66,10 @@ export default function PostContent(props) {
       };
 
     const handleCloseEdit = async (postId) => {
-        // const postRef = doc(db, "posts", postId); // move into store
-        // await updateDoc(postRef, {
-        // editing: true
-        // });
-        // dispatch(_updateUsersPost(postId)) //this changes the editing field from false to true
       setAnchorEl(null);
-    //   navigate('/post-edit')
     };
 
+    const navigate = useNavigate();
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (message !== '') {
@@ -90,7 +83,8 @@ export default function PostContent(props) {
                 await addDoc(messageRef, {
                   createdAt: new Date(),
                   text: message,
-                  photoURL,
+                //   photoURL,
+                  postPic: post.imageUrl,
                   userId: uid
                 });
             } else {
@@ -104,7 +98,8 @@ export default function PostContent(props) {
                 await addDoc(messageRef, {
                     createdAt: new Date(),
                     text: message,
-                    photoURL,
+                    // photoURL,
+                    postPic: post.imageUrl,
                     userId: uid
                 });
                 await updateDoc(doc(db, 'chats', data.id), {chatID: data.id});
@@ -112,21 +107,25 @@ export default function PostContent(props) {
         }
         setToggleMessage(false);
         setMessage('');
+        navigate(`/chats`);
     };
 
-    // console.log("0-=-=-=-=0", props.post)
-
     return(
-        <Marker key={post.docId} position={{lat: post.latitude, lng: post.longitude}} onClick={()=> {setSelectedMarker(post.docId)}} >
+    <Marker key={post.docId} position={{lat: post.latitude, lng: post.longitude}} onClick={()=> {setSelectedMarker(post.docId)}} >
             {selectedMarker === post.docId ?
                 <InfoWindow position={{lat: post.latitude, lng: post.longitude}} onCloseClick={()=>{setSelectedMarker(null);}} >
-                  <Card sx={{ maxWidth: 345 }}>
+                  <Card sx={{ maxWidth: 345, height: 'auto'}}>
                     <CardHeader
-                        avatar={
-                            <Avatar sx={{ bgcolor: red[500] }} aria-label="name">
-                                J
-                            {/* {post.name.slice(0, 1)} */}
-                            </Avatar>
+                        avatar={ post.postersId === auth.currentUser.uid ?
+                            <Avatar sx={{ bgcolor: red[500] }} aria-label="name" src={props.userPhoto ? props.userPhoto : ""} /> : 
+                            props.users.map(user => user.posterId === post.postersId ? 
+                                user.profilePic ? 
+                                <div key={post.posterId + 1} >
+                                <Avatar sx={{ bgcolor: red[500] }} aria-label="name" src={user.profilePic} /> 
+                                </div> :
+                                 <div key={post.posterId + 1} > 
+                                <Avatar sx={{ bgcolor: red[500] }} aria-label="name" >{`${user.firstName.slice(0,1)} ${user.last.slice(0,1)}`}</Avatar>
+                                </div> : null)
                         }
                         action={
                             <>
@@ -165,7 +164,7 @@ export default function PostContent(props) {
                     />
                     <CardMedia
                         component="img"
-                        height="194"
+                        height="auto" // auto makes a slider if photos are too large
                         src={post.imageUrl}
                         alt=""
                     />

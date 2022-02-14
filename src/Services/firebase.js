@@ -17,7 +17,7 @@ export function useAuth() {
   const [currentUser, setCurrentUser] = useState();
 
   useEffect(() => {
-    const unsub = onAuthStateChanged(auth, (user) => setCurrentUser(user));
+    onAuthStateChanged(auth, (user) => setCurrentUser(user));
   }, []);
   // console.log("current user", currentUser);
   return currentUser;
@@ -28,7 +28,7 @@ export function useAuth() {
 export async function upload(file, currentUser, setLoading) {
   const fileRef = ref(storage, currentUser.uid + ".png");
   // setLoading(true);
-  const snapshot = await uploadBytes(fileRef, file);
+  await uploadBytes(fileRef, file);
   const photoURL = await getDownloadURL(fileRef);
   updateProfile(currentUser, {
     photoURL: photoURL,
@@ -37,8 +37,8 @@ export async function upload(file, currentUser, setLoading) {
 
 export async function postUpload(file, currentUser) {
   const fileRef = ref(storage, "posts/" + currentUser.uid + ".png");
-  const snapshot = await uploadBytes(fileRef, file);
-  const postImage = await getDownloadURL(fileRef);
+  await uploadBytes(fileRef, file);
+  await getDownloadURL(fileRef);
 }
 
 export default firebaseApp;

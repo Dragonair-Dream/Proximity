@@ -19,63 +19,53 @@ const containerStyle = {
 function Map() {
   const [latitude, setLatitude] = useState(41.25861);
   const [longitude, setLongitude] = useState(-95.93779);
+  const [mapError, setMapError] = useState(null);
   const [myPostQueryData, setMyPostQueryData] = useState(null);
   const [allUsersPostQueryData, setAllUsersPostQueryData] = useState([]);
   const usersFriends = useSelector((state) => state.usersFriends);
+  const usersData = useSelector(state => state.userProfile)
+  const userPhoto = usersData.profilePic
+  const allUsers = useSelector((state) => state.users);
+  const dispatch = useDispatch();
+
 
   let actualFriendsPosts = [];
   if(Object.keys(usersFriends).length > 0){
     usersFriends.accepted.forEach(friend => {
     let cycle = (allUsersPostQueryData.filter(post => post.postersId === friend.uid))
-    console.log('cycycycycyc', cycle)
     let friendsPosts = [];
     if(cycle.length > 0) {
       friendsPosts.push(cycle)
       if(friendsPosts.length > 0) {
-        friendsPosts.map(postEl => { 
-          if(Array.isArray(postEl)) 
+        friendsPosts.map(postEl => {
+          if(Array.isArray(postEl))
           postEl.forEach(post => actualFriendsPosts.push(post))}
         )}
     }
   })}
 
-
-
-// console.log('friends posts with query listening ', actualFriendsPosts )
-console.log('friends posts with query listening ', actualFriendsPosts )
-
-
-  const dispatch = useDispatch();
-
-  const usersPosts = useSelector((state) => state.usersPosts);
-  console.log("-------", usersPosts)
-
-  // const usersFriends = useSelector((state) => state.usersFriends.accepted);
-  console.log("-------Fr", usersFriends);
-
-  const usersFriendsPosts = useSelector((state) => state.friendsPosts);
-  console.log("-------friends posts stuff", usersFriendsPosts);
-
   const successPos = (pos) => {
     const { latitude, longitude } = pos.coords;
     setLatitude(latitude);
     setLongitude(longitude);
-    // console.log("Your current position is:");
-    // console.log(`Latitude : ${latitude}`);
-    // console.log(`Longitude: ${longitude}`);
   };
 
   useEffect(() => {
-    let watchId;
     dispatch(_getUsersFriends())
-    dispatch(_getUsersPosts()); // is this the leak???
+    dispatch(_getUsersPosts());
     dispatch(_getUsersFriendsPosts());
-    if (navigator.geolocation) {
-      watchId = navigator.geolocation.getCurrentPosition(successPos);
-    } else {
-      alert("sorry, Geolocation is not supported by this browser.");
+  }, []);
+
+  const onError = (err) => {
+    setMapError(err);
+  };
+
+  useEffect(() => {
+    if (!navigator.geolocation) {
+      setMapError("sorry, Geolocation is not supported by this browser.");
     }
-    return watchId;
+    const watchId = navigator.geolocation.watchPosition(successPos, onError);
+    return () => navigator.geolocation.clearWatch(watchId);
   }, []);
 
   useEffect(() => {
@@ -108,16 +98,23 @@ console.log('friends posts with query listening ', actualFriendsPosts )
     path: "M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z",
     fillColor: "blue",
     fillOpacity: 0.5,
-    scale: 0.05, //to reduce the size of icons
+    scale: 0.05,
   };
+
+  if (mapError) {
+    return (
+      <div>
+        {mapError}
+      </div>
+    );
+  }
 
   return (
     <>
-      {/* <button onClick={getPosition}>position</button> */}
-      <LoadScript //Loads the Google Maps API script.(API) interfaces between an application and scripting language. It provides the connection points with the application that allow you to control it
+      <LoadScript
         googleMapsApiKey={googleMapsKey}
       >
-        <GoogleMap //GoogleMap - The map component inside which all other components render
+        <GoogleMap
           mapContainerStyle={containerStyle}
           center={{ lat: latitude, lng: longitude }}
           zoom={5}
@@ -127,22 +124,26 @@ console.log('friends posts with query listening ', actualFriendsPosts )
             position={{ lat: latitude, lng: longitude }}
             icon={iconPin}
             label="me"
-            // onClick={()=> {setSelectedMarker(jerry.post.id)}}
           />
           {myPostQueryData &&
-            myPostQueryData.map((post) => <PostContent post={post} />)
+            myPostQueryData.map((post) =>
+              <div key={post.docId}>
+                <PostContent post={post} userPhoto={userPhoto} />
+              </div>
+            )
           }
           {actualFriendsPosts &&
             actualFriendsPosts.map((post) => (
-              <PostContent post={post} /> //create div
+              <div key={post.docId}>
+                <PostContent post={post} users={allUsers} /> 
+              </div>
             ))
           }
           <PostCreate lat={latitude} lng={longitude} />
-          {/* Child components, such as markers, info windows, etc. */}
         </GoogleMap>
       </LoadScript>
     </>
   );
 }
 
-export default React.memo(Map); //Using memo will cause React to skip rendering a component if its props have not changed.
+export default React.memo(Map);
