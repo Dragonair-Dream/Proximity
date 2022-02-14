@@ -25,6 +25,7 @@ const Search = () => {
   const [friend, setFriend] = useState(null);
   useEffect(() => {
     if (search === '' || search === null || search === undefined) {
+      console.log('FILTERED SEARCH IS: ', [filtered, ...relations])
       setFilteredSearch([filtered, ...relations])
     } else {
       const searchLower = search.toLowerCase()
@@ -177,7 +178,7 @@ const Search = () => {
               ))}
             </ul>
           </li>
-        ) : ''}
+                    ) : ''}
 
         {filteredSearch[1].length ? (
           <li key='pending'>
@@ -209,7 +210,7 @@ const Search = () => {
               ))}
             </ul>
           </li>
-        ) : ''}
+                  ) : ''}
 
         {filteredSearch[2].length ? (
           <li key='accepted'>
@@ -259,7 +260,7 @@ const Search = () => {
             </Dialog>
           </li>
         ) : ''}
-
+                  
         {filteredSearch[3].length ? (
           <li key='requested'>
             <ul>
@@ -287,7 +288,7 @@ const Search = () => {
               ))}
             </ul>
           </li>
-        ) : ''}
+                  ) : ''}
 
       </List>
     </div>
