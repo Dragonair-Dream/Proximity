@@ -22,7 +22,7 @@ import Send from "@mui/icons-material/Send";
 import Fab from "@mui/material/Fab";
 import { db, auth } from "../Services/firebase";
 import { collection, addDoc, doc, updateDoc, query, getDocs, where, deleteDoc } from "firebase/firestore";
-
+import { useNavigate } from "react-router-dom";
 export default function PostContent(props) {
     const {post} = props
     const [anchorEl, setAnchorEl] = useState(null);
@@ -31,10 +31,6 @@ export default function PostContent(props) {
     const [chat, setChat] = useState(null);
     const [message, setMessage] = useState('');
     const open = Boolean(anchorEl);
-
-   
-
-
 
     const { postersId } = post
     const getChat = useCallback(async () => {
@@ -73,6 +69,7 @@ export default function PostContent(props) {
       setAnchorEl(null);
     };
 
+    const navigate = useNavigate();
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (message !== '') {
@@ -86,7 +83,8 @@ export default function PostContent(props) {
                 await addDoc(messageRef, {
                   createdAt: new Date(),
                   text: message,
-                  photoURL,
+                //   photoURL,
+                  postPic: post.imageUrl,
                   userId: uid
                 });
             } else {
@@ -100,7 +98,8 @@ export default function PostContent(props) {
                 await addDoc(messageRef, {
                     createdAt: new Date(),
                     text: message,
-                    photoURL,
+                    // photoURL,
+                    postPic: post.imageUrl,
                     userId: uid
                 });
                 await updateDoc(doc(db, 'chats', data.id), {chatID: data.id});
@@ -108,6 +107,7 @@ export default function PostContent(props) {
         }
         setToggleMessage(false);
         setMessage('');
+        navigate(`/chats`);
     };
 
     return(

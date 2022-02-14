@@ -43,7 +43,7 @@ export default function PostCreate(props) {
     const editing = false;
     try {
       const fileRef = ref(storage, "posts/" + random + ".png");
-      const snapshot = await uploadBytes(fileRef, image);
+      await uploadBytes(fileRef, image);
       const postImage = await getDownloadURL(fileRef);
       dispatch(
         _addUsersPost(

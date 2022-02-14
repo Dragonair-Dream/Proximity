@@ -12,13 +12,14 @@ import Toolbar from "@mui/material/Toolbar";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
-import { auth } from "../Services/firebase";
+import { auth, useAuth, db } from "../Services/firebase";
 import { signOut } from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../Services/firebase";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserData } from "../Store/userProfileReducer";
 import Divider from "@mui/material/Divider";
+import { doc, onSnapshot } from "firebase/firestore";
+
 
 const settings = ["Logout"];
 
@@ -26,6 +27,7 @@ const NavBar = (props) => {
   const [anchorUser, setAnchorUser] = useState(null);
   const [locationServices, setLocationServices] = useState("On");
   const [switchStatus, setSwitchStatus] = useState(true);
+  const [userProfilePic , setUserProfilePic] = useState(null);
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
@@ -59,6 +61,13 @@ const NavBar = (props) => {
     dispatch(getUserData());
   }, [thisUser]);
 
+  useEffect(() => {
+    const unsubscribe = onSnapshot(doc(db, "users", auth.currentUser.uid), (querySnapshot) => {
+      setUserProfilePic(querySnapshot.data().profilePic);
+    });
+    return unsubscribe;
+  }, []);
+
   return (
     <AppBar position="sticky">
       <Container maxWidth="xl">
@@ -91,11 +100,7 @@ const NavBar = (props) => {
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar
-                  src={
-                    userData.email === auth.currentUser.email
-                      ? auth.currentUser.photoURL
-                      : ""
-                  }
+                  src={auth.currentUser.photoURL}
                 />
               </IconButton>
             </Tooltip>
