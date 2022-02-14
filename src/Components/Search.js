@@ -32,6 +32,7 @@ const Search = () => {
       const p = relations[0].filter(user => user.userName.toLowerCase().includes(searchLower) || user.firstName.toLowerCase().includes(searchLower) || user.lastName.toLowerCase().includes(searchLower))
       const a = relations[1].filter(user => user.userName.toLowerCase().includes(searchLower) || user.firstName.toLowerCase().includes(searchLower) || user.lastName.toLowerCase().includes(searchLower))
       const r = relations[2].filter(user => user.userName.toLowerCase().includes(searchLower) || user.firstName.toLowerCase().includes(searchLower) || user.lastName.toLowerCase().includes(searchLower))
+      console.log('FILTERED SEARCH IS: ', [all, p, a, r])
       setFilteredSearch([all, p, a, r])
     }
   }, [search, filtered, relations])
@@ -145,7 +146,7 @@ const Search = () => {
 
       <List
         fullWidth
-        style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}
+        style={{display: 'grid', alignItems: 'center', justifyContent: 'space-evenly'}}
         
         subheader={<li />}
       >
@@ -169,7 +170,9 @@ const Search = () => {
                       />
                     </ListItemAvatar>
                     <ListItemText primary={`${add.firstName} ${add.lastName}`} secondary={`${add.userName}`}/>
-                    <button onClick={() => dispatch(decideRequest(add.uid, 'add'))}>Add Friend</button>
+                    <Button variant="outlined" onClick={() => dispatch(decideRequest(add.uid, 'add'))}>
+                      Add Friend
+                    </Button> 
                   </ListItem>
               ))}
             </ul>
@@ -184,10 +187,24 @@ const Search = () => {
               </ListSubheader>
               {filteredSearch[1].map((pending) => (
                 <ListItem key={`pending-${pending.uid}`}>
-                  <ListItemText primary={`${pending.firstName} ${pending.lastName}`} />
-                  <ListItemText secondary={`${pending.userName}`} />
-                  <button onClick={() => dispatch(decideRequest(pending.uid, 'accept'))}>Accept</button>
-                  <button onClick={() => dispatch(decideRequest(pending.uid, 'decline'))}>Decline</button>
+                  <ListItemAvatar>
+                    <Avatar
+                    src={pending.profilePic}
+                    sx={{
+                      width: 75,
+                      height: 75,
+                      border: 0.5,
+                      margin: "auto",
+                    }}
+                    />
+                  </ListItemAvatar>
+                  <ListItemText primary={`${pending.firstName} ${pending.lastName}`} secondary={`${pending.userName}`}/>
+                  <Button variant="outlined" onClick={() => dispatch(decideRequest(pending.uid, 'accept'))}>
+                    Accept
+                  </Button>
+                  <Button variant="outlined" onClick={() => dispatch(decideRequest(pending.uid, 'decline'))}>
+                    Decline
+                  </Button>
                 </ListItem>
               ))}
             </ul>
@@ -202,8 +219,18 @@ const Search = () => {
               </ListSubheader>
               {filteredSearch[2].map((accepted) => (
                 <ListItem key={`accepted-${accepted.uid}`}>
-                  <ListItemText primary={`${accepted.firstName} ${accepted.lastName}`} />
-                  <ListItemText secondary={`${accepted.userName}`} />
+                  <ListItemAvatar>
+                    <Avatar
+                    src={accepted.profilePic}
+                    sx={{
+                      width: 75,
+                      height: 75,
+                      border: 0.5,
+                      margin: "auto",
+                    }}
+                    />
+                  </ListItemAvatar>
+                  <ListItemText primary={`${accepted.firstName} ${accepted.lastName}`} secondary={`${accepted.userName}`}/>
                   <Button variant="outlined" onClick={() => handleClickOpen(accepted)}>
                     Message
                   </Button>
@@ -241,9 +268,21 @@ const Search = () => {
               </ListSubheader>
               {filteredSearch[3].map((request) => (
                 <ListItem key={`request-${request.uid}`}>
-                  <ListItemText primary={`${request.firstName} ${request.lastName}`} />
-                  <ListItemText secondary={`${request.userName}`} />
-                  <button>Send a Reminder</button>
+                  <ListItemAvatar>
+                    <Avatar
+                    src={request.profilePic}
+                    sx={{
+                      width: 75,
+                      height: 75,
+                      border: 0.5,
+                      margin: "auto",
+                    }}
+                    />
+                  </ListItemAvatar>
+                  <ListItemText primary={`${request.firstName} ${request.lastName}`} secondary={`${request.userName}`}/>
+                  <Button variant="outlined">
+                    Send a Reminder
+                  </Button>
                 </ListItem>
               ))}
             </ul>
