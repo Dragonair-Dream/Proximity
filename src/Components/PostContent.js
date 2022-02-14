@@ -22,7 +22,7 @@ import Send from "@mui/icons-material/Send";
 import Fab from "@mui/material/Fab";
 import { db, auth } from "../Services/firebase";
 import { collection, addDoc, doc, updateDoc, query, getDocs, where, deleteDoc } from "firebase/firestore";
-
+import { useNavigate } from "react-router-dom";
 export default function PostContent(props) {
     const {post} = props
     const [anchorEl, setAnchorEl] = useState(null);
@@ -31,13 +31,11 @@ export default function PostContent(props) {
     const [chat, setChat] = useState(null);
     const [message, setMessage] = useState('');
     const open = Boolean(anchorEl);
-    // console.log('CHAT!!!!!', chat);
 
     const { postersId } = post
     const getChat = useCallback(async () => {
         try {
             const chatRef = collection(db, 'chats');
-            // const q = query(chatRef, where('userChatRef.user1', '==', postersId ), where('userChatRef.user2', '==', auth.currentUser.uid));
             const q = query(chatRef, where('users', 'array-contains', auth.currentUser.uid ));
             const snapshot = await getDocs(q);
             let data =[];
@@ -77,6 +75,7 @@ export default function PostContent(props) {
     //   navigate('/post-edit')
     };
 
+    const navigate = useNavigate();
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (message !== '') {
@@ -91,6 +90,7 @@ export default function PostContent(props) {
                   createdAt: new Date(),
                   text: message,
                 //   photoURL,
+                  postPic: post.imageUrl,
                   userId: uid
                 });
             } else {
@@ -105,6 +105,7 @@ export default function PostContent(props) {
                     createdAt: new Date(),
                     text: message,
                     // photoURL,
+                    postPic: post.imageUrl,
                     userId: uid
                 });
                 await updateDoc(doc(db, 'chats', data.id), {chatID: data.id});
@@ -112,6 +113,7 @@ export default function PostContent(props) {
         }
         setToggleMessage(false);
         setMessage('');
+        navigate(`/chats`);
     };
 
     // console.log("0-=-=-=-=0", props.post)

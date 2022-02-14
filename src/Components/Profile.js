@@ -29,21 +29,19 @@ export default function Profile() {
   }, []);
 
   //get user data
-  useEffect(
-    () =>
-      onSnapshot(doc(db, "users", auth.currentUser.uid), (doc) =>
+  useEffect(() => {
+      const unsub = onSnapshot(doc(db, "users", auth.currentUser.uid), (doc) =>
         setUserData(doc.data())
-      ),
-    []
-  );
+      );
+      return unsub;
+  }, []);
   //get friends data
-  useEffect(
-    () =>
-      onSnapshot(doc(db, "friends", auth.currentUser.uid), (doc) =>
+  useEffect(() => {
+      const unsub = onSnapshot(doc(db, "friends", auth.currentUser.uid), (doc) =>
         setFriendsNew(doc.data().accepted)
-      ),
-    []
-  );
+      );
+      return unsub;
+  }, []);
 
   const handleSubmit = () => {
     navigate("/editProfile");
@@ -63,7 +61,7 @@ export default function Profile() {
       <Box sx={{ paddingTop: 1 }}>
         <Avatar
           alt="Remy Sharp"
-          src={userData.profilePic ? userData.profilePic : ""}
+          src={userData && userData.profilePic}
           sx={{
             width: 175,
             height: 175,

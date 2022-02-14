@@ -5,7 +5,13 @@ import { AccountCircle } from '@mui/icons-material'
 import { List, ListItem, ListItemText, ListSubheader } from '@mui/material/'
 import { decideRequest } from "../Store/relationsReducer";
 import { auth, db } from '../Services/firebase'
-import { onSnapshot, query, doc, where, collection } from "firebase/firestore";
+import { onSnapshot, query, doc, where, collection, updateDoc, addDoc, getDocs } from "firebase/firestore";
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import { useNavigate } from "react-router-dom";
 
 const Search = () => {
   /*
@@ -21,6 +27,10 @@ const Search = () => {
   const [relations, setRelations] = useState([[], [], []])
   const [flatRelations, setFlatRelations] = useState([''])
   const [filteredSearch, setFilteredSearch] = useState([[], [], [], []])
+  const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState('');
+  const navigate = useNavigate();
+  const [chat, setChat] = useState(null);
   useEffect(() => {
     if (search === '' || search === null || search === undefined) {
       setFilteredSearch([filtered, ...relations])
@@ -32,7 +42,7 @@ const Search = () => {
       setFilteredSearch([all, p, a, r])
     }
   }, [search, filtered, relations])
-  
+
   useEffect(() => {
     const relations = onSnapshot(doc(db, 'friends', auth.currentUser.uid), (doc) => {
       const relationsArray = [[], [], []]
@@ -74,6 +84,63 @@ const Search = () => {
     })
     return usersSnapshot
   }, [])
+
+  const handleClickOpen = async (friendUid) => {
+    try {
+        const chatRef = collection(db, 'chats');
+        const q = query(chatRef, where('users', 'array-contains', auth.currentUser.uid ));
+        const snapshot = await getDocs(q);
+        let data =[];
+        snapshot.forEach(item => {
+            data.push(item.data());
+        });
+        [data] = data.filter(item => (item.users.includes(friendUid) && item.users.includes(auth.currentUser.uid)));
+        setChat(data);
+    } catch (error) {
+        console.error('Error in PostContent useCallback', error);
+    }
+
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleSubmit = async (e, friendUid) => {
+    e.preventDefault();
+        if (message !== '') {
+            const { uid } = auth.currentUser;
+            if (chat) {
+                const chatRef = doc(db, 'chats', chat.chatID);
+                await updateDoc(chatRef, {
+                  latestMessage: {createdAt: new Date(), text: message,},
+                });
+                const messageRef = collection(chatRef, 'messages');
+                await addDoc(messageRef, {
+                  createdAt: new Date(),
+                  text: message,
+                  userId: uid
+                });
+            } else {
+                const chatRef = collection(db, 'chats');
+                const data = await addDoc(chatRef, {
+                    latestMessage: {createdAt: new Date(), text: message,},
+                    users: [uid, friendUid],
+                    // userChatRef: {user1: post.postersId, user2: uid}
+                });
+                const messageRef = collection(doc(db, 'chats', data.id), 'messages');
+                await addDoc(messageRef, {
+                    createdAt: new Date(),
+                    text: message,
+                    userId: uid
+                });
+                await updateDoc(doc(db, 'chats', data.id), {chatID: data.id});
+            }
+        }
+        setMessage('');
+        navigate(`/chats`);
+  };
 
   return (
     <div>
@@ -139,7 +206,29 @@ const Search = () => {
                 <ListItem key={`accepted-${accepted.uid}`}>
                   <ListItemText primary={`${accepted.firstName} ${accepted.lastName}`} />
                   <ListItemText secondary={`${accepted.userName}`} />
-                  <button>Message</button>
+                  <Button variant="outlined" onClick={() => handleClickOpen(accepted.uid)}>
+                    Message
+                  </Button>
+                  <Dialog open={open} onClose={handleClose}>
+                    <DialogTitle>Send message to {accepted.userName}</DialogTitle>
+                    <DialogContent>
+                      <TextField
+                        autoFocus
+                        margin="dense"
+                        id="message"
+                        label="Type Message"
+                        type="text"
+                        fullWidth
+                        variant="standard"
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                      />
+                    </DialogContent>
+                    <DialogActions>
+                      <Button onClick={handleClose}>Cancel</Button>
+                      <Button onClick={(e) => handleSubmit(e, accepted.uid)}>Send Message</Button>
+                    </DialogActions>
+                  </Dialog>
                 </ListItem>
               ))}
             </ul>
