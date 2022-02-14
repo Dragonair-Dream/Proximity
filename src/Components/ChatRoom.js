@@ -71,7 +71,7 @@ const ChatRoom = () => {
         await addDoc(messageRef, {
           createdAt: new Date(),
           text,
-          photoUrl: photoURL,
+          // photoUrl: photoURL,
           userId: uid,
         });
       } else snapInPlace.current.scrollIntoView({ behavior: "smooth" });
