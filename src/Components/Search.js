@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Box, TextField } from '@mui/material'
-import { AccountCircle } from '@mui/icons-material'
+import { AccountCircle, SnippetFolderOutlined } from '@mui/icons-material'
 import { List, ListItem, ListItemText, ListSubheader } from '@mui/material/'
 import { decideRequest } from "../Store/relationsReducer";
 import { auth, db } from '../Services/firebase'
@@ -31,6 +31,7 @@ const Search = () => {
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
   const [chat, setChat] = useState(null);
+  const [friend, setFriend] = useState(null);
   useEffect(() => {
     if (search === '' || search === null || search === undefined) {
       setFilteredSearch([filtered, ...relations])
@@ -85,7 +86,7 @@ const Search = () => {
     return usersSnapshot
   }, [])
 
-  const handleClickOpen = async (friendUid) => {
+  const handleClickOpen = async (friend) => {
     try {
         const chatRef = collection(db, 'chats');
         const q = query(chatRef, where('users', 'array-contains', auth.currentUser.uid ));
@@ -94,12 +95,12 @@ const Search = () => {
         snapshot.forEach(item => {
             data.push(item.data());
         });
-        [data] = data.filter(item => (item.users.includes(friendUid) && item.users.includes(auth.currentUser.uid)));
+        [data] = data.filter(item => (item.users.includes(friend.uid) && item.users.includes(auth.currentUser.uid)));
         setChat(data);
     } catch (error) {
         console.error('Error in PostContent useCallback', error);
     }
-
+    setFriend(friend);
     setOpen(true);
   };
 
@@ -107,7 +108,8 @@ const Search = () => {
     setOpen(false);
   };
 
-  const handleSubmit = async (e, friendUid) => {
+  const handleSubmit = async (e, friend) => {
+    console.log('HANDLE SUBMIT', friend.uid)
     e.preventDefault();
         if (message !== '') {
             const { uid } = auth.currentUser;
@@ -126,7 +128,7 @@ const Search = () => {
                 const chatRef = collection(db, 'chats');
                 const data = await addDoc(chatRef, {
                     latestMessage: {createdAt: new Date(), text: message,},
-                    users: [uid, friendUid],
+                    users: [uid, friend.uid],
                     // userChatRef: {user1: post.postersId, user2: uid}
                 });
                 const messageRef = collection(doc(db, 'chats', data.id), 'messages');
@@ -206,32 +208,32 @@ const Search = () => {
                 <ListItem key={`accepted-${accepted.uid}`}>
                   <ListItemText primary={`${accepted.firstName} ${accepted.lastName}`} />
                   <ListItemText secondary={`${accepted.userName}`} />
-                  <Button variant="outlined" onClick={() => handleClickOpen(accepted.uid)}>
+                  <Button variant="outlined" onClick={() => handleClickOpen(accepted)}>
                     Message
                   </Button>
-                  <Dialog open={open} onClose={handleClose}>
-                    <DialogTitle>Send message to {accepted.userName}</DialogTitle>
-                    <DialogContent>
-                      <TextField
-                        autoFocus
-                        margin="dense"
-                        id="message"
-                        label="Type Message"
-                        type="text"
-                        fullWidth
-                        variant="standard"
-                        value={message}
-                        onChange={(e) => setMessage(e.target.value)}
-                      />
-                    </DialogContent>
-                    <DialogActions>
-                      <Button onClick={handleClose}>Cancel</Button>
-                      <Button onClick={(e) => handleSubmit(e, accepted.uid)}>Send Message</Button>
-                    </DialogActions>
-                  </Dialog>
                 </ListItem>
               ))}
             </ul>
+            <Dialog open={open} onClose={handleClose}>
+              <DialogTitle> Send message to {friend && friend.userName}</DialogTitle>
+              <DialogContent>
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  id="name"
+                  label="Type Message"
+                  type="text"
+                  fullWidth
+                  variant="standard"
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                />
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleClose}>Cancel</Button>
+                <Button onClick={(e) => handleSubmit(e, friend)}>Send Message</Button>
+              </DialogActions>
+            </Dialog>
           </li>
         ) : ''}
 
