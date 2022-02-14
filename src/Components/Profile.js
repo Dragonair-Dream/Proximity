@@ -40,7 +40,6 @@ export default function Profile() {
   useEffect(() => {
       const unsub = onSnapshot(doc(db, "friends", auth.currentUser.uid), (doc) => {
         setFriendsNew(doc.data().accepted)
-        console.log('LOOK HHEREEE!!', doc.data().accepted)
       }
       );
       return unsub;
