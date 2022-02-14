@@ -19,6 +19,7 @@ const containerStyle = {
 function Map() {
   const [latitude, setLatitude] = useState(41.25861);
   const [longitude, setLongitude] = useState(-95.93779);
+  const [mapError, setMapError] = useState(null);
   const [myPostQueryData, setMyPostQueryData] = useState(null);
   const [allUsersPostQueryData, setAllUsersPostQueryData] = useState([]);
   const usersFriends = useSelector((state) => state.usersFriends);
@@ -35,13 +36,12 @@ function Map() {
     if(cycle.length > 0) {
       friendsPosts.push(cycle)
       if(friendsPosts.length > 0) {
-        friendsPosts.map(postEl => { 
-          if(Array.isArray(postEl)) 
+        friendsPosts.map(postEl => {
+          if(Array.isArray(postEl))
           postEl.forEach(post => actualFriendsPosts.push(post))}
         )}
     }
   })}
-
 
   const successPos = (pos) => {
     const { latitude, longitude } = pos.coords;
@@ -50,16 +50,21 @@ function Map() {
   };
 
   useEffect(() => {
-    let watchId;
     dispatch(_getUsersFriends())
-    dispatch(_getUsersPosts()); 
+    dispatch(_getUsersPosts());
     dispatch(_getUsersFriendsPosts());
-    if (navigator.geolocation) {
-      watchId = navigator.geolocation.getCurrentPosition(successPos);
-    } else {
-      alert("sorry, Geolocation is not supported by this browser.");
+  }, []);
+
+  const onError = (err) => {
+    setMapError(err);
+  };
+
+  useEffect(() => {
+    if (!navigator.geolocation) {
+      setMapError("sorry, Geolocation is not supported by this browser.");
     }
-    return watchId;
+    const watchId = navigator.geolocation.watchPosition(successPos, onError);
+    return () => navigator.geolocation.clearWatch(watchId);
   }, []);
 
   useEffect(() => {
@@ -92,15 +97,23 @@ function Map() {
     path: "M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z",
     fillColor: "blue",
     fillOpacity: 0.5,
-    scale: 0.05, 
+    scale: 0.05,
   };
+
+  if (mapError) {
+    return (
+      <div>
+        {mapError}
+      </div>
+    );
+  }
 
   return (
     <>
-      <LoadScript 
+      <LoadScript
         googleMapsApiKey={googleMapsKey}
       >
-        <GoogleMap 
+        <GoogleMap
           mapContainerStyle={containerStyle}
           center={{ lat: latitude, lng: longitude }}
           zoom={5}
@@ -112,7 +125,7 @@ function Map() {
             label="me"
           />
           {myPostQueryData &&
-            myPostQueryData.map((post) => 
+            myPostQueryData.map((post) =>
               <div key={post.docId}>
                 <PostContent post={post} userPhoto={userPhoto} />
               </div>
@@ -121,7 +134,7 @@ function Map() {
           {actualFriendsPosts &&
             actualFriendsPosts.map((post) => (
               <div key={post.docId}>
-                <PostContent post={post} friends={usersFriends.accepted} /> 
+                <PostContent post={post} friends={usersFriends.accepted} />
               </div>
             ))
           }
@@ -132,4 +145,4 @@ function Map() {
   );
 }
 
-export default React.memo(Map); 
+export default React.memo(Map);
