@@ -18,12 +18,10 @@ import {
 export default function Profile() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const users = useSelector((state) => state.users);
 
   const [userData, setUserData] = useState([]);
   const [friends, setFriendsNew] = useState([]);
-  console.log('juahbdhb friendsss ojndfkmof', friends)
-  console.log('juahbdhb userrrrr ojndfkmof', userData)
-
 
   //get user posts for count
   const posts = useSelector((state) => state.usersPosts);
@@ -40,8 +38,10 @@ export default function Profile() {
   }, []);
   //get friends data
   useEffect(() => {
-      const unsub = onSnapshot(doc(db, "friends", auth.currentUser.uid), (doc) =>
+      const unsub = onSnapshot(doc(db, "friends", auth.currentUser.uid), (doc) => {
         setFriendsNew(doc.data().accepted)
+        console.log('LOOK HHEREEE!!', doc.data().accepted)
+      }
       );
       return unsub;
   }, []);
@@ -64,7 +64,7 @@ export default function Profile() {
       <Box sx={{ paddingTop: 1 }}>
         <Avatar
           alt="Remy Sharp"
-          src={userData && userData.profilePic}
+          src={auth.currentUser.photoURL}
           sx={{
             width: 175,
             height: 175,
@@ -174,7 +174,9 @@ export default function Profile() {
           flexWrap="wrap"
         >
           {friends &&
-            friends.map((friend) => (
+            friends.map((friend) => {
+              const user = users.find(user => user.posterId === friend.uid);
+              return  (
               <Stack
                 key={friend.uid}
                 align="center"
@@ -183,7 +185,7 @@ export default function Profile() {
               >
                 <Avatar
                   alt="Remy Sharp"
-                  src={friend.profilePic}
+                  src={user && user.profilePic}
                   sx={{
                     width: 75,
                     height: 75,
@@ -195,7 +197,7 @@ export default function Profile() {
                   {friend.firstName}
                 </Typography>
               </Stack>
-            ))}
+            )})}
         </Stack>
         <br />
         <br />

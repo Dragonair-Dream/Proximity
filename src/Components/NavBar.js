@@ -100,7 +100,7 @@ const NavBar = (props) => {
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar
-                  src={userProfilePic}
+                  src={auth.currentUser.photoURL}
                 />
               </IconButton>
             </Tooltip>
