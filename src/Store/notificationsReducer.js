@@ -27,11 +27,12 @@ export const readAll = () => {
       const notifData = notifDoc.data()
       const updatedArr = notifData.notifications.map(element => {
         return {
-          actionType: element.actionType,
+          type: element.type,
           text: element.text,
           read: true
         }
       })
+      console.log('UPDATED ARR: ', updatedArr)
       await setDoc(doc(db, 'notifications', auth.currentUser.uid), {
         notifications: updatedArr
       })

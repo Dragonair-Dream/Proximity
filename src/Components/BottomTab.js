@@ -42,19 +42,22 @@ function BottomTab() {
   let [count, setCount] = useState(0)
 
   useEffect(() => {
-    const unsub = onSnapshot(doc(db, 'notifications', auth.currentUser.uid), (notifs) => {
+    let unsub
+    unsub = onSnapshot(doc(db, 'notifications', auth.currentUser.uid), (notifs) => {
       let sum = 0
       const data = notifs.data()
-      console.log('NOTIFICATIONS IS THIS: ', data)
-      data.notifications.forEach((notification) => {
-        if (notification.read === false && window.location.pathname !== '/notifications') {
-          sum += 1
-        }
-      })
-      dispatch(setNotifications(data.notifications.reverse()))
-      setCount(count + sum)
+      if (data) {
+        data.notifications.forEach((notification) => {
+          if (notification.read === false && window.location.pathname !== '/notifications') {
+            sum += 1
+          }
+        })
+        dispatch(setNotifications(data.notifications.reverse()))
+        setCount(count + sum)
+      } else {
+        setCount(0)
+      }
     })
-
     return unsub
   }, [])
 

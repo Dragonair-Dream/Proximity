@@ -39,7 +39,7 @@ export default function SignUp() {
         loginEmail,
         loginPassword
       );
-      console.log('SETTING NOTIFICATIONS UNDER: ', auth.currentUser.uid)
+
       await setDoc(doc(db, "friends", auth.currentUser.uid), {
         accepted: [],
         pending: [],

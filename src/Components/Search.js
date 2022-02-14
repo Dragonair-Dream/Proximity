@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { Box, TextField } from '@mui/material'
-import { AccountCircle } from '@mui/icons-material'
-import { List, ListItem, ListItemText, ListSubheader } from '@mui/material/'
+import { Box, ListItemAvatar, ListItemButton, TextField } from '@mui/material'
+import { List, ListItem, ListItemText, ListSubheader, Avatar } from '@mui/material/'
 import { decideRequest } from "../Store/relationsReducer";
 import { auth, db } from '../Services/firebase'
 import { onSnapshot, doc, collection } from "firebase/firestore";
+
+import { FormControl, InputLabel, OutlinedInput, InputAdornment } from '@mui/material/'
 
 const Search = () => {
   const dispatch = useDispatch()
@@ -73,22 +74,17 @@ const Search = () => {
     })
     return usersSnapshot
   }, [flatRelations])
-
+  
   return (
     <div>
-      <Box sx={{ width: '100%' }}>
-        <TextField id="input-with-sx" label="Search for Friends..." variant="standard" value={search} onChange={e => setSearch(e.target.value)}/>
+      <Box fullWidth style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+        <TextField sx={{ width: 2/3 }} label="Search for Friends..." variant="standard" value={search} onChange={e => setSearch(e.target.value)}/>
       </Box>
+
       <List
-        sx={{
-          width: '100%',
-          maxWidth: 360,
-          bgcolor: 'background.paper',
-          position: 'relative',
-          overflow: 'auto',
-          maxHeight: 300,
-          '& ul': { padding: 0 },
-        }}
+        fullWidth
+        style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}
+        
         subheader={<li />}
       >
         {filteredSearch[0].length ? (
@@ -98,11 +94,21 @@ const Search = () => {
                 {`Add a Friend`}
               </ListSubheader>
               {filteredSearch[0].map((add) => (
-                <ListItem key={`add-${add.uid}`}>
-                  <ListItemText primary={`${add.firstName} ${add.lastName}`} />
-                  <ListItemText secondary={`${add.userName}`} />
-                  <button onClick={() => dispatch(decideRequest(add.uid, 'add'))}>Add Friend</button>
-                </ListItem>
+                  <ListItem key={`add-${add.uid}`}>
+                    <ListItemAvatar>
+                      <Avatar
+                      src={add.profilePic}
+                      sx={{
+                        width: 75,
+                        height: 75,
+                        border: 0.5,
+                        margin: "auto",
+                      }}
+                      />
+                    </ListItemAvatar>
+                    <ListItemText primary={`${add.firstName} ${add.lastName}`} secondary={`${add.userName}`}/>
+                    <button onClick={() => dispatch(decideRequest(add.uid, 'add'))}>Add Friend</button>
+                  </ListItem>
               ))}
             </ul>
           </li>
