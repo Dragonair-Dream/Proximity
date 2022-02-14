@@ -12,22 +12,13 @@ import Toolbar from "@mui/material/Toolbar";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
-<<<<<<< HEAD
-import { auth, db } from "../Services/firebase";
-=======
 import { auth, useAuth, db } from "../Services/firebase";
->>>>>>> ce74661b86f74794832c8c86512224176979816a
 import { signOut } from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserData } from "../Store/userProfileReducer";
 import Divider from "@mui/material/Divider";
-<<<<<<< HEAD
-import { onSnapshot, doc } from "@firebase/firestore";
-=======
 import { doc, onSnapshot } from "firebase/firestore";
-
->>>>>>> ce74661b86f74794832c8c86512224176979816a
 
 const settings = ["Logout"];
 
@@ -35,7 +26,7 @@ const NavBar = (props) => {
   const [anchorUser, setAnchorUser] = useState(null);
   const [locationServices, setLocationServices] = useState("On");
   const [switchStatus, setSwitchStatus] = useState(true);
-  const [userProfilePic , setUserProfilePic] = useState(null);
+  const [userProfilePic, setUserProfilePic] = useState(null);
   const dispatch = useDispatch();
 
   const [userData, setUserData] = useState([]);
@@ -78,9 +69,12 @@ const NavBar = (props) => {
   );
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(doc(db, "users", auth.currentUser.uid), (querySnapshot) => {
-      setUserProfilePic(querySnapshot.data().profilePic);
-    });
+    const unsubscribe = onSnapshot(
+      doc(db, "users", auth.currentUser.uid),
+      (querySnapshot) => {
+        setUserProfilePic(querySnapshot.data().profilePic);
+      }
+    );
     return unsubscribe;
   }, []);
 
@@ -115,9 +109,7 @@ const NavBar = (props) => {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar
-                  src={auth.currentUser.photoURL}
-                />
+                <Avatar src={auth.currentUser.photoURL} />
               </IconButton>
             </Tooltip>
             <Menu
