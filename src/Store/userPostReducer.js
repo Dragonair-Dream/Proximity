@@ -46,7 +46,7 @@ export const _addUsersPost = (
 ) => {
   return async (dispatch) => {
     try {
-      const post = await addDoc(
+      await addDoc(
         collection(db, "posts"),
         {
           postersId: uid,
