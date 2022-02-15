@@ -72,7 +72,7 @@ const NavBar = (props) => {
     const unsubscribe = onSnapshot(
       doc(db, "users", auth.currentUser.uid),
       (querySnapshot) => {
-        setUserProfilePic(querySnapshot.data().profilePic);
+        setUserProfilePic(querySnapshot.data());
       }
     );
     return unsubscribe;

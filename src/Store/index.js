@@ -10,6 +10,7 @@ import messagesReducer from "./messagesReducer";
 import userPostReducer from "./userPostReducer";
 import userFriendReducer from "./userFriendReducer"
 import friendsPostsReducer from "./friendsPostsReducer";
+import notificationsReducer from "./notificationsReducer";
 import singleChatReducer from "./singleChatReducer";
 //import reducers from store here
 
@@ -24,6 +25,7 @@ const reducer = combineReducers({
   chats: chatsReducer,
   user: getSingleUserDoc,
   messages: messagesReducer,
+  notifications: notificationsReducer,
   singleChat: singleChatReducer,
 
 

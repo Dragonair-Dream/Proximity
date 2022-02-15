@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Box, TextField } from '@mui/material'
-import { AccountCircle, SnippetFolderOutlined } from '@mui/icons-material'
-import { List, ListItem, ListItemText, ListSubheader } from '@mui/material/'
+import { List, ListItem, ListItemText, ListSubheader, Avatar, ListItemAvatar, TextField, Box } from '@mui/material/'
 import { decideRequest } from "../Store/relationsReducer";
 import { auth, db } from '../Services/firebase'
 import { onSnapshot, query, doc, where, collection, updateDoc, addDoc, getDocs } from "firebase/firestore";
@@ -14,13 +12,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { useNavigate } from "react-router-dom";
 
 const Search = () => {
-  /*
-  const relations = useSelector(state => state.relations)
-  const flatRelations = [...relations.accepted, ...relations.pending, ...relations.requested].map(user => user.uid)
-  console.log('FLATRELATIONS IS: ', flatRelations)
-  const users = useSelector(state => state.users)
-  const filteredUsers = users.filter(user => !flatRelations.includes(user.posterId))
-  */
+  const user = useSelector(state => state.userProfile)
+  console.log('USER IN SEARCH IS: ', user)
   const dispatch = useDispatch()
   const [search, setSearch] = useState('')
   const [filtered, setFiltered] = useState([])
@@ -34,12 +27,15 @@ const Search = () => {
   const [friend, setFriend] = useState(null);
   useEffect(() => {
     if (search === '' || search === null || search === undefined) {
+      console.log('FILTERED SEARCH IS: ', [filtered, ...relations])
       setFilteredSearch([filtered, ...relations])
     } else {
-      const all = filtered.filter(user => user.userName.includes(search) || user.firstName.includes(search) || user.lastName.includes(search))
-      const p = relations[0].filter(user => user.userName.includes(search) || user.firstName.includes(search) || user.lastName.includes(search))
-      const a = relations[1].filter(user => user.userName.includes(search) || user.firstName.includes(search) || user.lastName.includes(search))
-      const r = relations[2].filter(user => user.userName.includes(search) || user.firstName.includes(search) || user.lastName.includes(search))
+      const searchLower = search.toLowerCase()
+      const all = filtered.filter(user => user.userName.toLowerCase().includes(searchLower) || user.firstName.toLowerCase().includes(searchLower) || user.lastName.toLowerCase().includes(searchLower))
+      const p = relations[0].filter(user => user.userName.toLowerCase().includes(searchLower) || user.firstName.toLowerCase().includes(searchLower) || user.lastName.toLowerCase().includes(searchLower))
+      const a = relations[1].filter(user => user.userName.toLowerCase().includes(searchLower) || user.firstName.toLowerCase().includes(searchLower) || user.lastName.toLowerCase().includes(searchLower))
+      const r = relations[2].filter(user => user.userName.toLowerCase().includes(searchLower) || user.firstName.toLowerCase().includes(searchLower) || user.lastName.toLowerCase().includes(searchLower))
+      console.log('FILTERED SEARCH IS: ', [all, p, a, r])
       setFilteredSearch([all, p, a, r])
     }
   }, [search, filtered, relations])
@@ -68,23 +64,24 @@ const Search = () => {
   }, [])
 
   useEffect(() => {
-    const usersQuery = query(collection(db, 'users'), where('posterId', 'not-in', flatRelations))
-    const usersSnapshot = onSnapshot(usersQuery, (allDocs) => {
+    const usersSnapshot = onSnapshot(collection(db, 'users'), (allDocs) => {
       const filteredUsers = []
       allDocs.forEach((doc) => {
         const data = doc.data()
-        filteredUsers.push({
-          firstName: data.firstName,
-          lastName: data.lastName,
-          profilePic: data.profilePic,
-          uid: data.posterId,
-          userName: data.userName
-        })
+        if (!flatRelations.includes(data.posterId) && data.posterId !== auth.currentUser.uid) {
+          filteredUsers.push({
+            firstName: data.firstName,
+            lastName: data.lastName,
+            profilePic: data.profilePic,
+            uid: data.posterId,
+            userName: data.userName
+          })
+        }
       })
       setFiltered(filteredUsers)
     })
     return usersSnapshot
-  }, [])
+  }, [flatRelations])
 
   const handleClickOpen = async (friend) => {
     try {
@@ -146,39 +143,16 @@ const Search = () => {
 
   return (
     <div>
-      <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
-        <TextField id="input-with-sx" label="Search for Friends..." variant="standard" value={search} onChange={e => setSearch(e.target.value)}/>
-        <AccountCircle sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
+      <Box fullWidth style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+        <TextField sx={{ width: 2/3 }} label="Search for Friends..." variant="standard" value={search} onChange={e => setSearch(e.target.value)}/>
       </Box>
 
       <List
-        sx={{
-          width: '100%',
-          maxWidth: 360,
-          bgcolor: 'background.paper',
-          position: 'relative',
-          overflow: 'auto',
-          maxHeight: 300,
-          '& ul': { padding: 0 },
-        }}
+        fullWidth
+        style={{display: 'grid', alignItems: 'center', justifyContent: 'space-evenly'}}
+        
         subheader={<li />}
       >
-        {filteredSearch[0].length ? (
-          <li key='notFriends'>
-            <ul>
-              <ListSubheader>
-                {`Add a Friend`}
-              </ListSubheader>
-              {filteredSearch[0].map((add) => (
-                <ListItem key={`add-${add.uid}`}>
-                  <ListItemText primary={`${add.firstName} ${add.lastName}`} />
-                  <ListItemText secondary={`${add.userName}`} />
-                  <button onClick={() => dispatch(decideRequest(add.uid, 'add'))}>Add Friend</button>
-                </ListItem>
-              ))}
-            </ul>
-          </li>
-        ) : ''}
 
         {filteredSearch[1].length ? (
           <li key='pending'>
@@ -188,15 +162,29 @@ const Search = () => {
               </ListSubheader>
               {filteredSearch[1].map((pending) => (
                 <ListItem key={`pending-${pending.uid}`}>
-                  <ListItemText primary={`${pending.firstName} ${pending.lastName}`} />
-                  <ListItemText secondary={`${pending.userName}`} />
-                  <button onClick={() => dispatch(decideRequest(pending.uid, 'accept'))}>Accept</button>
-                  <button onClick={() => dispatch(decideRequest(pending.uid, 'decline'))}>Decline</button>
+                  <ListItemAvatar>
+                    <Avatar
+                    src={pending.profilePic}
+                    sx={{
+                      width: 75,
+                      height: 75,
+                      border: 0.5,
+                      margin: "auto",
+                    }}
+                    />
+                  </ListItemAvatar>
+                  <ListItemText primary={`${pending.firstName} ${pending.lastName}`} secondary={`${pending.userName}`}/>
+                  <Button variant="outlined" onClick={() => dispatch(decideRequest(pending.uid, 'accept', user.firstName))}>
+                    Accept
+                  </Button>
+                  <Button variant="outlined" onClick={() => dispatch(decideRequest(pending.uid, 'decline', user.firstName))}>
+                    Decline
+                  </Button>
                 </ListItem>
               ))}
             </ul>
           </li>
-        ) : ''}
+                  ) : ''}
 
         {filteredSearch[2].length ? (
           <li key='accepted'>
@@ -206,8 +194,18 @@ const Search = () => {
               </ListSubheader>
               {filteredSearch[2].map((accepted) => (
                 <ListItem key={`accepted-${accepted.uid}`}>
-                  <ListItemText primary={`${accepted.firstName} ${accepted.lastName}`} />
-                  <ListItemText secondary={`${accepted.userName}`} />
+                  <ListItemAvatar>
+                    <Avatar
+                    src={accepted.profilePic}
+                    sx={{
+                      width: 75,
+                      height: 75,
+                      border: 0.5,
+                      margin: "auto",
+                    }}
+                    />
+                  </ListItemAvatar>
+                  <ListItemText primary={`${accepted.firstName} ${accepted.lastName}`} secondary={`${accepted.userName}`}/>
                   <Button variant="outlined" onClick={() => handleClickOpen(accepted)}>
                     Message
                   </Button>
@@ -227,7 +225,7 @@ const Search = () => {
                   variant="standard"
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
-                />
+                  />
               </DialogContent>
               <DialogActions>
                 <Button onClick={handleClose}>Cancel</Button>
@@ -236,7 +234,7 @@ const Search = () => {
             </Dialog>
           </li>
         ) : ''}
-
+                  
         {filteredSearch[3].length ? (
           <li key='requested'>
             <ul>
@@ -245,15 +243,55 @@ const Search = () => {
               </ListSubheader>
               {filteredSearch[3].map((request) => (
                 <ListItem key={`request-${request.uid}`}>
-                  <ListItemText primary={`${request.firstName} ${request.lastName}`} />
-                  <ListItemText secondary={`${request.userName}`} />
-                  <button>Send a Reminder</button>
+                  <ListItemAvatar>
+                    <Avatar
+                    src={request.profilePic}
+                    sx={{
+                      width: 75,
+                      height: 75,
+                      border: 0.5,
+                      margin: "auto",
+                    }}
+                    />
+                  </ListItemAvatar>
+                  <ListItemText primary={`${request.firstName} ${request.lastName}`} secondary={`${request.userName}`}/>
+                  <Button variant="outlined" onClick={() => dispatch(decideRequest(request.uid, 'reminder', user.firstName))}>
+                    Send a Reminder
+                  </Button>
                 </ListItem>
               ))}
             </ul>
           </li>
-        ) : ''}
+                  ) : ''}
 
+      {filteredSearch[0].length ? (
+        <li key='notFriends'>
+          <ul>
+            <ListSubheader>
+              {`Add a Friend`}
+            </ListSubheader>
+            {filteredSearch[0].map((add) => (
+                <ListItem key={`add-${add.uid}`}>
+                  <ListItemAvatar>
+                    <Avatar
+                    src={add.profilePic}
+                    sx={{
+                      width: 75,
+                      height: 75,
+                      border: 0.5,
+                      margin: "auto",
+                    }}
+                    />
+                  </ListItemAvatar>
+                  <ListItemText primary={`${add.firstName} ${add.lastName}`} secondary={`${add.userName}`}/>
+                  <Button variant="outlined" onClick={() => dispatch(decideRequest(add.uid, 'add', user.firstName))}>
+                    Add Friend
+                  </Button> 
+                </ListItem>
+            ))}
+          </ul>
+        </li>
+                  ) : ''}
       </List>
     </div>
   )
