@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@mui/styles";
-import { BottomNavigation } from "@mui/material";
+import { BottomNavigation, Badge } from "@mui/material";
 import { BottomNavigationAction } from "@mui/material";
 import {
   Notifications,
@@ -9,6 +9,11 @@ import {
   ChatBubbleTwoTone,
 } from "@mui/icons-material";
 import { Link } from "react-router-dom";
+import { auth, db} from '../Services/firebase'
+import { onSnapshot, doc } from "firebase/firestore";
+import { useDispatch } from 'react-redux'
+
+import { setNotifications } from '../Store/notificationsReducer'
 
 const useStyles = makeStyles({
   root: {
@@ -33,6 +38,29 @@ const myStyles = makeStyles({
 });
 
 function BottomTab() {
+  const dispatch = useDispatch()
+  let [count, setCount] = useState(0)
+
+  useEffect(() => {
+    let unsub
+    unsub = onSnapshot(doc(db, 'notifications', auth.currentUser.uid), (notifs) => {
+      let sum = 0
+      const data = notifs.data()
+      if (data) {
+        data.notifications.forEach((notification) => {
+          if (notification.read === false && window.location.pathname !== '/notifications') {
+            sum += 1
+          }
+        })
+        dispatch(setNotifications(data.notifications.reverse()))
+        setCount(count + sum)
+      } else {
+        setCount(0)
+      }
+    })
+    return unsub
+  }, [])
+
   const classes = useStyles();
   const styles = myStyles();
 
@@ -70,8 +98,12 @@ function BottomTab() {
         to="/notifications"
         className={styles.root}
         label="Notifications"
-        icon={<Notifications style={{ fill: "white" }} />}
         classes={{selected: styles.selected}}
+        icon={
+          <Badge badgeContent={count} color='secondary'>
+            <Notifications style={{ fill: "white" }} />
+          </Badge>
+        }
       />
       <BottomNavigationAction
         component={Link}
