@@ -25,10 +25,10 @@ const useStyles = makeStyles({
 const myStyles = makeStyles({
   root: {
     width: "100%",
-    color: "white",
+    color: "gray",
   },
   selected: {
-    color: "red",
+    color: "white",
   },
 });
 
@@ -45,7 +45,7 @@ function BottomTab() {
   return (
     <BottomNavigation
       className={classes.root}
-      showLabels
+      showLabels={false}
       value={value}
       onChange={(e, newValue) => handleChange(e, newValue)}
     >
@@ -55,6 +55,7 @@ function BottomTab() {
         className={styles.root}
         label="Map"
         icon={<MapTwoTone style={{ fill: "white" }} />}
+        classes={{selected: styles.selected}}
       />
       <BottomNavigationAction
         component={Link}
@@ -62,6 +63,7 @@ function BottomTab() {
         className={styles.root}
         label="Search"
         icon={<Search style={{ fill: "white" }} />}
+        classes={{selected: styles.selected}}
       />
       <BottomNavigationAction
         component={Link}
@@ -69,6 +71,7 @@ function BottomTab() {
         className={styles.root}
         label="Notifications"
         icon={<Notifications style={{ fill: "white" }} />}
+        classes={{selected: styles.selected}}
       />
       <BottomNavigationAction
         component={Link}
@@ -76,6 +79,7 @@ function BottomTab() {
         className={styles.root}
         label="Chat"
         icon={<ChatBubbleTwoTone style={{ fill: "white" }} />}
+        classes={{selected: styles.selected}}
       />
     </BottomNavigation>
   );

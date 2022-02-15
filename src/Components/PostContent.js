@@ -117,14 +117,14 @@ export default function PostContent(props) {
                   <Card sx={{ maxWidth: 345, height: 'auto'}}>
                     <CardHeader
                         avatar={ post.postersId === auth.currentUser.uid ?
-                            <Avatar sx={{ bgcolor: red[500] }} aria-label="name" src={props.userPhoto ? props.userPhoto : ""} /> : 
-                            props.users.map(user => user.posterId === post.postersId ? 
-                                user.profilePic ? 
+                            <Avatar sx={{ bgcolor: red[500] }} aria-label="name" src={props.userPhoto ? props.userPhoto : ""} /> :
+                            props.users.map(user => user.posterId === post.postersId ?
+                                user.profilePic ?
                                 <div key={post.posterId + 1} >
-                                <Avatar sx={{ bgcolor: red[500] }} aria-label="name" src={user.profilePic} /> 
+                                <Avatar sx={{ bgcolor: red[500] }} aria-label="name" src={user.profilePic} />
                                 </div> :
-                                 <div key={post.posterId + 1} > 
-                                <Avatar sx={{ bgcolor: red[500] }} aria-label="name" >{`${user.firstName.slice(0,1)} ${user.last.slice(0,1)}`}</Avatar>
+                                 <div key={post.posterId + 1} >
+                                <Avatar sx={{ bgcolor: red[500] }} aria-label="name" >{user.userName.slice(0,2)}</Avatar>
                                 </div> : null)
                         }
                         action={
