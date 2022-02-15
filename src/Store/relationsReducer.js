@@ -46,7 +46,7 @@ export const decideRequest = (uid, option, name='') => {
         await updateDoc(doc(db, 'notifications', uid), {
           notifications: arrayUnion({
             read: false,
-            type: 'accept',
+            type: 'search',
             text: `${name} has accepted your friend request!`
           })
         })
@@ -64,7 +64,7 @@ export const decideRequest = (uid, option, name='') => {
         await updateDoc(doc(db, 'notifications', uid), {
           notifications: arrayUnion({
             read: false,
-            type: 'decline',
+            type: 'search',
             text: `${name} has declined your friend request.`
           })
         })
@@ -98,7 +98,7 @@ export const decideRequest = (uid, option, name='') => {
         await updateDoc(doc(db, 'notifications', uid), {
           notifications: arrayUnion({
             read: false,
-            type: 'add',
+            type: 'search',
             text: `${name} sent you a friend request!`
           })
         })
@@ -110,7 +110,7 @@ export const decideRequest = (uid, option, name='') => {
         await updateDoc(doc(db, 'notifications', uid), {
           notifications: arrayUnion({
             read: false,
-            type: 'reminder',
+            type: 'search',
             text: `${name} is waiting on your friend request!`
           })
         })
