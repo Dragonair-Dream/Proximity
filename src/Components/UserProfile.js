@@ -36,7 +36,6 @@ export default function UserProfile() {
     userName: userName,
     DateOfBirth: DateOfBirth,
     phoneNumber: phoneNumber,
-    profilePic: photoURL,
     posterId: auth.currentUser.uid,
     about: about,
     didUpdate: true,

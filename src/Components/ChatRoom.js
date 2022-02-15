@@ -25,8 +25,7 @@ import { Alert } from "@mui/material";
 const useStyles = makeStyles({
   messageArea: {
     width: "100%",
-    height: "70vh",
-    overflowY: "auto",
+    height: "100%",
   },
 });
 
@@ -83,7 +82,7 @@ const ChatRoom = () => {
 
   const classes = useStyles();
   return (
-    <Grid container style={{ height: "100%" }}>
+    <Grid container style={{marginBottom: '70px', height: '100%' }}>
       <List className={classes.messageArea}>
         {messages &&
           messages.map((msg) => (

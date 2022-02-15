@@ -72,7 +72,7 @@ const NavBar = (props) => {
     <AppBar position="sticky">
       <Container maxWidth="xl">
         <Toolbar>
-          <FormControl>
+          {/* <FormControl>
             <FormControlLabel
               value="bottom"
               control={
@@ -85,7 +85,7 @@ const NavBar = (props) => {
               label={`Location ${locationServices}`}
               labelPlacement="bottom"
             />
-          </FormControl>
+          </FormControl> */}
 
           <Typography
             variant="h5"
@@ -93,7 +93,10 @@ const NavBar = (props) => {
             component="div"
             sx={{ flexGrow: 1, display: "flex", justifyContent: "center" }}
           >
-            PROXIMITY
+            <img
+              style={{width: '200px', height: '75px' }}
+              src="/ProximityTitleLogo2.png"
+            />
           </Typography>
 
           <Box sx={{ flexGrow: 0 }}>

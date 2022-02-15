@@ -150,14 +150,14 @@ const Search = () => {
       <List
         fullWidth
         style={{display: 'grid', alignItems: 'center', justifyContent: 'space-evenly'}}
-        
+
         subheader={<li />}
       >
 
         {filteredSearch[1].length ? (
           <li key='pending'>
             <ul>
-              <ListSubheader>
+              <ListSubheader disableSticky>
                 {`${filteredSearch[1].length} Pending Request(s)`}
               </ListSubheader>
               {filteredSearch[1].map((pending) => (
@@ -189,7 +189,7 @@ const Search = () => {
         {filteredSearch[2].length ? (
           <li key='accepted'>
             <ul>
-              <ListSubheader>
+              <ListSubheader disableSticky>
                 {`${filteredSearch[2].length} Friend(s)`}
               </ListSubheader>
               {filteredSearch[2].map((accepted) => (
@@ -234,11 +234,11 @@ const Search = () => {
             </Dialog>
           </li>
         ) : ''}
-                  
+
         {filteredSearch[3].length ? (
           <li key='requested'>
             <ul>
-              <ListSubheader>
+              <ListSubheader disableSticky>
                 {`${filteredSearch[3].length} Sent Request(s)`}
               </ListSubheader>
               {filteredSearch[3].map((request) => (
@@ -267,7 +267,7 @@ const Search = () => {
       {filteredSearch[0].length ? (
         <li key='notFriends'>
           <ul>
-            <ListSubheader>
+            <ListSubheader disableSticky>
               {`Add a Friend`}
             </ListSubheader>
             {filteredSearch[0].map((add) => (
@@ -286,7 +286,7 @@ const Search = () => {
                   <ListItemText primary={`${add.firstName} ${add.lastName}`} secondary={`${add.userName}`}/>
                   <Button variant="outlined" onClick={() => dispatch(decideRequest(add.uid, 'add', user.firstName))}>
                     Add Friend
-                  </Button> 
+                  </Button>
                 </ListItem>
             ))}
           </ul>

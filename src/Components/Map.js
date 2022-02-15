@@ -13,7 +13,7 @@ import { _getUsersFriends } from "../Store/userFriendReducer";
 const containerStyle = {
   width: "100%",
   height: "90vh",
-  marginBottom: "17%",
+  marginBottom: "70px",
 };
 
 function Map() {
@@ -135,7 +135,7 @@ function Map() {
           {actualFriendsPosts &&
             actualFriendsPosts.map((post) => (
               <div key={post.docId}>
-                <PostContent post={post} users={allUsers} /> 
+                <PostContent post={post} users={allUsers} />
               </div>
             ))
           }
