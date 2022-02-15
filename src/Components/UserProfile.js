@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { auth, upload, useAuth } from "../Services/firebase";
 import { createUserProfile } from "../Store/userProfileReducer";
-import ProfileImage from "./ProfileImage";
 import { useNavigate } from "react-router";
 import {
   TextField,

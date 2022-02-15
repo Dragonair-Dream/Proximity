@@ -20,15 +20,16 @@ import { getUserData } from "../Store/userProfileReducer";
 import Divider from "@mui/material/Divider";
 import { doc, onSnapshot } from "firebase/firestore";
 
-
 const settings = ["Logout"];
 
 const NavBar = (props) => {
   const [anchorUser, setAnchorUser] = useState(null);
   const [locationServices, setLocationServices] = useState("On");
   const [switchStatus, setSwitchStatus] = useState(true);
-  const [userProfilePic , setUserProfilePic] = useState(null);
+  const [userProfilePic, setUserProfilePic] = useState(null);
   const dispatch = useDispatch();
+
+  const [userData, setUserData] = useState([]);
 
   const navigate = useNavigate();
   const logout = async () => {
@@ -56,15 +57,24 @@ const NavBar = (props) => {
     }
   };
   const thisUser = useAuth();
-  const userData = useSelector((state) => state.userProfile);
-  useEffect(() => {
-    dispatch(getUserData());
-  }, [thisUser]);
+  // const userData = useSelector((state) => state.userProfile);
+  useEffect(
+    () => () =>
+      onSnapshot(
+        doc(db, "users", auth.currentUser.uid),
+        (doc) => setUserData(doc.data())
+        // console.log("klasjfl;ajsdfl;kadsf", doc.data())
+      ),
+    [thisUser]
+  );
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(doc(db, "users", auth.currentUser.uid), (querySnapshot) => {
-      setUserProfilePic(querySnapshot.data());
-    });
+    const unsubscribe = onSnapshot(
+      doc(db, "users", auth.currentUser.uid),
+      (querySnapshot) => {
+        setUserProfilePic(querySnapshot.data());
+      }
+    );
     return unsubscribe;
   }, []);
 
@@ -102,9 +112,7 @@ const NavBar = (props) => {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar
-                  src={auth.currentUser.photoURL}
-                />
+                <Avatar src={auth.currentUser.photoURL} />
               </IconButton>
             </Tooltip>
             <Menu
