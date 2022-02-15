@@ -64,15 +64,15 @@ const App = () => {
         <NavBar />
         <Routes>
           <Route path="/" element={<Map />} />
-          <Route exact path="/SignUp" element={<PageDoesNotExist />} />
-          <Route exact path="/post-edit" element={<PostEdit />} />
-          <Route exact path="/search" element={<Search />} />
-          <Route exact path="/notifications" element={<Notifications />} />
-          <Route exact path="/settings" element={<Settings />} />
-          <Route exact path="/chats" element={<Chats />} />
-          <Route exact path="/chats/:chatId" element={<ChatRoom />} />
-          <Route exact path="/userProfile" element={<Profile />} />
-          <Route exact path="/editProfile" element={<UserProfile />} />
+          <Route path="/SignUp" element={<PageDoesNotExist />} />
+          <Route path="/post-edit" element={<PostEdit />} />
+          <Route path="/search" element={<Search />} />
+          <Route path="/notifications" element={<Notifications />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/chats" element={<Chats />} />
+          <Route path="/chats/:chatId" element={<ChatRoom />} />
+          <Route path="/userProfile" element={<Profile />} />
+          <Route path="/editProfile" element={<UserProfile />} />
           <Route path="/:slug" element={<PageDoesNotExist />} />
         </Routes>
         <BottomTab />
@@ -82,8 +82,8 @@ const App = () => {
     return (
       <div>
         <Routes>
-          <Route path="/" element={<SignIn />} />
-          <Route exact path="/SignUp" element={<SignUp />} />
+          <Route exact path="/" element={<SignIn />} />
+          <Route path="/SignUp" element={<SignUp />} />
           <Route path="/:slug" element={<PageDoesNotExist />} />
         </Routes>
       </div>

@@ -24,7 +24,7 @@ function Map() {
   const [allUsersPostQueryData, setAllUsersPostQueryData] = useState([]);
   const usersFriends = useSelector((state) => state.usersFriends);
   const usersData = useSelector(state => state.userProfile)
-  const userPhoto = usersData.profilePic
+  const userPhoto = auth.currentUser.photoURL
   const allUsers = useSelector((state) => state.users);
   const dispatch = useDispatch();
 
