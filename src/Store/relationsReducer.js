@@ -11,7 +11,7 @@ const getRelationsAction = (relations) => {
   }
 }
 
-export const decideRequest = (uid, option) => {
+export const decideRequest = (uid, option, name='') => {
   return async (dispatch) => {
     try {
       const myUid = auth.currentUser.uid
@@ -43,6 +43,13 @@ export const decideRequest = (uid, option) => {
           accepted: arrayUnion(findTheirs),
           requested: arrayRemove(findTheirs)
         })
+        await updateDoc(doc(db, 'notifications', uid), {
+          notifications: arrayUnion({
+            read: false,
+            type: 'accept',
+            text: `${name} has accepted your friend request!`
+          })
+        })
       } else if (option === 'decline') {
         const findFriend = findFriendData.pending.find(element => element.uid === uid)
         const findTheirs = findTheirsData.requested.find(element => element.uid === myUid)
@@ -54,8 +61,15 @@ export const decideRequest = (uid, option) => {
         await updateDoc(editTheirs, {
           requested: arrayRemove(findTheirs)
         })
-      } else { //send friend request
-        console.log('========= IN ELSE =========')
+        await updateDoc(doc(db, 'notifications', uid), {
+          notifications: arrayUnion({
+            read: false,
+            type: 'decline',
+            text: `${name} has declined your friend request.`
+          })
+        })
+      } else if (option === 'add') { //send friend request
+        console.log('========= IN ELSE IF (ADD) =========')
         const myDoc = await getDoc(doc(db, 'users', myUid))
         const myData = myDoc.data()
         console.log('THIS IS MY DATA: ', myData)
@@ -80,6 +94,25 @@ export const decideRequest = (uid, option) => {
         })
         await updateDoc(editTheirs, {
           pending: arrayUnion(myInfo)
+        })
+        await updateDoc(doc(db, 'notifications', uid), {
+          notifications: arrayUnion({
+            read: false,
+            type: 'add',
+            text: `${name} sent you a friend request!`
+          })
+        })
+      } else { //send reminder
+        const findFriend = findFriendData.requested.find(element => element.uid === uid)
+        await updateDoc(editMine, {
+          requested: arrayRemove(findFriend)
+        })
+        await updateDoc(doc(db, 'notifications', uid), {
+          notifications: arrayUnion({
+            read: false,
+            type: 'reminder',
+            text: `${name} is waiting on your friend request!`
+          })
         })
       }
       dispatch(getRelations())
