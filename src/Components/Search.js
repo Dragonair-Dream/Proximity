@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { List, ListItem, ListItemText, ListSubheader, Avatar, ListItemAvatar, TextField, Box } from '@mui/material/'
 import { decideRequest } from "../Store/relationsReducer";
 import { auth, db } from '../Services/firebase'
@@ -12,6 +12,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { useNavigate } from "react-router-dom";
 
 const Search = () => {
+  const user = useSelector(state => state.userProfile)
+  console.log('USER IN SEARCH IS: ', user)
   const dispatch = useDispatch()
   const [search, setSearch] = useState('')
   const [filtered, setFiltered] = useState([])
@@ -151,34 +153,6 @@ const Search = () => {
         
         subheader={<li />}
       >
-        {filteredSearch[0].length ? (
-          <li key='notFriends'>
-            <ul>
-              <ListSubheader>
-                {`Add a Friend`}
-              </ListSubheader>
-              {filteredSearch[0].map((add) => (
-                  <ListItem key={`add-${add.uid}`}>
-                    <ListItemAvatar>
-                      <Avatar
-                      src={add.profilePic}
-                      sx={{
-                        width: 75,
-                        height: 75,
-                        border: 0.5,
-                        margin: "auto",
-                      }}
-                      />
-                    </ListItemAvatar>
-                    <ListItemText primary={`${add.firstName} ${add.lastName}`} secondary={`${add.userName}`}/>
-                    <Button variant="outlined" onClick={() => dispatch(decideRequest(add.uid, 'add'))}>
-                      Add Friend
-                    </Button> 
-                  </ListItem>
-              ))}
-            </ul>
-          </li>
-                    ) : ''}
 
         {filteredSearch[1].length ? (
           <li key='pending'>
@@ -200,10 +174,10 @@ const Search = () => {
                     />
                   </ListItemAvatar>
                   <ListItemText primary={`${pending.firstName} ${pending.lastName}`} secondary={`${pending.userName}`}/>
-                  <Button variant="outlined" onClick={() => dispatch(decideRequest(pending.uid, 'accept'))}>
+                  <Button variant="outlined" onClick={() => dispatch(decideRequest(pending.uid, 'accept', user.firstName))}>
                     Accept
                   </Button>
-                  <Button variant="outlined" onClick={() => dispatch(decideRequest(pending.uid, 'decline'))}>
+                  <Button variant="outlined" onClick={() => dispatch(decideRequest(pending.uid, 'decline', user.firstName))}>
                     Decline
                   </Button>
                 </ListItem>
@@ -251,7 +225,7 @@ const Search = () => {
                   variant="standard"
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
-                />
+                  />
               </DialogContent>
               <DialogActions>
                 <Button onClick={handleClose}>Cancel</Button>
@@ -281,7 +255,7 @@ const Search = () => {
                     />
                   </ListItemAvatar>
                   <ListItemText primary={`${request.firstName} ${request.lastName}`} secondary={`${request.userName}`}/>
-                  <Button variant="outlined">
+                  <Button variant="outlined" onClick={() => dispatch(decideRequest(request.uid, 'reminder', user.firstName))}>
                     Send a Reminder
                   </Button>
                 </ListItem>
@@ -290,6 +264,34 @@ const Search = () => {
           </li>
                   ) : ''}
 
+      {filteredSearch[0].length ? (
+        <li key='notFriends'>
+          <ul>
+            <ListSubheader>
+              {`Add a Friend`}
+            </ListSubheader>
+            {filteredSearch[0].map((add) => (
+                <ListItem key={`add-${add.uid}`}>
+                  <ListItemAvatar>
+                    <Avatar
+                    src={add.profilePic}
+                    sx={{
+                      width: 75,
+                      height: 75,
+                      border: 0.5,
+                      margin: "auto",
+                    }}
+                    />
+                  </ListItemAvatar>
+                  <ListItemText primary={`${add.firstName} ${add.lastName}`} secondary={`${add.userName}`}/>
+                  <Button variant="outlined" onClick={() => dispatch(decideRequest(add.uid, 'add', user.firstName))}>
+                    Add Friend
+                  </Button> 
+                </ListItem>
+            ))}
+          </ul>
+        </li>
+                  ) : ''}
       </List>
     </div>
   )
