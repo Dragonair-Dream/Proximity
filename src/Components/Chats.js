@@ -12,6 +12,7 @@ import Typography from "@mui/material/Typography";
 import { formatRelative } from "date-fns";
 import { getChats } from "../Store/chatsReducer";
 import { Link } from "react-router-dom";
+import { getAllUsers } from "../Store/usersReducer";
 
 const Chats = () => {
 
@@ -21,6 +22,7 @@ const Chats = () => {
 
   useEffect(() => {
     dispatch(getChats());
+    dispatch(getAllUsers());
   }, []);
 
   if (chatsArray.length === 0) {
