@@ -45,7 +45,7 @@ export default function SignUp() {
         pending: [],
         requested: [],
       });
-      
+
       await setDoc(doc(db, "notifications", auth.currentUser.uid), {
         notifications: [],
       });
@@ -54,7 +54,7 @@ export default function SignUp() {
         createUserProfile({
           userName: loginDisplayName,
           email: loginEmail,
-          profilePic: "",
+          profilePic: "/Proximity.jpg",
           didUpdate: false,
           posterId: user.uid,
           DateOfBirth: "",
@@ -65,7 +65,7 @@ export default function SignUp() {
         })
       );
 
-      
+
     } catch (error) {
       alert(error.message);
       console.log(error.message);

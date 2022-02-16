@@ -28,7 +28,7 @@ export const createUserProfile = (userInfo) => {
       if (!uid) throw new Error("UID is undefined or possibly null");
       await setDoc(doc(db, "users", uid), {
         ...userInfo,
-        profilePic: auth.currentUser.photoURL,
+        profilePic: auth.currentUser.photoURL || '/Proximity.jpg'
       });
       dispatch(createdUserProfile(userInfo));
     } catch (error) {
@@ -59,7 +59,6 @@ export default (state = {}, action) => {
       console.log("create user error", action.error);
       return state;
     case GET_USER_DATA:
-      // console.log("got user data", action.userData);
       return action.userData;
     default:
       return state;

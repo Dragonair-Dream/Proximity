@@ -18,23 +18,15 @@ export const decideRequest = (uid, option, name='') => {
       const editMine = doc(db, 'friends', myUid)
       const docRef = await getDoc(editMine)
       const findFriendData = docRef.data()
-      console.log('GOT MY DOC', findFriendData)
       //const findFriend = findFriendData.pending.find(element => element.uid === uid)
-      //console.log('GOT MY DATA', findFriend)
-      console.log('Their uid is: ', uid)
       const editTheirs = doc(db, 'friends', uid)
-      console.log(editTheirs)
       const theirDocRef = await getDoc(editTheirs)
-      console.log('THEIRDOCREF', theirDocRef)
-      console.log('GOT THEIR DOC')
       const findTheirsData = theirDocRef.data()
       // const findTheirs = findTheirsData.requested.find(element => element.uid === myUid)
-      //console.log('GOT THEIR DATA')
       if (option === 'accept') {
         const findFriend = findFriendData.pending.find(element => element.uid === uid)
         const findTheirs = findTheirsData.requested.find(element => element.uid === myUid)
 
-        console.log('========= IN IF =========')
         await updateDoc(editMine, {
           accepted: arrayUnion(findFriend),
           pending: arrayRemove(findFriend)
@@ -54,7 +46,6 @@ export const decideRequest = (uid, option, name='') => {
         const findFriend = findFriendData.pending.find(element => element.uid === uid)
         const findTheirs = findTheirsData.requested.find(element => element.uid === myUid)
 
-        console.log('========= IN ELSE IF =========')
         await updateDoc(editMine, {
           pending: arrayRemove(findFriend)
         })
@@ -69,10 +60,8 @@ export const decideRequest = (uid, option, name='') => {
           })
         })
       } else if (option === 'add') { //send friend request
-        console.log('========= IN ELSE IF (ADD) =========')
         const myDoc = await getDoc(doc(db, 'users', myUid))
         const myData = myDoc.data()
-        console.log('THIS IS MY DATA: ', myData)
         const myInfo = {
           firstName: myData.firstName,
           lastName: myData.lastName,

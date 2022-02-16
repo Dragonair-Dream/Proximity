@@ -34,7 +34,7 @@ const NavBar = (props) => {
   const navigate = useNavigate();
   const logout = async () => {
     await signOut(auth);
-    navigate("/");
+    // navigate("/");
   };
 
   const handleOpenUserMenu = (e) => {
@@ -58,15 +58,12 @@ const NavBar = (props) => {
   };
   const thisUser = useAuth();
   // const userData = useSelector((state) => state.userProfile);
-  useEffect(
-    () => () =>
-      onSnapshot(
-        doc(db, "users", auth.currentUser.uid),
-        (doc) => setUserData(doc.data())
-        // console.log("klasjfl;ajsdfl;kadsf", doc.data())
-      ),
-    [thisUser]
-  );
+  useEffect(() => {
+    const unsubscribe = onSnapshot(doc(db, 'users', auth.currentUser.uid), (doc) => {
+      setUserData(doc.data());
+    });
+    return unsubscribe;
+  }, [thisUser]);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(

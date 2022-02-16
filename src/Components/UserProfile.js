@@ -25,8 +25,8 @@ export default function UserProfile() {
   const [firstName, setFirstName] = useState(userData.firstName || "");
   const [lastName, setLastName] = useState(userData.lastName || "");
   const [about, setAbout] = useState(userData.about || "");
-  const [photo, setPhoto] = useState(null);
-  const [photoURL, setphotoURL] = useState(auth.currentUser.photoURL);
+  // const [photo, setPhoto] = useState(null);
+  const [photoURL, setphotoURL] = useState(auth.currentUser.photoURL || "/Proximity.jpg");
 
   const newData = {
     firstName: firstName,
@@ -34,6 +34,7 @@ export default function UserProfile() {
     email: email,
     userName: userName,
     DateOfBirth: DateOfBirth,
+    // profilePic: photoURL,
     phoneNumber: phoneNumber,
     posterId: auth.currentUser.uid,
     about: about,
@@ -41,27 +42,27 @@ export default function UserProfile() {
   };
   const navigate = useNavigate();
 
-  async function handleChange(e) {
+  function handleChange(e) {
     if (e.target.files[0]) {
       upload(e.target.files[0], currentUser);
       // setPhoto(e.target.files[0]);
-      setphotoURL(auth.currentUser.photoURL);
+      // setphotoURL(auth.currentUser.photoURL);
     }
   }
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     // if (!photo) {
-      dispatch(createUserProfile(newData));
+    dispatch(createUserProfile(newData));
     // } else {
       // dispatch(createUserProfile(newData));
       // upload(photo, currentUser);
     // }
-    navigate("/UserProfile");
+    setInterval(navigate("/UserProfile"), 500);
   };
 
-  useEffect(() => {
-      setphotoURL(auth.currentUser.photoURL);
-  });
+  // useEffect(() => {
+  //     setphotoURL(auth.currentUser.photoURL);
+  // }, [photoURL]);
 
   return (
     <Grid container style={{ maxHeight: "100vh" }}>

@@ -32,7 +32,6 @@ export const readAll = () => {
           read: true
         }
       })
-      console.log('UPDATED ARR: ', updatedArr)
       await setDoc(doc(db, 'notifications', auth.currentUser.uid), {
         notifications: updatedArr
       })

@@ -20,7 +20,6 @@ export const getMessages = (chatId) => {
       const messageData = []
       // messageSnap.forEach(message => {
       //   hey = new CollectionReference(message)
-      //   console.log(hey = new DocumentReference(message.data()))
       // });
       messageSnap.forEach(message => messageData.push(message.data()));
       // dispatch(setMessages(messageData));

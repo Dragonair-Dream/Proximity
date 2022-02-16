@@ -13,7 +13,6 @@ import { useNavigate } from "react-router-dom";
 
 const Search = () => {
   const user = useSelector(state => state.userProfile)
-  console.log('USER IN SEARCH IS: ', user)
   const dispatch = useDispatch()
   const [search, setSearch] = useState('')
   const [filtered, setFiltered] = useState([])
@@ -27,7 +26,6 @@ const Search = () => {
   const [friend, setFriend] = useState(null);
   useEffect(() => {
     if (search === '' || search === null || search === undefined) {
-      console.log('FILTERED SEARCH IS: ', [filtered, ...relations])
       setFilteredSearch([filtered, ...relations])
     } else {
       const searchLower = search.toLowerCase()
@@ -35,7 +33,6 @@ const Search = () => {
       const p = relations[0].filter(user => user.userName.toLowerCase().includes(searchLower) || user.firstName.toLowerCase().includes(searchLower) || user.lastName.toLowerCase().includes(searchLower))
       const a = relations[1].filter(user => user.userName.toLowerCase().includes(searchLower) || user.firstName.toLowerCase().includes(searchLower) || user.lastName.toLowerCase().includes(searchLower))
       const r = relations[2].filter(user => user.userName.toLowerCase().includes(searchLower) || user.firstName.toLowerCase().includes(searchLower) || user.lastName.toLowerCase().includes(searchLower))
-      console.log('FILTERED SEARCH IS: ', [all, p, a, r])
       setFilteredSearch([all, p, a, r])
     }
   }, [search, filtered, relations])
@@ -106,7 +103,6 @@ const Search = () => {
   };
 
   const handleSubmit = async (e, friend) => {
-    console.log('HANDLE SUBMIT', friend.uid)
     e.preventDefault();
         if (message !== '') {
             const { uid } = auth.currentUser;
