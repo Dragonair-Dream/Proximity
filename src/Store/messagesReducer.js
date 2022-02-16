@@ -1,5 +1,5 @@
-import { auth, db } from '../Services/firebase';
-import { collection, query, where, getDocs, orderBy, getDoc, doc, DocumentReference, CollectionReference } from 'firebase/firestore';
+import { db } from '../Services/firebase';
+import { collection, getDocs, doc } from 'firebase/firestore';
 
 const GET_MESSAGES = 'GET_MESSAGES';
 
@@ -16,10 +16,9 @@ export const getMessages = (chatId) => {
       const chatRef = doc(db, 'chats', chatId)
       const messages = collection(chatRef, 'messages');
       const messageSnap = await getDocs(messages);
-      let hey;
       const messageData = []
       // messageSnap.forEach(message => {
-      //   hey = new CollectionReference(message)
+
       // });
       messageSnap.forEach(message => messageData.push(message.data()));
       // dispatch(setMessages(messageData));

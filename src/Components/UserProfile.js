@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { auth, upload, useAuth } from "../Services/firebase";
-import { createUserProfile } from "../Store/userProfileReducer";
+import { createUser } from "../Store/usersReducer";
 import { useNavigate } from "react-router";
 import {
   TextField,
@@ -52,7 +52,7 @@ export default function UserProfile() {
   const handleSubmit = (e) => {
     e.preventDefault();
     // if (!photo) {
-    dispatch(createUserProfile(newData));
+    dispatch(createUser(newData));
     // } else {
       // dispatch(createUserProfile(newData));
       // upload(photo, currentUser);

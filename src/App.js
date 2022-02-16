@@ -63,13 +63,13 @@ const App = () => {
       <div>
         <NavBar />
         <Routes>
-          <Route path="/" element={<Map />} />
+          <Route exact path="/" element={<Map />} />
           <Route path="/SignUp" element={<PageDoesNotExist />} />
           <Route path="/post-edit" element={<PostEdit />} />
           <Route path="/search" element={<Search />} />
           <Route path="/notifications" element={<Notifications />} />
           <Route path="/settings" element={<Settings />} />
-          <Route path="/chats" element={<Chats />} />
+          <Route exact path="/chats" element={<Chats />} />
           <Route path="/chats/:chatId" element={<ChatRoom />} />
           <Route path="/userProfile" element={<Profile />} />
           <Route path="/editProfile" element={<UserProfile />} />

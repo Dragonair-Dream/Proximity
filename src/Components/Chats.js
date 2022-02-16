@@ -12,7 +12,6 @@ import Typography from "@mui/material/Typography";
 import { formatRelative } from "date-fns";
 import { getChats } from "../Store/chatsReducer";
 import { Link } from "react-router-dom";
-import { getAllUsers } from "../Store/usersReducer";
 
 const Chats = () => {
 
@@ -22,7 +21,6 @@ const Chats = () => {
 
   useEffect(() => {
     dispatch(getChats());
-    dispatch(getAllUsers());
   }, []);
 
   if (chatsArray.length === 0) {
@@ -36,7 +34,10 @@ const Chats = () => {
   return (
     <List sx={{ width: "100%", maxWidth: "100%", bgcolor: "background.paper" }}>
       {chatsArray.map((item) => {
-        const user = users.find(user => user.posterId === item.users.find(userId => userId !== auth.currentUser.uid))
+        let user;
+        if (users) {
+          user = users.find(user => user.posterId === item.users.find(userId => userId !== auth.currentUser.uid))
+        }
         return (
           <Link style={{color: 'black', textDecoration: 'none'}} to={`/chats/${item.chatID}`} key={item.chatID} state={user}>
             <ListItem alignItems="flex-start">
