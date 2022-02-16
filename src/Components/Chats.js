@@ -38,7 +38,7 @@ const Chats = () => {
       {chatsArray.map((item) => {
         const user = users.find(user => user.posterId === item.users.find(userId => userId !== auth.currentUser.uid))
         return (
-          <Link style={{color: 'black', textDecoration: 'none'}} to={`/chats/${item.chatID}`} key={item.chatID} state={user && user}>
+          <Link style={{color: 'black', textDecoration: 'none'}} to={`/chats/${item.chatID}`} key={item.chatID} state={user}>
             <ListItem alignItems="flex-start">
               <ListItemAvatar>
                 <Avatar src={user && user.profilePic} />

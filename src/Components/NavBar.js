@@ -34,7 +34,7 @@ const NavBar = (props) => {
   const navigate = useNavigate();
   const logout = async () => {
     await signOut(auth);
-    // navigate("/");
+    setInterval(navigate("/"), 500);
   };
 
   const handleOpenUserMenu = (e) => {

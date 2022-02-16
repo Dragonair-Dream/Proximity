@@ -13,10 +13,12 @@ import CardMedia from '@mui/material/CardMedia';
 const ChatMessages = (props) => {
   const { text, userId, createdAt, postPic } = props.message;
   const { friend } = props
+  const profilePhoto = friend ? friend.profilePic : '';
+  const profileUsername = friend ? friend.userName: '';
   const messagePosition = userId === auth.currentUser.uid ? 'right' : 'left';
   const textAlignment = userId === auth.currentUser.uid ? 'row-reverse' : 'row';
-  const profilePic = userId === auth.currentUser.uid ? auth.currentUser.photoURL : friend.profilePic;
-  const userName = userId === auth.currentUser.uid ? auth.currentUser.displayName : friend.userName;
+  const profilePic = userId === auth.currentUser.uid ? auth.currentUser.photoURL : profilePhoto;
+  const userName = userId === auth.currentUser.uid ? auth.currentUser.displayName : profileUsername;
 
   return (
       <Grid container align={messagePosition} display='flex'>
