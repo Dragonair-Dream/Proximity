@@ -1,7 +1,6 @@
 import { auth } from "../Services/firebase";
 import { db } from "../Services/firebase";
-import { collection, addDoc, getDoc, doc, setDoc } from "firebase/firestore";
-import UserProfile from "../Components/UserProfile";
+import { getDoc, doc, setDoc } from "firebase/firestore";
 
 const CREATE_USER_PROFILE = "CREATE_USER_PROFILE";
 const CREATE_USER_PROFILE_ERROR = "CREATE_USER_PROFILE_ERROR";

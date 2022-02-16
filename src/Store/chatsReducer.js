@@ -1,5 +1,5 @@
 import { auth, db } from '../Services/firebase';
-import { collection, query, where, getDocs, orderBy, getDoc, doc } from 'firebase/firestore';
+import { collection, query, where, getDocs } from 'firebase/firestore';
 
 const GET_CHATS = 'GET_CHATS';
 
