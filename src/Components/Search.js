@@ -144,7 +144,7 @@ const Search = () => {
       </Box>
 
       <List
-        style={{display: 'grid', alignItems: 'center', justifyContent: 'space-evenly'}}
+        style={{display: 'grid', alignItems: 'center', justifyContent: 'space-evenly', marginBottom: '70px'}}
 
         subheader={<li />}
       >
