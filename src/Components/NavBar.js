@@ -26,7 +26,7 @@ const NavBar = () => {
   const [anchorUser, setAnchorUser] = useState(null);
   const [locationServices, setLocationServices] = useState("On");
   const [switchStatus, setSwitchStatus] = useState(true);
-  const [userProfilePic, setUserProfilePic] = useState(null);
+  // const [userProfilePic, setUserProfilePic] = useState(null);
   // const dispatch = useDispatch();
 
   const [userData, setUserData] = useState([]);
@@ -65,15 +65,15 @@ const NavBar = () => {
     return unsubscribe;
   }, [thisUser]);
 
-  useEffect(() => {
-    const unsubscribe = onSnapshot(
-      doc(db, "users", auth.currentUser.uid),
-      (querySnapshot) => {
-        setUserProfilePic(querySnapshot.data());
-      }
-    );
-    return unsubscribe;
-  }, []);
+  // useEffect(() => {
+  //   const unsubscribe = onSnapshot(
+  //     doc(db, "users", auth.currentUser.uid),
+  //     (querySnapshot) => {
+  //       setUserProfilePic(querySnapshot.data());
+  //     }
+  //   );
+  //   return unsubscribe;
+  // }, []);
 
   return (
     <AppBar position="sticky">
@@ -109,7 +109,7 @@ const NavBar = () => {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar src={auth.currentUser.photoURL} />
+                <Avatar src={userData && userData.profilePic} />
               </IconButton>
             </Tooltip>
             <Menu

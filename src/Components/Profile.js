@@ -63,7 +63,7 @@ export default function Profile() {
       <Box sx={{ paddingTop: 1 }}>
         <Avatar
           alt="Remy Sharp"
-          src={auth.currentUser.photoURL}
+          src={userData && userData.profilePic}
           sx={{
             width: 175,
             height: 175,
