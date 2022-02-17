@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { auth } from "../Services/firebase";
+import { auth, db } from "../Services/firebase";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import Divider from "@mui/material/Divider";
@@ -12,15 +12,31 @@ import Typography from "@mui/material/Typography";
 import { formatRelative } from "date-fns";
 import { getChats } from "../Store/chatsReducer";
 import { Link } from "react-router-dom";
+import { onSnapshot, collection, query } from "firebase/firestore";
 
 const Chats = () => {
 
-  let chatsArray = useSelector((state) => state.chats);
-  let users = useSelector((state) => state.users);
+  const chatsArray = useSelector((state) => state.chats);
+  // let users = useSelector((state) => state.users);
+  const [users, setUsers] = useState([]);
   const dispatch = useDispatch();
+
+  console.log('YYOOOOOOOO', users)
 
   useEffect(() => {
     dispatch(getChats());
+  }, []);
+
+  useEffect(() => {
+    const q = query(collection(db, "users"));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const usersData = [];
+      querySnapshot.forEach((doc) => {
+          usersData.push(doc.data());
+      });
+      setUsers(usersData);
+    });
+    return unsubscribe
   }, []);
 
   if (chatsArray.length === 0) {
@@ -35,7 +51,7 @@ const Chats = () => {
     <List sx={{ width: "100%", maxWidth: "100%", bgcolor: "background.paper" }}>
       {chatsArray.map((item) => {
         let user;
-        if (users) {
+        if (users.length) {
           user = users.find(user => user.posterId === item.users.find(userId => userId !== auth.currentUser.uid))
         }
         return (

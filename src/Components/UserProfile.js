@@ -72,15 +72,6 @@ export default function UserProfile() {
   //     setphotoURL(auth.currentUser.photoURL);
   // }, [photoURL]);
 
-  // React.useEffect(() => {
-  //   const timer = setInterval(() => {
-  //     setProgress((prevProgress) => (prevProgress >= 100 ? 10 : prevProgress + 10));
-  //   }, 800);
-  //   return () => {
-  //     clearInterval(timer);
-  //   };
-  // }, []);
-
   return (
     <Grid container style={{ maxHeight: "100vh", justifyContent: 'center' }}>
       <Grid
