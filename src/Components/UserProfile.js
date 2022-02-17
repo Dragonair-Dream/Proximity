@@ -82,7 +82,7 @@ export default function UserProfile() {
   // }, []);
 
   return (
-    <Grid container style={{ maxHeight: "100vh" }}>
+    <Grid container style={{ maxHeight: "100vh", justifyContent: 'center' }}>
       <Grid
         container
         item
