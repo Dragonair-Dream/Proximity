@@ -42,9 +42,9 @@ export default function UserProfile() {
   };
   const navigate = useNavigate();
 
-  function handleChange(e) {
+  async function handleChange(e) {
     if (e.target.files[0]) {
-      upload(e.target.files[0], currentUser);
+      await upload(e.target.files[0], currentUser);
       // setPhoto(e.target.files[0]);
       // setphotoURL(auth.currentUser.photoURL);
     }
