@@ -10,8 +10,10 @@ import {
   InputAdornment,
   Typography,
   Avatar,
+  Box
 } from "@mui/material";
 import { AccountCircle, ContactPhone, Cake, Badge } from "@mui/icons-material";
+import Loader from "./Loader";
 
 export default function UserProfile() {
   const userData = useSelector((state) => state.userProfile);
@@ -27,6 +29,7 @@ export default function UserProfile() {
   const [about, setAbout] = useState(userData.about || "");
   // const [photo, setPhoto] = useState(null);
   const [photoURL, setphotoURL] = useState(auth.currentUser.photoURL || "/Proximity.jpg");
+  const [progress, setProgress] = useState(0);
 
   const newData = {
     firstName: firstName,
@@ -47,23 +50,36 @@ export default function UserProfile() {
       upload(e.target.files[0], currentUser);
       // setPhoto(e.target.files[0]);
       // setphotoURL(auth.currentUser.photoURL);
+      const timer = setInterval(() => {
+        setProgress((prevProgress) => (prevProgress >= 100 ? 100 : prevProgress + 25));
+      }, 800);
+      if (progress === '100') clearInterval(timer);
     }
   }
 
   const handleSubmit = (e) => {
     e.preventDefault();
     // if (!photo) {
-    dispatch(createUser(newData));
+    setTimeout(dispatch(createUser(newData)), 5000);
     // } else {
       // dispatch(createUserProfile(newData));
       // upload(photo, currentUser);
     // }
-    setInterval(navigate("/UserProfile"), 5000);
+    setTimeout(navigate("/UserProfile"), 6000);
   };
 
   // useEffect(() => {
   //     setphotoURL(auth.currentUser.photoURL);
   // }, [photoURL]);
+
+  // React.useEffect(() => {
+  //   const timer = setInterval(() => {
+  //     setProgress((prevProgress) => (prevProgress >= 100 ? 10 : prevProgress + 10));
+  //   }, 800);
+  //   return () => {
+  //     clearInterval(timer);
+  //   };
+  // }, []);
 
   return (
     <Grid container style={{ maxHeight: "100vh" }}>
@@ -230,6 +246,9 @@ export default function UserProfile() {
             sx={{ width: 75, height: 75 }}
           />
           <br />
+          <Box sx={{ width: '100%' }}>
+            <Loader value={progress} />
+          </Box>
           <Button
             style={{ padding: "8px" }}
             variant="contained"
