@@ -42,13 +42,14 @@ export default function UserProfile() {
   };
   const navigate = useNavigate();
 
-  async function handleChange(e) {
+  function handleChange(e) {
     if (e.target.files[0]) {
-      await upload(e.target.files[0], currentUser);
+      upload(e.target.files[0], currentUser);
       // setPhoto(e.target.files[0]);
       // setphotoURL(auth.currentUser.photoURL);
     }
   }
+
   const handleSubmit = (e) => {
     e.preventDefault();
     // if (!photo) {
@@ -57,7 +58,7 @@ export default function UserProfile() {
       // dispatch(createUserProfile(newData));
       // upload(photo, currentUser);
     // }
-    setInterval(navigate("/UserProfile"), 500);
+    setInterval(navigate("/UserProfile"), 5000);
   };
 
   // useEffect(() => {
