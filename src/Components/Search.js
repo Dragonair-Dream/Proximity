@@ -139,12 +139,11 @@ const Search = () => {
 
   return (
     <div>
-      <Box fullWidth style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+      <Box style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
         <TextField sx={{ width: 2/3 }} label="Search for Friends..." variant="standard" value={search} onChange={e => setSearch(e.target.value)}/>
       </Box>
 
       <List
-        fullWidth
         style={{display: 'grid', alignItems: 'center', justifyContent: 'space-evenly'}}
 
         subheader={<li />}
@@ -217,7 +216,6 @@ const Search = () => {
                   id="name"
                   label="Type Message"
                   type="text"
-                  fullWidth
                   variant="standard"
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
