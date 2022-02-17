@@ -33,46 +33,52 @@ const Chats = () => {
 
   return (
     <List sx={{ width: "100%", maxWidth: "100%", bgcolor: "background.paper" }}>
-      {chatsArray.map((item) => (
-        <Link style={{color: 'black', textDecoration: 'none'}} to={`/chats/${item.chatID}`} key={item.chatID} state={users.find(user => user.posterId === item.users.find(userId => userId !== auth.currentUser.uid))}>
-          <ListItem alignItems="flex-start">
-            <ListItemAvatar>
-              <Avatar src={users.find(user => user.posterId === item.users.find(userId => userId !== auth.currentUser.uid)).profilePic} />
-            </ListItemAvatar>
-            <ListItemText
-              primary={
-                <React.Fragment>
-                  {users.find(user => user.posterId === item.users.find(userId => userId !== auth.currentUser.uid)).userName}
-                  <Typography
-                    sx={{ display: "inline" }}
-                    component="span"
-                    variant="body2"
-                    color="gray"
-                  >
-                    {` (${formatRelative(
-                      new Date(item.latestMessage.createdAt.seconds * 1000),
-                      new Date()
-                    )})`}
-                  </Typography>
-                </React.Fragment>
-              }
-              secondary={
-                <React.Fragment>
-                  <Typography
-                    sx={{ display: "inline" }}
-                    component="span"
-                    variant="body2"
-                    color="text.secondary"
-                  >
-                  </Typography>
-                  {item.latestMessage.text}
-                </React.Fragment>
-              }
-            />
-          </ListItem>
-          <Divider variant="inset" component="li" />
-        </Link>
-      ))}
+      {chatsArray.map((item) => {
+        let user;
+        if (users) {
+          user = users.find(user => user.posterId === item.users.find(userId => userId !== auth.currentUser.uid))
+        }
+        return (
+          <Link style={{color: 'black', textDecoration: 'none'}} to={`/chats/${item.chatID}`} key={item.chatID} state={user}>
+            <ListItem alignItems="flex-start">
+              <ListItemAvatar>
+                <Avatar src={user && user.profilePic} />
+              </ListItemAvatar>
+              <ListItemText
+                primary={
+                  <React.Fragment>
+                    {user && user.userName}
+                    <Typography
+                      sx={{ display: "inline" }}
+                      component="span"
+                      variant="body2"
+                      color="gray"
+                    >
+                      {` (${formatRelative(
+                        new Date(item.latestMessage.createdAt.seconds * 1000),
+                        new Date()
+                      )})`}
+                    </Typography>
+                  </React.Fragment>
+                }
+                secondary={
+                  <React.Fragment>
+                    <Typography
+                      sx={{ display: "inline" }}
+                      component="span"
+                      variant="body2"
+                      color="text.secondary"
+                    >
+                    </Typography>
+                    {item.latestMessage.text}
+                  </React.Fragment>
+                }
+              />
+            </ListItem>
+            <Divider variant="inset" component="li" />
+          </Link>
+        )
+      })}
     </List>
   );
 };

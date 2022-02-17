@@ -1,5 +1,5 @@
 import { auth, db } from '../Services/firebase';
-import { collection, query, where, getDocs, orderBy, getDoc, doc } from 'firebase/firestore';
+import { collection, query, where, getDocs } from 'firebase/firestore';
 
 const GET_CHATS = 'GET_CHATS';
 
@@ -16,23 +16,10 @@ export const getChats = () => {
       const chatRef = collection(db, 'chats');
       const q = query(chatRef, where('users', 'array-contains', auth.currentUser.uid ));
       const snapshot = await getDocs(q);
-
-
-      // const friendId =[];
       const data = [];
       snapshot.forEach(item => {
-        // friendId.push(item.data().users.filter(user => user !== auth.currentUser.uid));
         data.push(item.data());
       });
-      // console.log(friendId)
-      // const userRef = collection(db, 'users');
-      // const q2 = query(userRef, where('name', 'not-in', friendId));
-      // const userSnap = await getDocs(q2);
-      // console.log()
-      // userSnap.forEach(id => console.log('DFSADSFADSF', id.data()))
-      // data.map(item => item.users = item.users.filter(user => user !== auth.currentUser.uid));
-
-      // console.log(data)
       dispatch(setChats(data));
     } catch (error) {
       console.error('Something went wrong with Chat Collection Get request', error);

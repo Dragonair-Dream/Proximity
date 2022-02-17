@@ -30,7 +30,6 @@ export const getSingleChat = (postersId) => {
 export default (state = {}, action) => {
   switch (action.type) {
     case GET_SINGLE_CHAT:
-      console.log("REDUCER!!!!", action.chatItem)
       return action.chatItem;
     default:
       return state;

@@ -20,12 +20,11 @@ import Divider from "@mui/material/Divider";
 import Fab from "@mui/material/Fab";
 import Send from "@mui/icons-material/Send";
 import makeStyles from "@mui/styles/makeStyles";
-import { Alert } from "@mui/material";
 
 const useStyles = makeStyles({
   messageArea: {
     width: "100%",
-    height: "100%",
+    height: "80%",
   },
 });
 

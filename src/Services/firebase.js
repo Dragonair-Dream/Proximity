@@ -19,7 +19,6 @@ export function useAuth() {
   useEffect(() => {
     onAuthStateChanged(auth, (user) => setCurrentUser(user));
   }, []);
-  // console.log("current user", currentUser);
   return currentUser;
 }
 

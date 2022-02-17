@@ -28,7 +28,6 @@ const addUsersPost = (postData) => {
 };
 
 const updateUsersPost = (postData) => {
-  console.log("jhasbdjhabdhdbiqdbqi", postData);
   return {
     type: UPDATE_USERS_POST,
     postData,

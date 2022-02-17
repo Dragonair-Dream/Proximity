@@ -9,7 +9,6 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-//import Link from "@mui/material/Link";
 import { Link, useNavigate } from "react-router-dom";
 import InputAdornment from "@mui/material/InputAdornment";
 import { AccountCircle, LockRounded } from "@mui/icons-material";
@@ -45,7 +44,7 @@ export default function SignUp() {
         pending: [],
         requested: [],
       });
-      
+
       await setDoc(doc(db, "notifications", auth.currentUser.uid), {
         notifications: [],
       });
@@ -54,7 +53,7 @@ export default function SignUp() {
         createUserProfile({
           userName: loginDisplayName,
           email: loginEmail,
-          profilePic: "",
+          profilePic: "/Proximity.jpg",
           didUpdate: false,
           posterId: user.uid,
           DateOfBirth: "",
@@ -65,7 +64,7 @@ export default function SignUp() {
         })
       );
 
-      
+
     } catch (error) {
       alert(error.message);
       console.log(error.message);

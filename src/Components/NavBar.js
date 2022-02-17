@@ -9,32 +9,32 @@ import Menu from "@mui/material/Menu";
 import IconButton from "@mui/material/IconButton";
 import Container from "@mui/material/Container";
 import Toolbar from "@mui/material/Toolbar";
-import FormControl from "@mui/material/FormControl";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Switch from "@mui/material/Switch";
+// import FormControl from "@mui/material/FormControl";
+// import FormControlLabel from "@mui/material/FormControlLabel";
+// import Switch from "@mui/material/Switch";
 import { auth, useAuth, db } from "../Services/firebase";
 import { signOut } from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { getUserData } from "../Store/userProfileReducer";
+// import { useDispatch, useSelector } from "react-redux";
+// import { getUserData } from "../Store/userProfileReducer";
 import Divider from "@mui/material/Divider";
 import { doc, onSnapshot } from "firebase/firestore";
 
 const settings = ["Logout"];
 
-const NavBar = (props) => {
+const NavBar = () => {
   const [anchorUser, setAnchorUser] = useState(null);
   const [locationServices, setLocationServices] = useState("On");
   const [switchStatus, setSwitchStatus] = useState(true);
   const [userProfilePic, setUserProfilePic] = useState(null);
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   const [userData, setUserData] = useState([]);
 
   const navigate = useNavigate();
   const logout = async () => {
     await signOut(auth);
-    navigate("/");
+    setInterval(navigate("/"), 500);
   };
 
   const handleOpenUserMenu = (e) => {
@@ -58,15 +58,12 @@ const NavBar = (props) => {
   };
   const thisUser = useAuth();
   // const userData = useSelector((state) => state.userProfile);
-  useEffect(
-    () => () =>
-      onSnapshot(
-        doc(db, "users", auth.currentUser.uid),
-        (doc) => setUserData(doc.data())
-        // console.log("klasjfl;ajsdfl;kadsf", doc.data())
-      ),
-    [thisUser]
-  );
+  useEffect(() => {
+    const unsubscribe = onSnapshot(doc(db, 'users', auth.currentUser.uid), (doc) => {
+      setUserData(doc.data());
+    });
+    return unsubscribe;
+  }, [thisUser]);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(

@@ -16,22 +16,18 @@ function PostEdit() {
   const post = selectedPost[0]
   const [locationName, setLocationName] = useState(post.locationName || '');
   const [caption, setCaption] = useState(post.caption || '');
-  console.log('caption$$$$', post)
   const newData = {
     postId: post.docId,
     caption,
     locationName
   }
-    
-  console.log('locationname$$$$', selectedPost)
-  
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('handle submit hit from post edit', newData);
     dispatch(_updateUsersPost(newData))
     navigate('/')
   }
- 
+
   return (
     <Grid container style={{ maxHeight: "100vh",   justifyContent:"center"  }}>
       <Grid
