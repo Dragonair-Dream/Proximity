@@ -21,7 +21,7 @@ import TextField from "@mui/material/TextField";
 import Send from "@mui/icons-material/Send";
 import Fab from "@mui/material/Fab";
 import { db, auth } from "../Services/firebase";
-import { collection, addDoc, doc, updateDoc, query, getDocs, where, deleteDoc } from "firebase/firestore";
+import { collection, addDoc, doc, updateDoc, query, getDocs, where, deleteDoc, arrayUnion } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 export default function PostContent(props) {
     const {post} = props
@@ -79,6 +79,13 @@ export default function PostContent(props) {
         e.preventDefault();
         if (message !== '') {
             const { uid, photoURL } = auth.currentUser;
+            await updateDoc(doc(db, 'notifications', post.postersId), {
+              notifications: arrayUnion({
+                read: false,
+                type: 'chats',
+                text: `${auth.currentUser.displayName} has sent you a message`
+              })
+            })
             if (chat) {
                 const chatRef = doc(db, 'chats', chat.chatID);
                 await updateDoc(chatRef, {

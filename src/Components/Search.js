@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { List, ListItem, ListItemText, ListSubheader, Avatar, ListItemAvatar, TextField, Box } from '@mui/material/'
 import { decideRequest } from "../Store/relationsReducer";
 import { auth, db } from '../Services/firebase'
-import { onSnapshot, query, doc, where, collection, updateDoc, addDoc, getDocs, getDoc } from "firebase/firestore";
+import { onSnapshot, query, doc, where, collection, updateDoc, addDoc, getDocs, arrayUnion } from "firebase/firestore";
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -157,6 +157,13 @@ const Search = () => {
     e.preventDefault();
         if (message !== '') {
             const { uid } = auth.currentUser;
+            await updateDoc(doc(db, 'notifications', friend.uid), {
+              notifications: arrayUnion({
+                read: false,
+                type: 'chats',
+                text: `${auth.currentUser.displayName} has sent you a message`
+              })
+            })
             if (chat) {
                 const chatRef = doc(db, 'chats', chat.chatID);
                 await updateDoc(chatRef, {

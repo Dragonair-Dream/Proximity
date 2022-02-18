@@ -80,12 +80,11 @@ const ChatRoom = () => {
         let usersUid = notYou.users.find(element => element !== uid)
         let them = await getDoc(doc(db, 'users', usersUid))
         them = them.data()
-
         await updateDoc(doc(db, 'notifications', usersUid), {
           notifications: arrayUnion({
             read: false,
             type: 'chats',
-            text: `${them.firstName} ${them.lastName} has sent you a message`
+            text: `${auth.currentUser.displayName} has sent you a message`
           })
         })
 
