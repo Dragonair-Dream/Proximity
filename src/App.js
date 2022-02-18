@@ -44,20 +44,7 @@ const App = () => {
       }
     });
   }, [setUser]);
-  /*
-  if (user && (!currentUserState.didUpdate)) {
-    console.log('USER HERE ==============', user)
-    console.log('CURRENT HERE +++++++++++', currentUser)
-    return (
-      <div>
-        <Routes>
-          <Route path='SignUp' element={}
-          <Route path='/' element={<UserProfile/>} />
-          <Route path="/userProfile" element={<Profile />} />
-        </Routes>
-      </div>
-    )
-  } else */
+
   if (user) {
     return (
       <div>

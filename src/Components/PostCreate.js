@@ -37,7 +37,6 @@ export default function PostCreate(props) {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('ME IS: ', me)
     const random = Math.floor(Math.random() * 1000);
     const uid = auth.currentUser.uid;
     const latitude = props.lat;
@@ -51,7 +50,7 @@ export default function PostCreate(props) {
         notifications: arrayUnion({
           read: false,
           type: 'map',
-          text: `${me.firstName} ${me.lastName} added a new post`
+          text: `${auth.currentUser.displayName} added a new post`
         })
       })
     })

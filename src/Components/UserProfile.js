@@ -77,7 +77,7 @@ export default function UserProfile() {
   const handleSubmit = (e) => {
     e.preventDefault();
     // if (!photo) {
-    setTimeout(dispatch(createUser(newData)), 5000);
+    dispatch(createUser(newData));
     // } else {
       // dispatch(createUserProfile(newData));
       // upload(photo, currentUser);
@@ -260,8 +260,8 @@ export default function UserProfile() {
             <DialogTitle id="alert-dialog-title">
               {'Loading...'}
             </DialogTitle>
-            <DialogContent>
-              <Box sx={{ width: '500px', padding: '10px' }}>
+            <DialogContent sx={{width: '200px'}}>
+              <Box sx={{ width: '100%', padding: '10px' }}>
                 <Loader value={progress} />
               </Box>
             </DialogContent>

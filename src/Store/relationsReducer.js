@@ -13,7 +13,6 @@ const getRelationsAction = (relations) => {
 export const updateRelations = (newData) => {
   return async (dispatch) => {
     try {
-      console.log('HIT UPDATE RELATIONS')
       const uid = auth.currentUser.uid
       let relations = await getDoc(doc(db, 'friends', uid))
       relations = relations.data()
@@ -34,7 +33,6 @@ export const updateRelations = (newData) => {
             newArr.push(requestedLoop)
           }
         }
-        console.log('PENDING UID AND NEW ARR ARE: ', pending.uid, newArr)
         await updateDoc(doc(db, 'friends', pending.uid), {
           requested: newArr
         })
@@ -56,7 +54,6 @@ export const updateRelations = (newData) => {
             newArr.push(pendingLoop)
           }
         }
-        console.log('REQUESTED UID AND NEW ARR ARE: ', requested.uid, newArr)
         await updateDoc(doc(db, 'friends', requested.uid), {
           pending: newArr
         })
@@ -78,12 +75,10 @@ export const updateRelations = (newData) => {
             newArr.push(acceptedLoop)
           }
         }
-        console.log('ACCEPTED UID AND NEW ARR ARE: ', accepted.uid, newArr)
         await updateDoc(doc(db, 'friends', accepted.uid), {
           accepted: newArr
         })
       }
-      console.log('LEAVING UPDATE RELATIONS')
     } catch(err) {
       console.log(err)
     }
