@@ -12,6 +12,7 @@ import {
   Avatar,
 } from "@mui/material";
 import { AccountCircle, ContactPhone, Cake, Badge } from "@mui/icons-material";
+import { updateRelations } from '../Store/relationsReducer'
 
 export default function UserProfile() {
   const userData = useSelector((state) => state.userProfile);
@@ -57,6 +58,7 @@ export default function UserProfile() {
       // dispatch(createUserProfile(newData));
       // upload(photo, currentUser);
     // }
+    dispatch(updateRelations(newData))
     setInterval(navigate("/UserProfile"), 500);
   };
 

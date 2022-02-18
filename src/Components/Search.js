@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { List, ListItem, ListItemText, ListSubheader, Avatar, ListItemAvatar, TextField, Box } from '@mui/material/'
 import { decideRequest } from "../Store/relationsReducer";
 import { auth, db } from '../Services/firebase'
-import { onSnapshot, query, doc, where, collection, updateDoc, addDoc, getDocs } from "firebase/firestore";
+import { onSnapshot, query, doc, where, collection, updateDoc, addDoc, getDocs, getDoc } from "firebase/firestore";
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -73,7 +73,58 @@ const Search = () => {
             uid: data.posterId,
             userName: data.userName
           })
+        } 
+        /*else if (data.posterId !== auth.currentUser.uid) {
+          const newRelations = []
+          for (const pending of relations[0]) {
+            console.log('Pending is: ', pending)
+            if (pending.uid === auth.currentUser.uid) {
+              const newUser = getDoc(doc(db, 'users', pending.uid))
+              const newUserData = newUser.data()
+              newRelations.push({
+                firstName: newUserData.firstName,
+                lastName: newUserData.lastName,
+                profilePic: newUserData.profilePic,
+                uid: newUserData.posterId,
+                userName: newUserData.userName
+              })
+            } else {
+              newRelations.push(pending)
+            }
+          }
+          for (const accepted of relations[1]) {
+            if (accepted.uid === auth.currentUser.uid) {
+              const newUser = getDoc(doc(db, 'users', accepted.uid))
+              const newUserData = newUser.data()
+              newRelations.push({
+                firstName: newUserData.firstName,
+                lastName: newUserData.lastName,
+                profilePic: newUserData.profilePic,
+                uid: newUserData.posterId,
+                userName: newUserData.userName
+              })
+            } else {
+              newRelations.push(accepted)
+            }
+          }
+          for (const requested of relations[2]) {
+            if (requested.uid === auth.currentUser.uid) {
+              const newUser = getDoc(doc(db, 'users', requested.uid))
+              const newUserData = newUser.data()
+              newRelations.push({
+                firstName: newUserData.firstName,
+                lastName: newUserData.lastName,
+                profilePic: newUserData.profilePic,
+                uid: newUserData.posterId,
+                userName: newUserData.userName
+              })
+            } else {
+              newRelations.push(requested)
+            }
+          }
+          setRelations(newRelations)
         }
+        */
       })
       setFiltered(filteredUsers)
     })
