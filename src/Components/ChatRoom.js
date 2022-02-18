@@ -9,6 +9,8 @@ import {
   query,
   onSnapshot,
   addDoc,
+  arrayUnion,
+  getDoc,
 } from "firebase/firestore";
 import { useParams, useLocation } from "react-router-dom";
 import ChatMessages from "./ChatMessages";
@@ -72,6 +74,20 @@ const ChatRoom = () => {
           // photoUrl: photoURL,
           userId: uid,
         });
+
+        let notYou = await getDoc(doc(db, 'chats', chatId))
+        notYou = notYou.data()
+        let usersUid = notYou.users.find(element => element !== uid)
+        let them = await getDoc(doc(db, 'users', usersUid))
+        them = them.data()
+        await updateDoc(doc(db, 'notifications', usersUid), {
+          notifications: arrayUnion({
+            read: false,
+            type: 'chats',
+            text: `${auth.currentUser.displayName} has sent you a message`
+          })
+        })
+
       } else snapInPlace.current.scrollIntoView({ behavior: "smooth" });
       setText("");
     } else {

@@ -8,13 +8,15 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
-import { auth, storage } from "../Services/firebase";
-import { useDispatch } from "react-redux";
+import { auth, storage, db } from "../Services/firebase";
+import { useDispatch, useSelector } from "react-redux";
 import { _addUsersPost } from "../Store/userPostReducer";
 import { uploadBytes, ref, getDownloadURL } from "firebase/storage";
+import { arrayUnion, updateDoc, getDoc, doc } from "firebase/firestore";
 
 export default function PostCreate(props) {
 
+  const me = useSelector(state => state.userProfile)
   const [open, setOpen] = useState(false);
   const [image, setImage] = useState(null);
   const [caption, setCaption] = useState("");
@@ -35,13 +37,26 @@ export default function PostCreate(props) {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log('ME IS: ', me)
     const random = Math.floor(Math.random() * 1000);
-
     const uid = auth.currentUser.uid;
     const latitude = props.lat;
     const longitude = props.lng;
     const editing = false;
+
+    let friends = await getDoc(doc(db, 'friends', uid))
+    friends = friends.data()
+    friends.accepted.forEach((friend) => {
+      updateDoc(doc(db, 'notifications', friend.uid), {
+        notifications: arrayUnion({
+          read: false,
+          type: 'map',
+          text: `${me.firstName} ${me.lastName} added a new post`
+        })
+      })
+    })
     try {
+
       const fileRef = ref(storage, "posts/" + random + ".png");
       await uploadBytes(fileRef, image);
       const postImage = await getDownloadURL(fileRef);

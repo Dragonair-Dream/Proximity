@@ -10,6 +10,85 @@ const getRelationsAction = (relations) => {
     relations
   }
 }
+export const updateRelations = (newData) => {
+  return async (dispatch) => {
+    try {
+      console.log('HIT UPDATE RELATIONS')
+      const uid = auth.currentUser.uid
+      let relations = await getDoc(doc(db, 'friends', uid))
+      relations = relations.data()
+      for (const pending of relations.pending) {
+        let theirDoc = await getDoc(doc(db, 'friends', pending.uid))
+        theirDoc = theirDoc.data()
+        const newArr = []
+        for (const requestedLoop of theirDoc.requested) {
+          if (requestedLoop.uid === uid) {
+            newArr.push({
+              firstName: newData.firstName,
+              lastName: newData.lastName,
+              profilePic: auth.currentUser.photoURL,
+              uid: newData.uid,
+              userName: newData.userName
+            })
+          } else {
+            newArr.push(requestedLoop)
+          }
+        }
+        console.log('PENDING UID AND NEW ARR ARE: ', pending.uid, newArr)
+        await updateDoc(doc(db, 'friends', pending.uid), {
+          requested: newArr
+        })
+      }
+      for (const requested of relations.requested) {
+        let theirDoc = await getDoc(doc(db, 'friends', requested.uid))
+        theirDoc = theirDoc.data()
+        const newArr = []
+        for (const pendingLoop of theirDoc.pending) {
+          if (pendingLoop.uid === uid) {
+            newArr.push({
+              firstName: newData.firstName,
+              lastName: newData.lastName,
+              profilePic: auth.currentUser.photoURL,
+              uid: newData.uid,
+              userName: newData.userName
+            })
+          } else {
+            newArr.push(pendingLoop)
+          }
+        }
+        console.log('REQUESTED UID AND NEW ARR ARE: ', requested.uid, newArr)
+        await updateDoc(doc(db, 'friends', requested.uid), {
+          pending: newArr
+        })
+      }
+      for (const accepted of relations.accepted) {
+        let theirDoc = await getDoc(doc(db, 'friends', accepted.uid))
+        theirDoc = theirDoc.data()
+        const newArr = []
+        for (const acceptedLoop of theirDoc.accepted) {
+          if (acceptedLoop.uid === uid) {
+            newArr.push({
+              firstName: newData.firstName,
+              lastName: newData.lastName,
+              profilePic: auth.currentUser.photoURL,
+              uid: newData.posterId,
+              userName: newData.userName
+            })
+          } else {
+            newArr.push(acceptedLoop)
+          }
+        }
+        console.log('ACCEPTED UID AND NEW ARR ARE: ', accepted.uid, newArr)
+        await updateDoc(doc(db, 'friends', accepted.uid), {
+          accepted: newArr
+        })
+      }
+      console.log('LEAVING UPDATE RELATIONS')
+    } catch(err) {
+      console.log(err)
+    }
+  }
+}
 
 export const decideRequest = (uid, option, name='') => {
   return async (dispatch) => {
@@ -39,7 +118,7 @@ export const decideRequest = (uid, option, name='') => {
           notifications: arrayUnion({
             read: false,
             type: 'search',
-            text: `${name} has accepted your friend request!`
+            text: `${auth.currentUser.displayName} has accepted your friend request!`
           })
         })
       } else if (option === 'decline') {
@@ -56,7 +135,7 @@ export const decideRequest = (uid, option, name='') => {
           notifications: arrayUnion({
             read: false,
             type: 'search',
-            text: `${name} has declined your friend request.`
+            text: `${auth.currentUser.displayName} has declined your friend request.`
           })
         })
       } else if (option === 'add') { //send friend request
@@ -88,19 +167,21 @@ export const decideRequest = (uid, option, name='') => {
           notifications: arrayUnion({
             read: false,
             type: 'search',
-            text: `${name} sent you a friend request!`
+            text: `${auth.currentUser.displayName} sent you a friend request!`
           })
         })
       } else { //send reminder
+        /*
         const findFriend = findFriendData.requested.find(element => element.uid === uid)
         await updateDoc(editMine, {
           requested: arrayRemove(findFriend)
         })
+        */
         await updateDoc(doc(db, 'notifications', uid), {
           notifications: arrayUnion({
             read: false,
             type: 'search',
-            text: `${name} is waiting on your friend request!`
+            text: `${auth.currentUser.displayName} is waiting on your friend request!`
           })
         })
       }

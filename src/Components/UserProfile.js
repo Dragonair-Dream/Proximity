@@ -15,6 +15,7 @@ import {
   DialogContent,
   DialogTitle
 } from "@mui/material";
+import { updateRelations } from '../Store/relationsReducer'
 import { AccountCircle, ContactPhone, Cake, Badge, CompressOutlined, LocalDining } from "@mui/icons-material";
 import Loader from "./Loader";
 
@@ -75,8 +76,14 @@ export default function UserProfile() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(createUser(newData));
-    navigate("/UserProfile");
+    // if (!photo) {
+    setTimeout(dispatch(createUser(newData)), 5000);
+    // } else {
+      // dispatch(createUserProfile(newData));
+      // upload(photo, currentUser);
+    // }
+    dispatch(updateRelations(newData))
+    setTimeout(navigate("/UserProfile"), 6000);
   };
 
   return (
