@@ -65,16 +65,6 @@ const NavBar = () => {
     return unsubscribe;
   }, [thisUser]);
 
-  // useEffect(() => {
-  //   const unsubscribe = onSnapshot(
-  //     doc(db, "users", auth.currentUser.uid),
-  //     (querySnapshot) => {
-  //       setUserProfilePic(querySnapshot.data());
-  //     }
-  //   );
-  //   return unsubscribe;
-  // }, []);
-
   return (
     <AppBar position="sticky">
       <Container maxWidth="xl">
