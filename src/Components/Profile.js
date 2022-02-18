@@ -117,15 +117,7 @@ export default function Profile() {
         </Stack>
       </Stack>
       <Divider component="p" />
-      <p>
-        <Typography
-          sx={{ mt: 0.5, ml: 2 }}
-          color="text.secondary"
-          display="block"
-          variant="caption"
-        ></Typography>
-      </p>
-      <TableContainer component={Paper} align="center">
+      <TableContainer component={Paper} align="center" style={{backgroundColor: 'azure'}}>
         <Table sx={{ maxWidth: 350 }} aria-label="simple table">
           <TableBody>
             <TableRow>
