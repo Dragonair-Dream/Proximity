@@ -20,7 +20,7 @@ const Notifications = () => {
   }, [])
 
   return (
-    <Box fullWidth sx={{bgcolor: 'Background.paper'}}>
+    <Box fullWidth sx={{bgcolor: 'Background.paper', marginBottom: '70px'}}>
       <Container disableGutters maxWidth="sm" component="main" sx={{ pt: 8, pb: 6 }}>
         <Typography variant="h5" align="center" color="text.primary" component="p">
           Your Notifications
