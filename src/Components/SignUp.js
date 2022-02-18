@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { auth, db } from "../Services/firebase";
+import { auth, db, upload, useAuth } from "../Services/firebase";
 import { createUserProfile } from "../Store/userProfileReducer";
 import { useDispatch } from "react-redux";
 import { doc, setDoc } from "@firebase/firestore";
@@ -12,6 +12,7 @@ import Typography from "@mui/material/Typography";
 import { Link, useNavigate } from "react-router-dom";
 import InputAdornment from "@mui/material/InputAdornment";
 import { AccountCircle, LockRounded } from "@mui/icons-material";
+import { createUser } from "../Store/usersReducer";
 
 export default function SignUp() {
   //creates regex for valid emails
@@ -22,6 +23,7 @@ export default function SignUp() {
   const [displayName, setDisplayName] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setlastName] = useState("");
+  const currentUser = useAuth();
 
   const dispatch = useDispatch();
 
@@ -49,8 +51,9 @@ export default function SignUp() {
         notifications: [],
       });
       updateProfile(auth.currentUser, { displayName: loginDisplayName });
+      // upload('/Proximity.jpg', currentUser)
       dispatch(
-        createUserProfile({
+        createUser({
           userName: loginDisplayName,
           email: loginEmail,
           profilePic: "/Proximity.jpg",

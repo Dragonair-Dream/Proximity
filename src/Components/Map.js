@@ -117,7 +117,7 @@ function Map() {
         <GoogleMap
           mapContainerStyle={containerStyle}
           center={{ lat: latitude, lng: longitude }}
-          zoom={5}
+          zoom={10}
           options={{ gestureHandling: "cooperative", fullscreenControl: false }}
         >
           <Marker
