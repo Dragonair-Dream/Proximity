@@ -57,6 +57,11 @@ export default function PostContent(props) {
       setAnchorEl(event.currentTarget);
     };
 
+    const closeInfoWindow = () => {
+        setSelectedMarker(null);
+        setToggleMessage(false);
+    };
+
     const handleClose = () => {
       setAnchorEl(null);
     };
@@ -113,7 +118,7 @@ export default function PostContent(props) {
     return(
     <Marker key={post.docId} position={{lat: post.latitude, lng: post.longitude}} onClick={()=> {setSelectedMarker(post.docId)}} >
             {selectedMarker === post.docId ?
-                <InfoWindow position={{lat: post.latitude, lng: post.longitude}} onCloseClick={()=>{setSelectedMarker(null);}} >
+                <InfoWindow position={{lat: post.latitude, lng: post.longitude}} onCloseClick={closeInfoWindow} >
                   <Card sx={{ maxWidth: 445, height: 'auto'}} >
                     <CardHeader
                         avatar={ post.postersId === auth.currentUser.uid ?

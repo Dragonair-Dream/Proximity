@@ -52,7 +52,6 @@ export const getUserData = () => {
 export default (state = {}, action) => {
   switch (action.type) {
     case CREATE_USER_PROFILE:
-      console.log("created User", action.userInfo);
       return action.userInfo;
     case CREATE_USER_PROFILE_ERROR:
       console.log("create user error", action.error);

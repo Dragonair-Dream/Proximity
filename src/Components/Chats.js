@@ -21,8 +21,6 @@ const Chats = () => {
   const [users, setUsers] = useState([]);
   const dispatch = useDispatch();
 
-  console.log('YYOOOOOOOO', users)
-
   useEffect(() => {
     dispatch(getChats());
   }, []);
