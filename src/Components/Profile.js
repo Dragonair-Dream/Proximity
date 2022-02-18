@@ -7,7 +7,13 @@ import { doc, onSnapshot } from "@firebase/firestore";
 import {
   Button,
   Grid,
+  Table,
+  TableBody,
   Typography,
+  TableCell,
+  TableRow,
+  TableContainer,
+  Paper,
   Avatar,
   Box,
   Stack,
@@ -119,34 +125,60 @@ export default function Profile() {
           variant="caption"
         ></Typography>
       </p>
-      <Grid align="center" sx={{ mb: 2 }}>
-        <Typography>
-          Name :{" "}
-          {userData.email === auth.currentUser.email
-            ? `${userData.firstName} ${userData.lastName}`
-            : ""}
-        </Typography>
-        <Typography>
-          User Name :{" "}
-          {userData.email === auth.currentUser.email ? userData.userName : ""}
-        </Typography>
-        <Typography>
-          Email :{" "}
-          {userData.email === auth.currentUser.email ? userData.email : ""}
-        </Typography>
-        <Typography>
-          Phone Number :{" "}
-          {userData.email === auth.currentUser.email
-            ? userData.phoneNumber
-            : ""}
-        </Typography>
-        <Typography>
-          Birthday :{" "}
-          {userData.email === auth.currentUser.email
-            ? userData.DateOfBirth
-            : ""}
-        </Typography>
-      </Grid>
+      <TableContainer component={Paper} align="center">
+        <Table sx={{ maxWidth: 350 }} aria-label="simple table">
+          <TableBody>
+            <TableRow>
+              <TableCell>
+                Name :{" "}
+              </TableCell>
+              <TableCell>
+                {userData.email === auth.currentUser.email
+                  ? `${userData.firstName} ${userData.lastName}`
+                  : ""}
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>
+                User Name :{" "}
+              </TableCell>
+              <TableCell>
+
+                {userData.email === auth.currentUser.email ? userData.userName : ""}
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>
+                Email :{" "}
+              </TableCell>
+              <TableCell>
+                {userData.email === auth.currentUser.email ? userData.email : ""}
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>
+                Phone Number :{" "}
+              </TableCell>
+              <TableCell>
+                {userData.email === auth.currentUser.email
+                  ? userData.phoneNumber
+                  : ""}
+              </TableCell>
+            </TableRow>
+            <TableRow>
+            <TableCell>
+
+              Birthday :{" "}
+            </TableCell>
+            <TableCell>
+              {userData.email === auth.currentUser.email
+                ? userData.DateOfBirth
+                : ""}
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </TableContainer>
       <Divider component="p" />
       <p>
         <Typography
