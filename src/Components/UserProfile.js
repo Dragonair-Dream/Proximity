@@ -10,9 +10,12 @@ import {
   InputAdornment,
   Typography,
   Avatar,
-  Box
+  Box,
+  Dialog,
+  DialogContent,
+  DialogTitle
 } from "@mui/material";
-import { AccountCircle, ContactPhone, Cake, Badge } from "@mui/icons-material";
+import { AccountCircle, ContactPhone, Cake, Badge, CompressOutlined, LocalDining } from "@mui/icons-material";
 import Loader from "./Loader";
 
 export default function UserProfile() {
@@ -30,6 +33,7 @@ export default function UserProfile() {
   // const [photo, setPhoto] = useState(null);
   const [photoURL, setphotoURL] = useState(auth.currentUser.photoURL || "/Proximity.jpg");
   const [progress, setProgress] = useState(0);
+  const [open, setOpen] = useState(false);
 
   const newData = {
     firstName: firstName,
@@ -45,32 +49,35 @@ export default function UserProfile() {
   };
   const navigate = useNavigate();
 
+  const handleClose = (timer) => {
+    setOpen(false);
+    clearInterval(timer);
+  };
+
   function handleChange(e) {
     if (e.target.files[0]) {
       upload(e.target.files[0], currentUser);
       // setPhoto(e.target.files[0]);
       // setphotoURL(auth.currentUser.photoURL);
+      setOpen(true);
       const timer = setInterval(() => {
-        setProgress((prevProgress) => (prevProgress >= 100 ? 100 : prevProgress + 25));
+        setProgress((prevProgress) => {
+          if (prevProgress >= 100) {
+            handleClose(timer);
+            return 100;
+          } else {
+            return prevProgress + 25;
+          }
+        });
       }, 800);
-      if (progress === '100') clearInterval(timer);
     }
   }
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // if (!photo) {
-    setTimeout(dispatch(createUser(newData)), 5000);
-    // } else {
-      // dispatch(createUserProfile(newData));
-      // upload(photo, currentUser);
-    // }
-    setTimeout(navigate("/UserProfile"), 6000);
+    dispatch(createUser(newData));
+    navigate("/UserProfile");
   };
-
-  // useEffect(() => {
-  //     setphotoURL(auth.currentUser.photoURL);
-  // }, [photoURL]);
 
   return (
     <Grid container style={{ maxHeight: "100vh", justifyContent: 'center' }}>
@@ -237,9 +244,21 @@ export default function UserProfile() {
             sx={{ width: 75, height: 75 }}
           />
           <br />
-          <Box sx={{ width: '100%' }}>
-            <Loader value={progress} />
-          </Box>
+          <Dialog
+            open={open}
+            onClose={() => setOpen(false)}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title">
+              {'Loading...'}
+            </DialogTitle>
+            <DialogContent>
+              <Box sx={{ width: '500px', padding: '10px' }}>
+                <Loader value={progress} />
+              </Box>
+            </DialogContent>
+          </Dialog>
           <Button
             style={{ padding: "8px" }}
             variant="contained"
