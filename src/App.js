@@ -64,6 +64,7 @@ const App = () => {
         <NavBar />
         <Routes>
           <Route exact path="/" element={<Map />} />
+          <Route path="/map" element={<Map />} />
           <Route path="/SignUp" element={<PageDoesNotExist />} />
           <Route path="/post-edit" element={<PostEdit />} />
           <Route path="/search" element={<Search />} />
