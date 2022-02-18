@@ -118,7 +118,7 @@ export const decideRequest = (uid, option, name='') => {
           notifications: arrayUnion({
             read: false,
             type: 'search',
-            text: `${name} has accepted your friend request!`
+            text: `${auth.currentUser.displayName} has accepted your friend request!`
           })
         })
       } else if (option === 'decline') {
@@ -135,7 +135,7 @@ export const decideRequest = (uid, option, name='') => {
           notifications: arrayUnion({
             read: false,
             type: 'search',
-            text: `${name} has declined your friend request.`
+            text: `${auth.currentUser.displayName} has declined your friend request.`
           })
         })
       } else if (option === 'add') { //send friend request
@@ -167,19 +167,21 @@ export const decideRequest = (uid, option, name='') => {
           notifications: arrayUnion({
             read: false,
             type: 'search',
-            text: `${name} sent you a friend request!`
+            text: `${auth.currentUser.displayName} sent you a friend request!`
           })
         })
       } else { //send reminder
+        /*
         const findFriend = findFriendData.requested.find(element => element.uid === uid)
         await updateDoc(editMine, {
           requested: arrayRemove(findFriend)
         })
+        */
         await updateDoc(doc(db, 'notifications', uid), {
           notifications: arrayUnion({
             read: false,
             type: 'search',
-            text: `${name} is waiting on your friend request!`
+            text: `${auth.currentUser.displayName} is waiting on your friend request!`
           })
         })
       }
